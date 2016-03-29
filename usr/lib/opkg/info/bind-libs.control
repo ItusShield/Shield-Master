@@ -1,0 +1,10 @@
+Package: bind-libs
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, libopenssl
+Source: feeds/packages/net/bind
+License: BSD-3-Clause
+Section: libs
+Maintainer: Noah Meyerhans <frodo@morgul.net>
+Architecture: cn70xx
+Installed-Size: 1316797
+Description:  bind shared libraries

@@ -1,0 +1,10 @@
+Package: libustream-polarssl
+Version: 2014-04-14-a4ca61527236e89eb9efb782fd9bfd04796144e3
+Depends: libc, librt, libpthread, libubox, libpolarssl
+Source: package/libs/ustream-ssl
+License: ISC
+Section: libs
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 5440
+Description:  ustream SSL Library (polarssl)

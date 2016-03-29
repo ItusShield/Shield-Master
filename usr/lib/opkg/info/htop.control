@@ -1,0 +1,13 @@
+Package: htop
+Version: 1.0.3-1
+Depends: libc, librt, libpthread, libncurses
+Source: feeds/packages/admin/htop
+License: GPL-2.0
+LicenseFiles: COPYING
+Section: admin
+Maintainer: Etienne CHAMPETIER <champetier.etienne@gmail.com>
+Architecture: cn70xx
+Installed-Size: 94806
+Description:  Htop is an ncursed-based process viewer similar to top, but
+ it allows to scroll the list vertically and horizontally to
+ see all processes and their full command lines.

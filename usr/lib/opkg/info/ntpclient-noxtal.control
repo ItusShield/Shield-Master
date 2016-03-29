@@ -1,0 +1,17 @@
+Package: ntpclient-noxtal
+Version: 2010_365-1
+Depends: libc, librt, libpthread
+Conflicts: ntpclient-2010
+Source: feeds/packages/net/ntpclient-noxtal
+Section: net
+Maintainer: Stefan Katerkamp <s@katerkamp.de>
+Architecture: cn70xx
+Installed-Size: 15213
+Description:  NTP client for setting system time from NTP servers for systems
+ which do not have a crystal oscillator and battery backup.
+ NTP client gets frequently started by cron, which makes it robust
+ against loosing internet connection temporarily.
+ Due to the lower stability of free running clocks, no rate.awk 
+ and adjtimex are provided, which makes this package slightly smaller.
+ .
+ In terms of configuration, this package is compatible to the ntpclient package.

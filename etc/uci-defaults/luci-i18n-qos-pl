@@ -1,0 +1,1 @@
+uci set luci.languages.pl='Polski (Polish)'; uci commit luci

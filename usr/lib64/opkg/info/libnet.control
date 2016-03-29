@@ -1,0 +1,8 @@
+Package: libnet
+Version: 1.1.6-1
+Depends: libc, librt, libpthread, libpcap
+Source: feeds/packages/libs/libnet
+Section: libs
+Architecture: cn70xx
+Installed-Size: 180597
+Description:  Low-level packet creation library (v1.1.x)

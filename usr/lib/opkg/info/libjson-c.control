@@ -1,0 +1,11 @@
+Package: libjson-c
+Version: 0.12-1
+Depends: libc, librt
+Source: package/libs/libjson-c
+License: MIT
+LicenseFiles: COPYING
+Section: libs
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 25898
+Description:  This package contains a library for javascript object notation backends.

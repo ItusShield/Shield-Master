@@ -1,0 +1,15 @@
+config e2guardian 'e2guardian'
+        option content_ads '1'
+        option content_blasphemy '0'
+        option content_dating '0'
+        option content_drugs '0'
+        option content_gambling '0'
+        option content_illegal '1'
+        option content_malicious '1'
+        option content_piracy '0'
+        option content_porn '0'
+        option content_proxies '0'
+        option content_racism '0'
+        option content_social '0'
+
+

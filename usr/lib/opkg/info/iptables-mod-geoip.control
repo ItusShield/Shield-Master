@@ -1,0 +1,10 @@
+Package: iptables-mod-geoip
+Version: 2.5-1
+Depends: libc, librt, libpthread, iptables, kmod-ipt-geoip
+Source: package/network/utils/xtables-addons
+License: GPL-2.0
+Section: net
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 4808
+Description:  geoip iptables extension

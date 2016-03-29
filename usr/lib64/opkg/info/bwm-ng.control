@@ -1,0 +1,12 @@
+Package: bwm-ng
+Version: 0.6-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/net/bwm-ng
+License: GPL2-2.0
+LicenseFiles: COPYING
+Section: net
+Maintainer: Julen Landa Alustiza <julen@zokormazo.info>
+Architecture: cn70xx
+Installed-Size: 29941
+Description:  Bandwidth Monitor NG is a small and simple console-based live
+ network and disk io bandwidth monitor.

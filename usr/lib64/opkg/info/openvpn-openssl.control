@@ -1,0 +1,10 @@
+Package: openvpn-openssl
+Version: 2.3.6-3
+Depends: libc, librt, libpthread, kmod-tun, liblzo, libopenssl
+Source: package/network/services/openvpn
+License: GPL-2.0
+Section: net
+Maintainer: Mirko Vogt <mirko@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 310010
+Description:  Open source VPN solution using OpenSSL

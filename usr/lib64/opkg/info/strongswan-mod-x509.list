@@ -1,0 +1,2 @@
+/usr/lib/ipsec/plugins/libstrongswan-x509.so
+/etc/strongswan.d/charon/x509.conf

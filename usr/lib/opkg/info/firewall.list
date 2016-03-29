@@ -1,0 +1,6 @@
+/etc/init.d/firewall
+/sbin/fw3
+/etc/config/firewall
+/etc/snort.user
+/etc/firewall.user
+/etc/hotplug.d/iface/20-firewall

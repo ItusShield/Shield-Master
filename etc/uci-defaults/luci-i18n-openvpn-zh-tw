@@ -1,0 +1,1 @@
+uci set luci.languages.zh_tw='臺灣華語 (Taiwanese)'; uci commit luci

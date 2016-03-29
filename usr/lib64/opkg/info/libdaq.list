@@ -1,0 +1,12 @@
+/usr/lib/libdaq.so.2.0.4
+/usr/lib/libdaq.so.2
+/usr/lib/libsfbpf.so
+/usr/lib/daq/daq_afpacket.so
+/usr/lib/daq/daq_pcap.so
+/usr/lib/daq/daq_ipfw.so
+/usr/bin/daq-modules-config
+/usr/lib/daq/daq_dump.so
+/usr/lib/libsfbpf.so.0
+/usr/lib/libsfbpf.so.0.0.1
+/usr/lib/libdaq.so
+/usr/lib/daq/daq_nfq.so

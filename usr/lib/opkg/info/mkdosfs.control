@@ -1,0 +1,12 @@
+Package: mkdosfs
+Version: 3.0.27-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/utils/dosfstools
+License: GPL-3.0+
+LicenseFiles: COPYING
+Section: utils
+Maintainer: David Bonnes <david.bonnes@gmail.com>
+Architecture: cn70xx
+Installed-Size: 16473
+Description:  Utilities to create and check MS-DOS FAT filesystems.
+ (mkfs.vfat and mkfs.fat for creating FAT volumes)

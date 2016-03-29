@@ -1,0 +1,10 @@
+Package: luci-i18n-ddns-tr
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Source: feeds/luci/applications/luci-app-ddns
+License: Apache-2.0
+Section: luci
+Maintainer: Christian Schoenebeck <christian.schoenebeck@gmail.com>
+Architecture: all
+Installed-Size: 560
+Description:  Translation for luci-app-ddns - Türkçe (Turkish)

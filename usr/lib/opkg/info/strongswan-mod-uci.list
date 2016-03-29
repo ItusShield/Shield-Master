@@ -1,0 +1,2 @@
+/usr/lib/ipsec/plugins/libstrongswan-uci.so
+/etc/strongswan.d/charon/uci.conf

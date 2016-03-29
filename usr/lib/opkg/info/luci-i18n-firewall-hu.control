@@ -1,0 +1,8 @@
+Package: luci-i18n-firewall-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Source: feeds/luci/applications/luci-app-firewall
+Section: luci
+Architecture: all
+Installed-Size: 4411
+Description:  Translation for luci-app-firewall - Magyar (Hungarian)

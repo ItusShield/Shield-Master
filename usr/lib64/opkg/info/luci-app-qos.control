@@ -1,0 +1,8 @@
+Package: luci-app-qos
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, qos-scripts
+Source: feeds/luci/applications/luci-app-qos
+Section: luci
+Architecture: all
+Installed-Size: 1469
+Description:  Quality of Service configuration module

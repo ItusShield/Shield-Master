@@ -1,0 +1,1 @@
+uci set luci.languages.pt_br='Português do Brasil (Brazialian Portuguese)'; uci commit luci

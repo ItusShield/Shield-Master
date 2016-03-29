@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. /lib/functions/uci-defaults.sh
+
+rm -f /etc/config/network
+touch /etc/config/network
+
+ucidef_set_interface_loopback
+ucidef_set_interface_wan 'eth0'
+ucidef_set_interface_lan 'eth1 eth2'
+uci set network.lan.ipaddr=10.10.10.10
+
+uci commit network
+
+exit 0

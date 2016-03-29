@@ -1,0 +1,1 @@
+uci set luci.languages.ja='日本語 (Japanese)'; uci commit luci

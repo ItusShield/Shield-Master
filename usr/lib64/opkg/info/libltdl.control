@@ -1,0 +1,10 @@
+Package: libltdl
+Version: 2.4-1
+Depends: libc, librt, libpthread
+Source: package/libs/libtool
+License: GPL-2.0+
+LicenseFiles: COPYING
+Section: libs
+Architecture: cn70xx
+Installed-Size: 20300
+Description:  A generic dynamic object loading library

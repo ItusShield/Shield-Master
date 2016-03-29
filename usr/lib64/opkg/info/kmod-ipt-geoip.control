@@ -1,0 +1,10 @@
+Package: kmod-ipt-geoip
+Version: 3.10.20+2.5-1
+Depends: kernel (=3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipt-core
+Source: package/network/utils/xtables-addons
+License: GPL-2.0
+Section: kernel
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 3547
+Description:  geoip netfilter module

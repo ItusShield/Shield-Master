@@ -1,0 +1,3 @@
+/usr/lib/lua/luci/model/cbi/tinyproxy.lua
+/usr/lib/lua/luci/controller/tinyproxy.lua
+/usr/lib/lua/luci/view/tinyproxy_status.htm

@@ -1,0 +1,10 @@
+Package: zoneinfo-asia
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/utils/zoneinfo
+License: Public Domain
+Section: utils
+Maintainer: Vladimir Ulrich <admin@evl.su>
+Architecture: cn70xx
+Installed-Size: 30027
+Description:  Zone Information (Asia)

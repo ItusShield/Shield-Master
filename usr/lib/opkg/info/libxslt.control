@@ -1,0 +1,11 @@
+Package: libxslt
+Version: 1.1.28-2
+Depends: libc, librt, libpthread, libxml2
+Source: feeds/packages/libs/libxslt
+License: MIT
+LicenseFiles: COPYING
+Section: libs
+Maintainer: Jiri Slachta <slachta@cesnet.cz>
+Architecture: cn70xx
+Installed-Size: 130163
+Description:  A library for XML transformation using XSLT.

@@ -1,0 +1,2 @@
+/etc/strongswan.d/charon/sqlite.conf
+/usr/lib/ipsec/plugins/libstrongswan-sqlite.so

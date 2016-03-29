@@ -1,0 +1,10 @@
+Package: libuci-lua
+Version: 2015-04-09.1-1
+Depends: libc, librt, libpthread, libuci, liblua
+Source: package/system/uci
+License: LGPL-2.1
+Section: libs
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 8416
+Description:  Lua plugin for UCI

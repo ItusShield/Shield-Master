@@ -1,0 +1,1 @@
+uci set luci.languages.ca='Català (Catalan)'; uci commit luci

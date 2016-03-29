@@ -1,0 +1,10 @@
+Package: luci-app-e2guardian
+Version: 20150121
+Depends: libc, librt, libpthread, luci-mod-admin-full, e2guardian
+Source: feeds/packages/net/luci-app-e2guardian
+License: Apache-2.0
+Section: luci
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 5575
+Description:  This package will install E2Guardian Web UI.

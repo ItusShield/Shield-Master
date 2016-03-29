@@ -1,0 +1,13 @@
+Package: grep
+Version: 2.21-2
+Depends: libc, librt, libpthread, libpcre
+Source: feeds/packages/utils/grep
+License: GPL-3.0
+LicenseFiles: COPYING
+Section: utils
+Maintainer: Julen Landa Alustiza <julen@zokormazo.info>
+Architecture: cn70xx
+Installed-Size: 237308
+Description:  The grep command searches one or more input files for lines
+ containing a match to a specified pattern. By default, grep
+ prints the matching lines.

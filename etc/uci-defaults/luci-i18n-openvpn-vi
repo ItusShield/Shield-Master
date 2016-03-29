@@ -1,0 +1,1 @@
+uci set luci.languages.vi='Tiếng Việt (Vietnamese)'; uci commit luci

@@ -1,0 +1,9 @@
+Package: whois
+Version: 5.2.7-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/net/whois
+Section: net
+Maintainer: Kihamo <dev@kihamo.ru>
+Architecture: cn70xx
+Installed-Size: 31497
+Description:  Utility to display information from WHOIS servers

@@ -1,0 +1,11 @@
+Package: rpcd
+Version: 2015-04-14-9a6bfa110a5f8caa10951921b63bafdbb6e97d33
+Depends: libc, librt, libpthread, libubus, libubox, libuci, libblobmsg-json
+Source: package/system/rpcd
+License: ISC
+Section: utils
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 26599
+Description:  This package provides the UBUS RPC backend server to expose various
+ functionality to frontend programs via JSON-RPC.

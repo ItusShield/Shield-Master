@@ -1,0 +1,8 @@
+Package: luci-lib-nixio
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, liblua
+Source: feeds/luci/libs/luci-lib-nixio
+Section: luci
+Architecture: cn70xx
+Installed-Size: 45075
+Description:  NIXIO POSIX library

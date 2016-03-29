@@ -1,0 +1,10 @@
+Package: libsmartcols
+Version: 2.25.2-4
+Depends: libc, librt, libpthread
+Source: package/utils/util-linux
+License: GPL-2.0
+LicenseFiles: COPYING getopt/COPYING libblkid/COPYING libmount/COPYING Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.LGPLv2.1 libuuid/COPYING Documentation/licenses/COPYING.BSD-3
+Section: libs
+Architecture: cn70xx
+Installed-Size: 76878
+Description:  The smartcols library is used to print tables and trees in a pretty way.

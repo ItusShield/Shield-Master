@@ -1,0 +1,11 @@
+Package: libdnet
+Version: 1.12-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/libs/libdnet
+License: BSD
+Section: libs
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 50090
+Description:  libdnet is a library of simplified, portable interface to several low-level
+ networking routines.

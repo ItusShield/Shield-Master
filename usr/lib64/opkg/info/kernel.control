@@ -1,0 +1,10 @@
+Package: kernel
+Version: 3.10.20-1-7249e901273a7e253967168cb6ea0120
+Depends: libc, librt, libpthread
+Source: package/kernel/linux
+License: GPLv2
+Section: sys
+Status: unknown hold not-installed
+Architecture: cn70xx
+Installed-Size: 105
+Description:  Virtual kernel package

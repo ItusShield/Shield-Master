@@ -1,0 +1,8 @@
+Package: luci-i18n-tinyproxy-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Source: feeds/luci/applications/luci-app-tinyproxy
+Section: luci
+Architecture: all
+Installed-Size: 326
+Description:  Translation for luci-app-tinyproxy - Türkçe (Turkish)

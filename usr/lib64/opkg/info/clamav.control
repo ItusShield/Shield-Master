@@ -1,0 +1,11 @@
+Package: clamav
+Version: 0.98.6-1
+Depends: libc, librt, libpthread, uclibcxx, zlib, libcurl, libopenssl
+Source: feeds/packages/net/clamav
+License: GPL-2.0
+Section: net
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 1744227
+Description:  ClamAV is an open source antivirus engine for detecting trojans,
+ viruses, malware & other malicious threats.

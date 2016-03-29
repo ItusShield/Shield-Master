@@ -1,0 +1,6 @@
+#!/bin/sh
+uci batch <<-EOF
+	set luci.themes.ItusNetworks=/luci-static/itusnetworks
+	commit luci
+EOF
+exit 0

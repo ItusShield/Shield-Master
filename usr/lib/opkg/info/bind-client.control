@@ -1,0 +1,10 @@
+Package: bind-client
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, bind-libs
+Source: feeds/packages/net/bind
+License: BSD-3-Clause
+Section: net
+Maintainer: Noah Meyerhans <frodo@morgul.net>
+Architecture: cn70xx
+Installed-Size: 27063
+Description:  bind dynamic DNS client

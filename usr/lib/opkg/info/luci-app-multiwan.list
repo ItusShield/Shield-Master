@@ -1,0 +1,5 @@
+/usr/lib/lua/luci/controller/multiwan.lua
+/usr/lib/lua/luci/model/cbi/multiwan/multiwan.lua
+/usr/lib/lua/luci/model/cbi/multiwan/multiwanmini.lua
+/usr/lib/lua/luci/view/admin_status/index/multiwan.htm
+/usr/lib/lua/luci/view/multiwan_status.htm

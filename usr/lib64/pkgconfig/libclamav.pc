@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=/usr
+libdir=${exec_prefix}/lib64
+includedir=${prefix}/include
+
+Name: libclamav
+Description: A GPL virus scanner
+Version: 0.98.6
+Libs: -L${libdir} -lclamav  -lz
+Cflags: -I${includedir} -O3 -pipe -mno-branch-likely -march=octeon -mabi=64 -DOCTEON_MODEL=OCTEON_CN70XX -fno-caller-saves -I/home/daniel/Build/v1.7/trunk/staging_dir/target-mips64-openwrt-linux-gnu/usr/include -I/home/daniel/Build/v1.7/trunk/staging_dir/target-mips64-openwrt-linux-gnu/usr/include  -fno-strict-aliasing
+

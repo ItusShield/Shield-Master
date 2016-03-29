@@ -1,0 +1,2 @@
+/usr/lib/ipsec/plugins/libstrongswan-md5.so
+/etc/strongswan.d/charon/md5.conf

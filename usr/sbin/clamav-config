@@ -1,0 +1,74 @@
+#! /bin/sh
+# Originally from libxml, Copyright (C) Daniel Veillard
+
+prefix=/usr
+exec_prefix=/usr
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib64
+
+usage()
+{
+    cat <<EOF
+Usage: clamav-config [OPTION]
+
+Known values for OPTION are:
+
+  --prefix=DIR		change libclamav prefix [default $prefix]
+  --libs		print library linking information
+  --cflags		print pre-processor and compiler flags
+  --help		display this help and exit
+  --version		output version information
+EOF
+
+    exit $1
+}
+
+if test $# -eq 0; then
+    usage 1
+fi
+
+cflags=false
+libs=false
+
+while test $# -gt 0; do
+    case "$1" in
+    -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+    *) optarg= ;;
+    esac
+
+    case "$1" in
+    --prefix=*)
+	prefix=$optarg
+	;;
+
+    --prefix)
+	echo $prefix
+	;;
+
+    --version)
+	echo 0.98.6
+	exit 0
+	;;
+
+    --help)
+	usage 0
+	;;
+
+    --cflags)
+       	echo -I${prefix}/include -O3 -pipe -mno-branch-likely -march=octeon -mabi=64 -DOCTEON_MODEL=OCTEON_CN70XX -fno-caller-saves -I/home/daniel/Build/v1.7/trunk/staging_dir/target-mips64-openwrt-linux-gnu/usr/include -I/home/daniel/Build/v1.7/trunk/staging_dir/target-mips64-openwrt-linux-gnu/usr/include  -fno-strict-aliasing
+       	;;
+
+    --libs)
+       	echo -L${exec_prefix}/lib64  -lz
+       	;;
+
+    *)
+	usage
+	exit 1
+	;;
+    esac
+    shift
+done
+
+exit 0
+

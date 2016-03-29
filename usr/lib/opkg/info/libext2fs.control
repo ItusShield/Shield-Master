@@ -1,0 +1,8 @@
+Package: libext2fs
+Version: 1.42.12-1
+Depends: libc, librt, libpthread
+Source: package/utils/e2fsprogs
+Section: libs
+Architecture: cn70xx
+Installed-Size: 196118
+Description:  libext2fs is a library which can access ext2, ext3 and ext4 filesystems.

@@ -1,0 +1,18 @@
+Package: kmod-ipsec6
+Version: 3.10.20-1
+Depends: kernel (=3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipsec, kmod-iptunnel6
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: cn70xx
+Installed-Size: 229
+Description:  Kernel modules for IPsec support in IPv6.
+ Includes:
+ - ah6
+ - esp6
+ - ipcomp6
+ - xfrm6_mode_beet
+ - xfrm6_mode_transport
+ - xfrm6_mode_tunnel
+ - xfrm6_tunnel

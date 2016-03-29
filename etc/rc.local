@@ -1,0 +1,48 @@
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+# The next four lines can be commented out. They are only needed the first time Shield boots in Gateway mode.
+sleep 2							# Can be safely removed
+cp /etc/config/network.gt /etc/config/network		# Can be safely removed
+sleep 1							# Can be safely removed
+/etc/init.d/network restart				# Can be safely removed
+sleep 2							# Can be safely removed
+
+ethtool -K eth0 gro off
+ethtool -K eth0 gso off
+ethtool -K eth0 lro off
+sleep 1
+ethtool -K eth1 gro off
+ethtool -K eth1 gso off
+ethtool -K eth1 lro off
+sleep 1
+ethtool -K eth2 gro off
+ethtool -K eth2 gso off
+ethtool -K eth2 lro off
+sleep 1
+ethtool -s eth0 autoneg off
+sleep 1
+ethtool -s eth0 autoneg on
+sleep 1
+ethtool -s eth2 autoneg off
+sleep 1
+ethtool -s eth2 autoneg on
+sleep 1
+ethtool -s eth1 autoneg off
+sleep 1
+ethtool -s eth1 autoneg on
+sleep 1
+chown -R nobody:nogroup /tmp/*
+
+sleep 1
+/etc/init.d/vnstat enable	# Vnstat Enable Autostart
+/etc/init.d/vnstat start	# Vnstat Start
+/etc/init.d/ipsec stop     	# strongSwan Stop
+/etc/init.d/ipsec disable       # strongSwan Disable Autostart
+sleep 2
+touch /var/run/ddns/lucihelper.err
+sh /etc/itus-setup.sh &>/dev/null
+
+
+exit 0                 
+

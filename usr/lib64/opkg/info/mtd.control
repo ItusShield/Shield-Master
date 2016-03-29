@@ -1,0 +1,10 @@
+Package: mtd
+Version: 20
+Depends: libc, librt, libpthread, libubox
+Source: package/system/mtd
+License: GPL-2.0+
+Section: utils
+Architecture: cn70xx
+Installed-Size: 23392
+Description:  This package contains an utility useful to upgrade from other firmware or 
+ older OpenWrt releases.

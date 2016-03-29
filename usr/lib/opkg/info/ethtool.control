@@ -1,0 +1,12 @@
+Package: ethtool
+Version: 3.18-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/net/ethtool
+License: GPL-2.0
+LicenseFiles: COPYING
+Section: net
+Maintainer: Matthias Schiffer <mschiffer@universe-factory.net>
+Architecture: cn70xx
+Installed-Size: 129502
+Description:  ethtool is a small utility for examining and tuning your ethernet-based
+ network interface

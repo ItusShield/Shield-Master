@@ -1,0 +1,22 @@
+config ntpserver
+	option hostname '0.us.pool.ntp.org'
+	option port     '123'
+
+config ntpserver
+	option hostname '1.us.pool.ntp.org'
+	option port     '123'
+
+config ntpserver
+	option hostname '2.us.pool.ntp.org'
+	option port     '123'
+
+config ntpserver
+	option hostname '3.us.pool.ntp.org'
+	option port     '123'
+
+config ntpdrift
+	option freq     '0'
+
+config ntpclient
+	option interval	600
+	option count	5

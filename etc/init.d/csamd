@@ -1,0 +1,100 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2015 OpenWrt.org
+
+START=90
+STOP=10
+
+USE_PROCD=1
+PROG=/usr/sbin/csamd
+CSAMD_CONFIGFILE="/etc/csamd.conf"
+
+validate_csamd_section() {
+	uci_validate_section csamd csamd "${1}" \
+		'MaximumConnectionQueueLength:uinteger' \
+		'MaxThreads:uinteger' \
+		'LogFacility:string' \
+		'MaxRecursion:uinteger' \
+		'ScanArchive:string' \
+		'ReadTimeout:uinteger' \
+		'StreamMaxLength:string' \
+		'FixStaleSocket:string' \
+		'DetectPUA:string' \
+		'DecompressLimit:uinteger' \
+		'SoftScanTimeLimit:uinteger' \
+		'LocalSocket:string' \
+		'FollowDirectorySymLinks:string' \
+		'FollowFileSymLinks:string' \
+		'User:string' \
+		'AllowSupplementrayGroups:string' \
+		'DatabaseDirectory:string' \
+		'PidFile:string' \
+		'DefinitionType:string' \
+		'LicenseKey:string' \
+		'IgnoreAdwareDetections:string' \
+		'IgnoreApplicationDetections:string' \
+		'IgnoreArchiveBombDetections:string' \
+		'IgnoreJokeDetections:string' \
+		'IgnoreRemoteTemplateDetections:string' \
+		'IgnoreSpywareDetections:string' \
+		'IgnoreToolDetections:string'
+}
+
+start_service() {
+
+	local MaximumConnectionQueueLength MaxThreads LogFacility MaxRecursion \
+		ScanArchive ReadTimeout StreamMaxLength FixStaleSocket DetectPUA \
+		DecompressLimit SoftScanTimeLimit LocalSocket FollowDirectorySymLinks \
+		FollowFileSymLinks User AllowSupplementrayGroups DatabaseDirectory PidFile \
+		DefinitionType LicenseKey IgnoreAdwareDetections IgnoreApplicationDetections \
+		IgnoreArchiveBombDetections IgnoreJokeDetections IgnoreRemoteTemplateDetections \
+		IgnoreSpywareDetections IgnoreToolDetections
+
+	validate_csamd_section csamd || {
+		echo "validation failed"
+		return 1
+	}
+
+	echo "MaximumConnectionQueueLength " $MaximumConnectionQueueLength > $CSAMD_CONFIGFILE
+	echo "MaxThreads " $MaxThreads >> $CSAMD_CONFIGFILE
+	echo "LogFacility " $LogFacility >> $CSAMD_CONFIGFILE
+	echo "MaxRecursion " $MaxRecursion >> $CSAMD_CONFIGFILE
+	echo "ScanArchive " $ScanArchive >> $CSAMD_CONFIGFILE
+	echo "ReadTimeout " $ReadTimeout >> $CSAMD_CONFIGFILE
+	echo "StreamMaxLength " $StreamMaxLength >> $CSAMD_CONFIGFILE
+	echo "FixStaleSocket " $FixStaleSocket >> $CSAMD_CONFIGFILE
+	echo "DetectPUA " $DetectPUA >> $CSAMD_CONFIGFILE
+	echo "DecompressLimit " $DecompressLimit >> $CSAMD_CONFIGFILE
+	echo "SoftScanTimeLimit " $SoftScanTimeLimit >> $CSAMD_CONFIGFILE
+	echo "LocalSocket " $LocalSocket >> $CSAMD_CONFIGFILE
+	echo "FollowDirectorySymLinks " $FollowDirectorySymLinks >> $CSAMD_CONFIGFILE
+	echo "FollowFileSymLinks " $FollowFileSymLinks >> $CSAMD_CONFIGFILE
+	echo "User " $User >> $CSAMD_CONFIGFILE
+	echo "AllowSupplementrayGroups " $AllowSupplementrayGroups >> $CSAMD_CONFIGFILE
+	echo "DatabaseDirectory " $DatabaseDirectory >> $CSAMD_CONFIGFILE
+	echo "PidFile " $PidFile >> $CSAMD_CONFIGFILE
+	echo "DefinitionType " $DefinitionType >> $CSAMD_CONFIGFILE
+	echo "LicenseKey " $LicenseKey >> $CSAMD_CONFIGFILE
+	echo "IgnoreAdwareDetections " $IgnoreAdwareDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreApplicationDetections " $IgnoreApplicationDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreArchiveBombDetections " $IgnoreArchiveBombDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreJokeDetections " $IgnoreJokeDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreRemoteTemplateDetections " $IgnoreRemoteTemplateDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreSpywareDetections " $IgnoreSpywareDetections >> $CSAMD_CONFIGFILE
+	echo "IgnoreToolDetections " $IgnoreToolDetections >> $CSAMD_CONFIGFILE
+
+	procd_open_instance
+	procd_set_param command $PROG -c $CSAMD_CONFIGFILE
+	procd_set_param file $CSAMD_CONFIGFILE
+	procd_close_instance
+}
+
+stop_service()
+{
+	service_stop ${PROG}
+}
+
+service_triggers()
+{
+	procd_add_reload_trigger "csamd"
+	procd_add_validation validate_csamd_section
+}

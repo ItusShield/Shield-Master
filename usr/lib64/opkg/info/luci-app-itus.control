@@ -1,0 +1,10 @@
+Package: luci-app-itus
+Version: 1-1
+Depends: libc, librt, libpthread, luci-app-e2guardian, luci-app-snort, luci-app-clamav, openvpn-openssl, luci-app-openvpn, luci-app-tinyproxy, luci-theme-itusnetworks, luci-app-qos, luci-app-multiwan, luci-app-ddns, luci-proto-relay, nmap-ssl, ethtool, ettercap, tcpdump, ebtables, ebtables-utils, curl, strongswan-full, whois, nbtscan, zoneinfo-core, fdisk, e2fsprogs, conntrack-tools, ip6tables, ip6tables-extra, ip6tables-mod-nat, iptables-mod-geoip, libgeoip, wget, luci-ssl, htop, libxslt, bwm-ng, openssl-util, netdiscover, mkdosfs, grep, luci-ssl
+Source: feeds/packages/admin/luci-app-itus
+License: GPL-2.0
+Section: admin
+Maintainer: Luka Perkov <luka.perkov@satura.hr>
+Architecture: cn70xx
+Installed-Size: 1025
+Description:  ITUS Status menu

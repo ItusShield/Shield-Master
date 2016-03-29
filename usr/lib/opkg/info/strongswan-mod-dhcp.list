@@ -1,0 +1,2 @@
+/etc/strongswan.d/charon/dhcp.conf
+/usr/lib/ipsec/plugins/libstrongswan-dhcp.so

@@ -1,0 +1,10 @@
+Package: strongswan-mod-uci
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan, libuci
+Source: feeds/packages/net/strongswan
+License: GPL-2.0+
+Section: net
+Maintainer: Steven Barth <cyrus@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 8639
+Description:  StrongSwan UCI config interface plugin

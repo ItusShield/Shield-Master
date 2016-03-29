@@ -1,0 +1,11 @@
+Package: libcurl
+Version: 7.40.0-3
+Depends: libc, librt, libpthread, libopenssl
+Source: package/network/utils/curl
+License: MIT
+LicenseFiles: COPYING
+Section: libs
+Maintainer: Imre Kaloz <kaloz@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 195273
+Description:  A client-side URL transfer library

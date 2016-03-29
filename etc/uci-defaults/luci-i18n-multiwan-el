@@ -1,0 +1,1 @@
+uci set luci.languages.el='Ελληνικά (Greek)'; uci commit luci

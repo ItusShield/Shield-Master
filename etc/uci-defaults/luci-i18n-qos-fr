@@ -1,0 +1,1 @@
+uci set luci.languages.fr='Français (French)'; uci commit luci

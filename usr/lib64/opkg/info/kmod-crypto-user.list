@@ -1,0 +1,4 @@
+/lib/modules/3.10.20/algif_skcipher.ko
+/lib/modules/3.10.20/af_alg.ko
+/lib/modules/3.10.20/algif_hash.ko
+/etc/modules.d/09-crypto-user

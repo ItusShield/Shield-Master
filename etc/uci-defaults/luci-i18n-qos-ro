@@ -1,0 +1,1 @@
+uci set luci.languages.ro='Română (Romanian)'; uci commit luci

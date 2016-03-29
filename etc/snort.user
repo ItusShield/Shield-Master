@@ -1,0 +1,11 @@
+# This file is interpreted as shell script.
+# Put your custom Snort iptables rules here
+                                                                                              
+	iptables -I FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout		# Snort IPv4      
+	ip6tables -I FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout		# Snort IPv6
+ 
+#	iptables -t nat -I PREROUTING -p TCP --dport 443 -j REDIRECT --to-port 1337	# SSL Decryption (experimental)
+
+	iptables -I FORWARD -m geoip --src-cc CN,RU -j DROP			# GeoIP Filter from China & Russia  
+	iptables -I FORWARD -m geoip --dst-cc CN,RU -j DROP 			# GeoIP Filter to China & Russia
+

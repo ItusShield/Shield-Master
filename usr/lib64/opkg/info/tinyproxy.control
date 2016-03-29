@@ -1,0 +1,9 @@
+Package: tinyproxy
+Version: 1.8.3-2
+Depends: libc, librt, libpthread
+Source: feeds/packages/net/tinyproxy
+Section: net
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 47685
+Description:  Tinyproxy is a lightweight HTTP and HTTPS proxy

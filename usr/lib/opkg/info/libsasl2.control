@@ -1,0 +1,11 @@
+Package: libsasl2
+Version: 2.1.26-3
+Depends: libc, librt, libpthread, libopenssl
+Source: feeds/packages/libs/cyrus-sasl
+License: BSD-4c BSD
+LicenseFiles: COPYING cmulocal/COPYING saslauthd/COPYING
+Section: libs
+Maintainer: W. Michael Petullo <mike@flyn.org>
+Architecture: cn70xx
+Installed-Size: 143852
+Description:  A general purpose authentication library

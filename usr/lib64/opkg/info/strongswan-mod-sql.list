@@ -1,0 +1,2 @@
+/usr/lib/ipsec/plugins/libstrongswan-sql.so
+/etc/strongswan.d/charon/sql.conf

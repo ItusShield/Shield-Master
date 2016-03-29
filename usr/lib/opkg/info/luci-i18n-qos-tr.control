@@ -1,0 +1,8 @@
+Package: luci-i18n-qos-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Source: feeds/luci/applications/luci-app-qos
+Section: luci
+Architecture: all
+Installed-Size: 318
+Description:  Translation for luci-app-qos - Türkçe (Turkish)

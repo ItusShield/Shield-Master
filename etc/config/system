@@ -1,0 +1,16 @@
+config system
+	option hostname 'Shield'
+	option log_size '1024'
+	option cronloglevel '4'
+	option zonename 'UTC'
+	option timezone 'UTC'
+	option conloglevel '4'
+
+config timeserver 'ntp'
+	list server '0.us.pool.ntp.org'
+	list server '1.us.pool.ntp.org'
+	list server '2.us.pool.ntp.org'
+	list server '3.us.pool.ntp.org'
+	option enabled '1'
+	option enable_server '0'
+

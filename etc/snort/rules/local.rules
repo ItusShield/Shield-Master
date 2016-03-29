@@ -1,0 +1,4 @@
+# Insert Custom Rules Here. 
+# Warning -- If rules are not input and formatted properly, this could cause IPS to fail to load.
+# Warning -- Adding a lot of rule here could slow down the load time of the IPS menu & web GUI.
+#

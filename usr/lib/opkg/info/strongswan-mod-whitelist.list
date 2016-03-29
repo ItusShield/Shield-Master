@@ -1,0 +1,3 @@
+/usr/lib/ipsec/whitelist
+/etc/strongswan.d/charon/whitelist.conf
+/usr/lib/ipsec/plugins/libstrongswan-whitelist.so

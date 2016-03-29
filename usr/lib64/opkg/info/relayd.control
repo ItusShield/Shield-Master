@@ -1,0 +1,10 @@
+Package: relayd
+Version: 2015-03-13-2970ff60bac6b70ecb682779d5c776dc559dc0b9
+Depends: libc, librt, libpthread, libubox
+Source: package/network/services/relayd
+License: GPL-2.0
+Section: net
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 12919
+Description:  Transparent routing / relay daemon

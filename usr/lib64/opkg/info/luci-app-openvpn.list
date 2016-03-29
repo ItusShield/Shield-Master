@@ -1,0 +1,7 @@
+/usr/lib/lua/luci/model/cbi/openvpn-basic.lua
+/usr/lib/lua/luci/controller/openvpn.lua
+/usr/lib/lua/luci/model/cbi/openvpn.lua
+/usr/lib/lua/luci/model/cbi/openvpn-advanced.lua
+/usr/lib/lua/luci/view/openvpn/pageswitch.htm
+/usr/lib/lua/luci/view/openvpn/cbi-select-input-add.htm
+/etc/config/openvpn_recipes

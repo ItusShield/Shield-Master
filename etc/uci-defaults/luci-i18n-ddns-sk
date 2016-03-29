@@ -1,0 +1,1 @@
+uci set luci.languages.sk='Slovenčina (Slovene)'; uci commit luci

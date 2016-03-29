@@ -1,0 +1,1 @@
+uci set luci.languages.es='Español (Spanish)'; uci commit luci

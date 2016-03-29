@@ -1,0 +1,71 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+
+mount -t proc proc /proc
+mount -t sysfs sys /sys
+mount -t tmpfs dev /dev
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+
+local sys_ext=/sys/block/mmcblk0/mmcblk0p2
+local dev_ext=/dev/mmcblk0p2
+local dev_ext_major=179
+local dev_ext_minor=2
+
+#local sys_ext=/sys/block/sda/sda2
+#local dev_ext=/dev/sda2
+#local dev_ext_major=8
+#local dev_ext_minor=2
+local extroot_dir=/extroot
+local count=0
+
+while true
+do
+    if [[ ${count} -eq 20 ]]
+    then
+        echo "Timed out."; break
+    fi
+ 
+    if [ -d ${sys_ext} ] 
+    then
+        echo "Found ${sys_ext} : ${count}"; break
+    fi
+
+    sleep 1; echo "Waiting for extroot dev : ${dev_ext} : ${count}"; count=$((count+1))
+done
+
+if [ ! -b ${dev_ext} ] 
+then
+    echo "Creating ${dev_ext}"; mknod ${dev_ext} b ${dev_ext_major} ${dev_ext_minor}
+fi
+
+mkdir ${extroot_dir}
+echo "Mounting ${dev_ext} on ${extroot_dir}"
+mount ${dev_ext} ${extroot_dir} -o noatime
+
+umount /sys
+umount /proc
+umount /dev/pts
+umount /dev
+
+count=0
+while true
+do
+    if [ -e ${extroot_dir}/init ]
+    then
+        echo "Found ${extroot_dir}/init"
+        exec switch_root ${extroot_dir} /sbin/init
+    fi
+ 
+    sleep 1; echo "Checking for ${extroot_dir}/init : ${count}"; count=$((count+1))
+
+    if [[ ${count} -eq 5 ]]
+    then
+        echo "Timed out."; break
+    fi
+done
+
+
+echo "Continuing initramfs boot"
+export INITRAMFS=1
+exec /sbin/init

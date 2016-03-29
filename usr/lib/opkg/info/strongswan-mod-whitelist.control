@@ -1,0 +1,10 @@
+Package: strongswan-mod-whitelist
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Source: feeds/packages/net/strongswan
+License: GPL-2.0+
+Section: net
+Maintainer: Steven Barth <cyrus@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 8903
+Description:  StrongSwan peer identity whitelisting plugin

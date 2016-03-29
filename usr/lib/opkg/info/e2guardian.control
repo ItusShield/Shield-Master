@@ -1,0 +1,10 @@
+Package: e2guardian
+Version: 3.1.2-1
+Depends: libc, librt, libpthread, libstdcpp, zlib, libpcre, libopenssl
+Source: feeds/packages/net/e2guardian
+License: GPL-2.0
+Section: net
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 735539
+Description:  E2Guardian

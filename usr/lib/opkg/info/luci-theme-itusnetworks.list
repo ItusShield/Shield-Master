@@ -1,0 +1,10 @@
+/etc/uci-defaults/luci-theme-itusnetworks
+/www/luci-static/itusnetworks/custom.js
+/www/luci-static/itusnetworks/mobile.css
+/usr/lib/lua/luci/view/themes/itusnetworks/header.htm
+/usr/lib/lua/luci/view/themes/itusnetworks/footer.htm
+/www/luci-static/itusnetworks/html5.js
+/www/luci-static/itusnetworks/itus_logo.png
+/www/luci-static/itusnetworks/cascade.css
+/usr/lib/lua/luci/view/themes/itusnetworks/header_BACKUP
+/www/luci-static/itusnetworks/favicon.ico

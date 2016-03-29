@@ -1,0 +1,1 @@
+uci set luci.languages.it='Italiano (Italian)'; uci commit luci

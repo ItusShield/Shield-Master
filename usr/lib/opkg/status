@@ -1,0 +1,2930 @@
+Package: luci-i18n-base-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-ddns-vi
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: terminfo
+Version: 5.9-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: kmod-sched-connmark
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-sched-core, kmod-ipt-core, kmod-ipt-conntrack-extra
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libuci-lua
+Version: 2015-04-09.1-1
+Depends: libc, librt, libpthread, libuci, liblua
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-i18n-firewall-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-stp
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-llc
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-firewall-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libc
+Version: -1
+Depends: libgcc
+Status: install hold installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: libnet
+Version: 1.1.6-1
+Depends: libc, librt, libpthread, libpcap
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+Auto-Installed: yes
+
+Package: luci-app-snort
+Version: 20150125
+Depends: libc, librt, libpthread, luci-mod-admin-full, snort
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+Auto-Installed: yes
+
+Package: kmod-crypto-user
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-hash, kmod-crypto-manager, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libnetfilter-cthelper
+Version: 1.0.0-1
+Depends: libc, librt, libpthread, libmnl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-app-e2guardian
+Version: 20150121
+Depends: libc, librt, libpthread, luci-mod-admin-full, e2guardian
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: luci-i18n-multiwan-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: opkg
+Version: 9c97d5ecd795709c8584e972bfdf3aee3a5b846d-7
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/opkg.conf f5671dd6962c83bdc54f3bb0da13891647
+Installed-Time: 1431992240
+
+Package: luci-i18n-openvpn-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: wget
+Version: 1.16.3-1
+Depends: libc, librt, libpthread, libpcre, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: luci-i18n-base-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-openvpn-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: ddns-scripts_no-ip_com
+Version: 2.4.0-1
+Depends: ddns-scripts
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992243
+
+Package: libpthread
+Version: -1
+Depends: libgcc
+Status: install hold installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: ubus
+Version: 2015-01-22-2d660c519d2fcff95248da9f4fd9b37d61f9eb09
+Depends: libc, librt, libpthread, libubus, libblobmsg-json, ubusd, libjson-c
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-multiwan-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-manager
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-aead, kmod-crypto-hash, kmod-crypto-pcompress, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: kmod-crypto-pcompress
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: kmod-bridge
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-stp
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-multiwan-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: zoneinfo-europe
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: rpcd
+Version: 2015-04-14-9a6bfa110a5f8caa10951921b63bafdbb6e97d33
+Depends: libc, librt, libpthread, libubus, libubox, libuci, libblobmsg-json
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/rpcd 9f58e09bb250fe6cee61c873ff2c1a19cb
+Installed-Time: 1431992240
+
+Package: luci-i18n-firewall-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: busybox
+Version: 1.23.2-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992237
+
+Package: luci-app-itus
+Version: 1-1
+Depends: libc, librt, libpthread, luci-app-e2guardian, luci-app-snort, luci-app-clamav, openvpn-openssl, luci-app-openvpn, luci-app-tinyproxy, luci-theme-itusnetworks, luci-app-qos, luci-app-multiwan, luci-app-ddns, luci-proto-relay, nmap-ssl, ethtool, ettercap, tcpdump, ebtables, ebtables-utils, curl, strongswan-full, whois, nbtscan, zoneinfo-core, fdisk, e2fsprogs, conntrack-tools, ip6tables, ip6tables-extra, ip6tables-mod-nat, iptables-mod-geoip, libgeoip, wget, luci-ssl, htop, libxslt, bwm-ng, openssl-util, netdiscover, mkdosfs, grep, luci-ssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+
+Package: odhcpd
+Version: 2015-04-10-e23972527f93a3d2a5412400384519ff550708b7
+Depends: libc, librt, libpthread, libubox, libuci, libubus
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-lib-ip
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, liblua, libnl-tiny
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: zoneinfo-southamerica
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-qos-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-multiwan-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-iv
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-manager, kmod-crypto-rng, kmod-crypto-wq, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libubus-lua
+Version: 2015-01-22-2d660c519d2fcff95248da9f4fd9b37d61f9eb09
+Depends: libc, librt, libpthread, libubus, liblua
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-firewall-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-hash
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: libopenldap
+Version: 2.4.39-2
+Depends: libc, librt, libpthread, libopenssl, libsasl2
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/openldap/ldap.conf b79af04396ef5b0718511dd1b1c1a8c28c
+Installed-Time: 1431992245
+
+Package: kmod-tun
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: kmod-crypto-aead
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: libiwinfo-lua
+Version: 2015-03-23-40f2844fadc05f4a4de7699dbc12fee295b7057b
+Depends: libc, librt, libpthread, libiwinfo, liblua
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: kmod-crypto-deflate
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-lib-zlib, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: conntrack-tools
+Version: 1.4.2-1
+Depends: libc, librt, libpthread, libnetfilter-conntrack, libnetfilter-cttimeout, libnetfilter-cthelper, libnetfilter-queue
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/conntrackd/conntrackd.conf a28542ea50a8d2daa0b2ebd55b0148767f
+Installed-Time: 1431992238
+
+Package: luci-i18n-openvpn-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: ebtables
+Version: 2.0.10-4-3
+Depends: libc, librt, libpthread, kmod-ebtables
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: libiwinfo
+Version: 2015-03-23-40f2844fadc05f4a4de7699dbc12fee295b7057b
+Depends: libc, librt, libpthread, libuci
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: kmod-crypto-md5
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-hash, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libcurl
+Version: 7.40.0-3
+Depends: libc, librt, libpthread, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992235
+Auto-Installed: yes
+
+Package: openssl-util
+Version: 1.0.2a-0
+Depends: libc, librt, libpthread, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/ssl/openssl.cnf 370ced7ca131cff3c6de479eb64ae7664f
+Installed-Time: 1431992240
+
+Package: kmod-lib-crc-ccitt
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-openvpn-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: zoneinfo-atlantic
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: bind-host
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, bind-libs
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: kmod-ipsec
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-authenc, kmod-crypto-iv, kmod-crypto-des, kmod-crypto-hmac, kmod-crypto-md5, kmod-crypto-sha1, kmod-crypto-deflate, kmod-crypto-cbc
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci-i18n-base-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libgcrypt
+Version: 1.6.1-1
+Depends: libc, librt, libpthread, libgpg-error
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: luci-i18n-openvpn-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libnetfilter-queue
+Version: 1.0.2-1
+Depends: libc, librt, libpthread, libmnl, libnfnetlink
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-theme-itusnetworks
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+Auto-Installed: yes
+
+Package: kmod-pppoe
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ppp, kmod-pppox
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-base-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-pppox
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ppp
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: strongswan-mod-openssl
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: kmod-ipt-conntrack
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipt-core, kmod-nf-conntrack
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-zh-tw
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-openvpn-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: base-files
+Version: 157-r45655
+Depends: libc, librt, libpthread, netifd, procd, jsonfilter, libopenssl, libcurl
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/hosts 081ef9d5367595d16e30b4b4549d9f4353
+ /etc/inittab f3d1d58ca2a9ef33a56d668d9693231ec4
+ /etc/group 35b63adf31591ac37358e918a5e8d4f9c1
+ /etc/passwd 6a451aa33393f47ade89b8bce4d9711818
+ /etc/shadow 3f69f695049fec0efc32b75e9e23dcd2ae
+ /etc/profile cd4d535f9a79ab37fbf3e86ae423939e3c
+ /etc/shells 8b35ce73c18161a7d7ed16fa244410993b
+ /etc/sysctl.conf 2550180927c3bba0fc442b3269154aef73
+ /etc/rc.local c6672b244e23d034c0cf03e4ff3bffa8b3
+ /etc/sysupgrade.conf 9e87b05fe2f12c84d1c465b39632274847
+ /etc/config/dhcp-master 5c82c3976b531722570b067062ca005079
+ /etc/config/firewall-router 661782f23fc3c5c1b91f0adf3c72c15393
+ /etc/config/tinyproxy-gateway 6f3a141511218129ceebf0ec9179b795e6
+ /etc/config/network-slave 6c4fcbb140f3787c390ab2a6e94e9a88a1
+ /etc/config/network-router 28001f9188e6ece549219d5eab3791a5bf
+ /etc/config/tinyproxy-router 5b737aabb3b5cdf9d6abfe083e34d5eba9
+ /etc/config/network-bridge fe86e5640081538c50d20ad24fd13aa5cb
+ /etc/config/network-gateway 6c4fcbb140f3787c390ab2a6e94e9a88a1
+ /etc/config/system e272a84f790d17d1c906edf6c9d3d6be6e
+ /etc/config/network-master 4977d53e5832debc7eba97de81809ad094
+Installed-Time: 1431992237
+
+Package: luci-app-clamav
+Version: 20150223
+Depends: libc, librt, libpthread, luci-mod-admin-full, clamav
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: luci-i18n-tinyproxy-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: zoneinfo-simple
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: libpcre
+Version: 8.36-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+Auto-Installed: yes
+
+Package: relayd
+Version: 2015-03-13-2970ff60bac6b70ecb682779d5c776dc559dc0b9
+Depends: libc, librt, libpthread, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: grep
+Version: 2.21-2
+Depends: libc, librt, libpthread, libpcre
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: zoneinfo-asia
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-openvpn-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: netifd
+Version: 2015-04-21-d0dcf744ba054c9b572be63519b1415685353c8d
+Depends: libc, librt, libpthread, libuci, libnl-tiny, libubus, ubus, ubusd, jshn, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: libmnl
+Version: 1.0.3-2
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: ddns-scripts
+Version: 2.4.0-1
+Status: install user installed
+Architecture: all
+Conffiles:
+ /etc/config/ddns f02b9dff4950ff5ddb6a22860ddeceaaba
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: luci-i18n-base-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libdaq
+Version: 2.0.4-1
+Depends: libc, librt, libpthread, libdnet, libpcap, libnfnetlink, libnetfilter-queue
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: libnetfilter-cttimeout
+Version: 1.0.0-1
+Depends: libc, librt, libpthread, libmnl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-base-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: dnsmasq
+Version: 2.73rc7-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/dhcp 0ca5001fbdfb1e20e1fd901ec6df0896a9
+ /etc/dnsmasq.conf 1e6ab19c1ae5e70d609ac7b6246541d520
+Installed-Time: 1431992238
+
+Package: kmod-mii
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: procd
+Version: 2015-04-10-27159f21f76b973a9fa3ec92b8fee2e390d43a43
+Depends: libc, librt, libpthread, ubusd, ubus, libjson-script, ubox, libubox, libubus
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: libblkid
+Version: 2.25.2-4
+Depends: libc, librt, libpthread, libuuid
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: ddns-scripts_cloudflare
+Version: 2.4.0-1
+Depends: ddns-scripts
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992243
+
+Package: kmod-crypto-hmac
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-manager, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: ubusd
+Version: 2015-01-22-2d660c519d2fcff95248da9f4fd9b37d61f9eb09
+Depends: libc, librt, libpthread, libubox, libjson-c
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: kmod-ipt-geoip
+Version: 3.10.20+2.5-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipt-core
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: kmod-llc
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: strongswan
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, ip, kmod-crypto-authenc, kmod-ipsec, kmod-ipsec4, kmod-ipsec6, kmod-ipt-ipsec, iptables-mod-ipsec
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/ipsec.secrets 78572ad5646ae7cc3d4bb2dd5c216110cd
+ /etc/strongswan.conf 0a043e77911c7e831b4f5e155c5265749f
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: jansson
+Version: 2.7-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: iptables-mod-ipsec
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, iptables, kmod-ipt-ipsec
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-qos-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libgpg-error
+Version: 1.12-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+Auto-Installed: yes
+
+Package: luci-i18n-base-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-app-qos
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, qos-scripts
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-qos-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-base-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: block-mount
+Version: 2015-04-14-e6004000ff15d7bd32cf5663e8690fc94d7ec747
+Depends: libc, librt, libpthread, ubox, libubox, libuci
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992237
+
+Package: luci-i18n-base-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: strongswan-mod-xcbc
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-app-ddns
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-mod-admin-full, ddns-scripts
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: firewall
+Version: 2015-02-26
+Depends: libc, librt, libpthread, libubox, libubus, libuci, libip4tc, libip6tc, libxtables, kmod-ipt-core, kmod-ipt-nat
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/firewall ba2e0abb6c97419c5d943dcfae2e944ad8
+ /etc/firewall.user bd68324966481011f5e36570258ad97dd4
+ /etc/snort.user 5b553f92a1ae2c6b5327f16d97255fc4a9
+Installed-Time: 1431992238
+
+Package: luci-i18n-base-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libxml2
+Version: 2.9.2-3
+Depends: libc, librt, libpthread, zlib
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+Auto-Installed: yes
+
+Package: luci-app-firewall
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-tinyproxy-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-ca
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libdnet
+Version: 1.12-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+Auto-Installed: yes
+
+Package: iptables-mod-nfqueue
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, iptables, kmod-nfnetlink-queue, kmod-ipt-nfqueue
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-qos-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: dosfsck
+Version: 3.0.27-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: luci-i18n-tinyproxy-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-cs
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libuci
+Version: 2015-04-09.1-1
+Depends: libc, librt, libpthread, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-qos-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: liblua
+Version: 5.1.5-1
+Depends: libc, librt
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci-i18n-qos-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libip4tc
+Version: 1.4.21-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: tcpdump
+Version: 4.5.1-4
+Depends: libc, librt, libpthread, libpcap
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-i18n-qos-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-de
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: odhcp6c
+Version: 2015-04-20-9ab4436ebed3a86f22bcc5831671d3d94c9f8155
+Depends: libc, librt, libpthread, kmod-ipv6
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: bwm-ng
+Version: 0.6-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: whois
+Version: 5.2.7-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/whois.conf ae4f814639fef0358a7ff9f152edc1312e
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: fstools
+Version: 2015-04-14-e6004000ff15d7bd32cf5663e8690fc94d7ec747
+Depends: libc, librt, libpthread, ubox, json-c, libblobmsg_json
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-base-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: strongswan-utils
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: iptables-mod-ipopt
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, iptables, kmod-ipt-ipopt
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: ethtool
+Version: 3.18-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: luci-i18n-qos-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: uci
+Version: 2015-04-09.1-1
+Depends: libc, librt, libpthread, libuci
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: lua
+Version: 5.1.5-1
+Depends: libc, liblua, librt
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: zoneinfo-pacific
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-tinyproxy-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-ssl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci, libustream-polarssl, px5g
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-base-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-ddns-el
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: dropbear
+Version: 2015.67-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/dropbear/dropbear_rsa_host_key e3b0c44298fc1c149afbf4c8996fb92427
+ /etc/dropbear/dropbear_dss_host_key e3b0c44298fc1c149afbf4c8996fb92427
+ /etc/config/dropbear 9192a6a4d31d34b418d95ed8d677b6aaa3
+Installed-Time: 1431992238
+
+Package: luci-i18n-ddns-en
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libnl
+Version: 3.2.21-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-tinyproxy-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libnetfilter-conntrack
+Version: 1.0.4-1
+Depends: libc, librt, libpthread, libnfnetlink, kmod-nf-conntrack-netlink, libmnl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: libustream-polarssl
+Version: 2014-04-14-a4ca61527236e89eb9efb782fd9bfd04796144e3
+Depends: libc, librt, libpthread, libubox, libpolarssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-i18n-ddns-es
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: curl
+Version: 7.40.0-3
+Depends: libc, librt, libpthread, libcurl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: zoneinfo-core
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: strongswan-charon
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: kmod-crypto-aes
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-openvpn-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libstdcpp
+Version: -1
+Status: install hold installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: mtd
+Version: 20
+Depends: libc, librt, libpthread, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: ip6tables-mod-nat
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, ip6tables, kmod-ipt-nat6
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: libltdl
+Version: 2.4-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-multiwan-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-cbc
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-manager, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-firewall-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-core
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-tinyproxy-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-qos-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-fr
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: ebtables-utils
+Version: 2.0.10-4-3
+Depends: libc, librt, libpthread, kmod-ebtables, ebtables
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-firewall-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libjson-c
+Version: 0.12-1
+Depends: libc, librt
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-pt-br
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libgcc
+Version: -1
+Status: install hold installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-qos-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-multiwan-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: nbtscan
+Version: 1.5.1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: libgeoip
+Version: 1.6.5-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: strongswan-mod-des
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: kmod-crypto-authenc
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-manager, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-multiwan-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: strongswan-mod-uci
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan, libuci
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: zoneinfo-northamerica
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-firewall-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: mkdosfs
+Version: 3.0.27-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: libip6tc
+Version: 1.4.21-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: e2guardian
+Version: 3.1.2-1
+Depends: libc, librt, libpthread, libstdcpp, zlib, libpcre, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/e2guardian/e2guardianf1.conf 3d8296e43ae2c7af3b0782dab641fed0df
+ /etc/config/e2guardian 18a3bb2ff17ad7468b74b593a6d7c815ff
+Installed-Time: 1431992243
+
+Package: luci-i18n-firewall-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: tinyproxy
+Version: 1.8.3-2
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/tinyproxy f0f8d25474e6effd003cc9491de9d332c8
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: luci-i18n-qos-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-he
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-proto-ppp
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: kmod-crypto-wq
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: libuuid
+Version: 2.25.2-4
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-mod-admin-full
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base, libubus-lua
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: luci-i18n-qos-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-base
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, lua, libuci-lua, luci-lib-nixio, luci-lib-ip, rpcd
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: libubox
+Version: 2015-03-22-b8d9b382e39823850331edc2a92379173daf1be3
+Depends: libc, librt
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-multiwan-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-multiwan-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-ddns-hu
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: zoneinfo-india
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-firewall-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: bind-client
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, bind-libs
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: liblzo
+Version: 2.08-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libsmartcols
+Version: 2.25.2-4
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: ntpclient-noxtal
+Version: 2010_365-1
+Depends: libc, librt, libpthread
+Conflicts: ntpclient-2010
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+
+Package: luci-i18n-tinyproxy-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-it
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: librt
+Version: -1
+Depends: libpthread
+Status: install hold installed
+Essential: yes
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-multiwan-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-ja
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libjson-script
+Version: 2015-03-22-b8d9b382e39823850331edc2a92379173daf1be3
+Depends: libc, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: bind-libs
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+Auto-Installed: yes
+
+Package: luci-i18n-openvpn-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: librpc
+Version: 2015-04-10-308e9964bfb623773dc0dcc99ef9d18d1551d6ae
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: uclibcxx
+Version: 0.2.4-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: libblobmsg-json
+Version: 2015-03-22-b8d9b382e39823850331edc2a92379173daf1be3
+Depends: libc, libjson-c, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-openvpn-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: iptables
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, kmod-ipt-core, libip4tc, libip6tc, libxtables
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-base-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: openvpn-openssl
+Version: 2.3.6-3
+Depends: libc, librt, libpthread, kmod-tun, liblzo, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/openvpn 09507797225f41595d4970b11dbaf9f9b4
+Installed-Time: 1431992240
+
+Package: luci-i18n-firewall-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-ddns-zh-cn
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-nf-conntrack-netlink
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-nfnetlink, kmod-ipt-conntrack
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: kmod-crypto-des
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-multiwan-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-openvpn-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-firewall-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: jshn
+Version: 2015-03-22-b8d9b382e39823850331edc2a92379173daf1be3
+Depends: libc, libjson-c, libubox, libblobmsg-json
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: libncurses
+Version: 5.9-1
+Depends: libc, librt, libpthread, terminfo
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libpcap
+Version: 1.5.3-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: e2fsprogs
+Version: 1.42.12-1
+Depends: libc, librt, libpthread, libuuid, libext2fs, libblkid
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/e2fsck.conf dece11e2b15f487d7d2bf9f96abe2eaaf9
+Installed-Time: 1431992238
+
+Package: bind-tools
+Version: 9.9.6-P1-2
+Depends: libc, librt, libpthread, bind-libs
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: kmod-ipv6
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci-i18n-multiwan-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libpolarssl
+Version: 1.3.10-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-firewall-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-ppp
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-lib-crc-ccitt, kmod-slhc
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-openvpn-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-multiwan-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: zoneinfo-australia-nz
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-openvpn-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: clamav
+Version: 0.98.6-1
+Depends: libc, librt, libpthread, uclibcxx, zlib, libcurl, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992243
+
+Package: luci-i18n-firewall-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-ms
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libnfnetlink
+Version: 1.0.1-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: strongswan-mod-updown
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-openvpn-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libubus
+Version: 2015-01-22-2d660c519d2fcff95248da9f4fd9b37d61f9eb09
+Depends: libc, librt, libpthread, libubox
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-tinyproxy-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-proto-relay
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, relayd
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: uhttpd
+Version: 2015-03-30-b9178b9357798ae23a5724333cc6572d14f23958
+Depends: libc, librt, libpthread, libubox
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/uhttpd d33d6b0909a9b68bfb8bfa965f072561a0
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-no
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-iptunnel4
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: zoneinfo-africa
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: kmod-iptunnel6
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipv6
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: kmod-ipsec4
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipsec, kmod-iptunnel4
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: ddns-scripts_nsupdate
+Version: 2.4.0-1
+Depends: ddns-scripts, bind-client
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992243
+
+Package: kmod-ipsec6
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-ipsec, kmod-iptunnel6
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: iptables-mod-conntrack-extra
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, iptables, kmod-ipt-conntrack-extra
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-qos-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: netdiscover
+Version: 0.3-pre-beta7-3
+Depends: libc, librt, libpthread, libpcap, libnet
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: usign
+Version: 2015-04-06-395369a223b6c48e0d897d0c4c4d17236edbeea9
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: ip6tables
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, kmod-ip6tables, iptables
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: libxtables
+Version: 1.4.21-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-qos-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: zlib
+Version: 1.2.8-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992235
+Auto-Installed: yes
+
+Package: snort
+Version: 2.9.7.2-1
+Depends: libc, librt, libpthread, libdaq, libdnet, libopenssl, libpcap, libpcre, libuuid, zlib
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/config/snort 1f4e6b5ff28e9c5e0acd788dc04b220429
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: htop
+Version: 1.0.3-1
+Depends: libc, librt, libpthread, libncurses
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: luci-lib-nixio
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, liblua
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+Auto-Installed: yes
+
+Package: strongswan-mod-x509
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-openvpn-he
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: strongswan-mod-unity
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: libyaml
+Version: 0.1.6-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: luci-app-tinyproxy
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-base-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-openvpn-hu
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-pl
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-tinyproxy-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-pt
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libxslt
+Version: 1.1.28-2
+Depends: libc, librt, libpthread, libxml2
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: strongswan-mod-sqlite
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan, strongswan-mod-sql, libsqlite3
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-multiwan-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-firewall-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-crypto-rng
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, uhttpd, uhttpd-mod-ubus, luci-mod-admin-full, luci-theme-itusnetworks, luci-app-firewall, luci-proto-ppp, libiwinfo-lua
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+Auto-Installed: yes
+
+Package: luci-i18n-qos-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-firewall-pt-br
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: strongswan-mod-dhcp
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: fdisk
+Version: 2.25.2-4
+Depends: libc, librt, libpthread, libblkid, libsmartcols
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-base-ca
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-openvpn-it
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: ettercap
+Version: 0.7.4.1-1
+Depends: libc, librt, libpthread, libpcap, libnet, libopenssl, libpcre, libncurses, libltdl, zlib
+Status: install user installed
+Architecture: cn70xx
+Conffiles:
+ /etc/etter.conf 9f9f4d0529b325a71848ea41f09bcdc519
+Installed-Time: 1431992244
+
+Package: luci-app-multiwan
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: libgmp
+Version: 6.0.0-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: libsqlite3
+Version: 3080803-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: strongswan-mod-sql
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-multiwan-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-cs
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-openvpn-ja
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-qos-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-firewall-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libext2fs
+Version: 1.42.12-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: strongswan-full
+Version: 5.3.0-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: luci-i18n-base-de
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: ip6tables-extra
+Version: 1.4.21-1
+Depends: libc, librt, libpthread, ip6tables, kmod-ip6tables-extra
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-tinyproxy-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: ubox
+Version: 2015-04-02-6fbafd7d5b2835d00eb9d1684e7c6ccf907177b8
+Depends: libc, librt, libpthread, libubox, ubusd, ubus, libubus, libuci
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-ro
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kernel
+Version: 3.10.20-1-7249e901273a7e253967168cb6ea0120
+Depends: libc, librt, libpthread
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+Auto-Installed: yes
+
+Package: luci-i18n-tinyproxy-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libnl-tiny
+Version: 0.1-4
+Depends: libc
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-ru
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libbz2
+Version: 1.0.6-2
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: kmod-lib-zlib
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci-i18n-qos-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-sk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-sk
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-el
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-multiwan-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: iptables-mod-geoip
+Version: 2.5-1
+Depends: libc, librt, libpthread, iptables, kmod-ipt-geoip
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: luci-i18n-base-en
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-tinyproxy-sv
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: px5g
+Version: 3
+Depends: libc, librt, libpthread, libpolarssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-i18n-ddns-sv
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-pl
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-base-es
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-qos-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: kmod-ifb
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-multiwan-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-nls-base
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: strongswan-mod-whitelist
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-firewall-pt
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: libgdbm
+Version: 1.11-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+
+Package: uhttpd-mod-ubus
+Version: 2015-03-30-b9178b9357798ae23a5724333cc6572d14f23958
+Depends: libc, librt, libpthread, uhttpd, libubus, libblobmsg-json
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992240
+
+Package: luci-i18n-tinyproxy-zh-tw
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: zoneinfo-poles
+Version: 2015d-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: libsasl2
+Version: 2.1.26-3
+Depends: libc, librt, libpthread, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992245
+Auto-Installed: yes
+
+Package: jsonfilter
+Version: 2014-06-19-cdc760c58077f44fc40adbbe41e1556a67c1b9a9
+Depends: libc, librt, libpthread, libubox, libjson-c
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-tinyproxy-tr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-ddns-tr
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-qos-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-qos
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-base-fr
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-base
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: nmap-ssl
+Version: 6.47-2
+Depends: libc, librt, libpthread, libpcap, libstdcpp, libopenssl
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992246
+Auto-Installed: yes
+
+Package: kmod-crypto-arc4
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992238
+
+Package: kmod-crypto-sha1
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-crypto-hash, kmod-crypto-core
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+
+Package: luci-i18n-openvpn-ms
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-uk
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: libopenssl
+Version: 1.0.2a-0
+Depends: libc, librt, libpthread, zlib
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992234
+Auto-Installed: yes
+
+Package: luci-i18n-ddns-uk
+Version: 2.2.1-1
+Depends: libc, librt, libpthread, luci-app-ddns
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-slhc
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120), kmod-lib-crc-ccitt
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: luci-i18n-multiwan-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: qos-scripts
+Version: 1.2.1-7
+Depends: libc, librt, libpthread, tc, kmod-sched-core, kmod-sched-connmark, kmod-ifb, iptables, iptables-mod-ipopt, iptables-mod-conntrack-extra
+Status: install user installed
+Architecture: all
+Conffiles:
+ /etc/config/qos 4eb1db98deeb8341f9307ffa2cefb44eda
+Installed-Time: 1431992240
+
+Package: libdb47
+Version: 4.7.25.4.NC-3
+Depends: libc, librt, libpthread, libxml2
+Provides: libdb47-full
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992244
+
+Package: luci-i18n-firewall-zh-cn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-firewall-ro
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-i18n-multiwan-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-multiwan
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: luci-app-openvpn
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992240
+
+Package: luci-i18n-firewall-ru
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-firewall
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992241
+
+Package: kmod-sched-core
+Version: 3.10.20-1
+Depends: kernel (= 3.10.20-1-7249e901273a7e253967168cb6ea0120)
+Status: install hold installed
+Architecture: cn70xx
+Installed-Time: 1431992239
+Auto-Installed: yes
+
+Package: strongswan-mod-md5
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Status: install user installed
+Architecture: cn70xx
+Installed-Time: 1431992247
+
+Package: luci-i18n-openvpn-no
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-openvpn
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+
+Package: luci-i18n-tinyproxy-vi
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, luci-app-tinyproxy
+Status: install user installed
+Architecture: all
+Installed-Time: 1431992242
+

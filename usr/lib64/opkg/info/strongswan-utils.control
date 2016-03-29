@@ -1,0 +1,11 @@
+Package: strongswan-utils
+Version: 5.3.0-1
+Depends: libc, librt, libpthread, strongswan
+Source: feeds/packages/net/strongswan
+License: GPL-2.0+
+Section: net
+Maintainer: Steven Barth <cyrus@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 56419
+Description:  StrongSwan is an OpenSource IPsec implementation for the Linux operating system.
+ This package contains the pki & scepclient utilities.

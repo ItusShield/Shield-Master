@@ -1,0 +1,10 @@
+Package: dnsmasq
+Version: 2.73rc7-1
+Depends: libc, librt, libpthread
+Source: package/network/services/dnsmasq
+License: GPL-2.0
+LicenseFiles: COPYING
+Section: net
+Architecture: cn70xx
+Installed-Size: 185660
+Description:  It is intended to provide coupled DNS and DHCP service to a LAN.

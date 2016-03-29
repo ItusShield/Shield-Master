@@ -1,0 +1,3 @@
+/etc/config/firewall
+/etc/firewall.user
+/etc/snort.user

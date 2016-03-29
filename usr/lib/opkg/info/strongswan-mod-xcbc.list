@@ -1,0 +1,2 @@
+/etc/strongswan.d/charon/xcbc.conf
+/usr/lib/ipsec/plugins/libstrongswan-xcbc.so

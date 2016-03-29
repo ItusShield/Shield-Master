@@ -1,0 +1,17 @@
+/usr/lib/lua/luci/model/cbi/ddns/detail.lua
+/usr/lib/lua/luci/view/ddns/detail_value.htm
+/usr/lib/lua/luci/model/cbi/ddns/hints.lua
+/etc/uci-defaults/luci-ddns
+/usr/lib/lua/luci/view/ddns/global_value.htm
+/usr/lib/lua/luci/view/ddns/overview_doubleline.htm
+/usr/lib/lua/luci/view/ddns/system_status.htm
+/usr/lib/lua/luci/model/cbi/ddns/global.lua
+/usr/lib/lua/luci/view/ddns/detail_logview.htm
+/usr/lib/lua/luci/tools/ddns.lua
+/usr/lib/lua/luci/view/ddns/overview_startstop.htm
+/usr/lib/lua/luci/view/ddns/detail_lvalue.htm
+/usr/lib/lua/luci/view/admin_status/index/ddns.htm
+/usr/lib/lua/luci/controller/ddns.lua
+/usr/lib/lua/luci/model/cbi/ddns/overview.lua
+/usr/lib/lua/luci/view/ddns/overview_status.htm
+/usr/lib/lua/luci/view/ddns/overview_enabled.htm

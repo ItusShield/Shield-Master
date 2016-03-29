@@ -1,0 +1,8 @@
+Package: luci
+Version: git-15.128.52815-526a602-1
+Depends: libc, librt, libpthread, uhttpd, uhttpd-mod-ubus, luci-mod-admin-full, luci-theme-itusnetworks, luci-app-firewall, luci-proto-ppp, libiwinfo-lua
+Source: feeds/luci/collections/luci
+Section: luci
+Architecture: all
+Installed-Size: 105
+Description:  Standard OpenWrt set including full admin with ppp support and the itusnetworks theme

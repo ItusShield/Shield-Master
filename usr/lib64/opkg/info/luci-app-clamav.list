@@ -1,0 +1,2 @@
+/usr/lib/lua/luci/model/cbi/clamav.lua
+/usr/lib/lua/luci/controller/clamav.lua

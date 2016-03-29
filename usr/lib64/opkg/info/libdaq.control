@@ -1,0 +1,10 @@
+Package: libdaq
+Version: 2.0.4-1
+Depends: libc, librt, libpthread, libdnet, libpcap, libnfnetlink, libnetfilter-queue
+Source: feeds/packages/libs/libdaq
+License: GPL-2.0
+Section: libs
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 143839
+Description:  Data Acquisition library for packet I/O.

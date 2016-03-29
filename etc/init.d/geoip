@@ -1,0 +1,37 @@
+#!/bin/sh /etc/rc.common
+
+START=83
+ME="geoip"
+LOCK='/var/run/geoip.lock'
+COUNTRIES=`cat /etc/config/geoip | grep 1 | cut -c 17-18`
+
+validate_system_section()
+{
+        uci_validate_section geoip geoip "${1}" \
+                'country:string' \
+                'whitelist:string'
+}
+
+start() {
+ local cfg="$1"
+COUNTRIES=`cat /etc/config/geoip | grep 1 | cut -c 17-18`
+	for country in $COUNTRIES
+		do
+			iptables -I FORWARD -m geoip --dst-cc $country -j DROP
+			iptables -I FORWARD -m geoip --src-cc $country -j DROP
+		done
+}
+
+
+stop() {
+COUNTRIES=`cat /etc/config/geoip | grep 1 | cut -c 17-18`
+        for country in $COUNTRIES                                                                  
+                do                                                                                 
+                        iptables -D FORWARD -m geoip --dst-cc $country -j DROP                     
+                        iptables -D FORWARD -m geoip --src-cc $country -j DROP                     
+                done 
+}
+
+restart() {
+	stop; sleep 1; start
+}

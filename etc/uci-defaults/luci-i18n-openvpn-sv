@@ -1,0 +1,1 @@
+uci set luci.languages.sv='Svenska (Swedish)'; uci commit luci

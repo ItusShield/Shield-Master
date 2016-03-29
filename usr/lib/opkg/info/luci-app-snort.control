@@ -1,0 +1,10 @@
+Package: luci-app-snort
+Version: 20150125
+Depends: libc, librt, libpthread, luci-mod-admin-full, snort
+Source: feeds/packages/net/luci-app-snort
+License: Apache-2.0
+Section: luci
+Maintainer: Luka Perkov <luka@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 2077
+Description:  This package will install Snort Web UI.

@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+
+START=90
+STOP=10
+
+start() {
+if [ -z "`grep /sbin/fw_upgrade /etc/crontabs/root`" ]; then
+	RANDOM=`awk 'BEGIN{srand();print int(rand()*(63000-2000))+2000 }'`
+	OFFSET=$(($RANDOM % 60))
+	RANDOM1=`awk 'BEGIN{srand();print int(rand()*(63000-2000))+1900 }'`
+	OFFSET1=$(($RANDOM1 % 60))
+	mkdir -p /etc/crontabs
+	echo "$OFFSET 03 * * * sh /sbin/fw_upgrade" >> /etc/crontabs/root
+	/etc/init.d/cron restart
+fi
+}

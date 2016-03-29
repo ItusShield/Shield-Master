@@ -1,0 +1,14 @@
+Package: strongswan-full
+Version: 5.3.0-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/net/strongswan
+License: GPL-2.0+
+Section: net
+Maintainer: Steven Barth <cyrus@openwrt.org>
+Architecture: cn70xx
+Installed-Size: 104
+Description:  StrongSwan is an OpenSource IPsec implementation for the Linux operating system.
+ This meta-package contains dependencies for all of the strongswan plugins
+ except kernel-libipsec,
+ socket-dynamic and which are ommitted in favor of the kernel-netlink and
+ socket-default plugins.

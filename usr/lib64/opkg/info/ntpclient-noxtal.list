@@ -1,0 +1,3 @@
+/etc/config/ntpclient
+/etc/init.d/ntpclient
+/usr/sbin/ntpclient

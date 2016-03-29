@@ -1,0 +1,10 @@
+Package: jansson
+Version: 2.7-1
+Depends: libc, librt, libpthread
+Source: feeds/packages/libs/jansson
+License: MIT
+Section: libs
+Maintainer: Gergely Kiss <mail.gery@gmail.com>
+Architecture: cn70xx
+Installed-Size: 36545
+Description:  Jansson is a C library for encoding, decoding and manipulating JSON data

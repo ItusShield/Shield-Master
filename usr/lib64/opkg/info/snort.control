@@ -1,0 +1,12 @@
+Package: snort
+Version: 2.9.7.2-1
+Depends: libc, librt, libpthread, libdaq, libdnet, libopenssl, libpcap, libpcre, libuuid, zlib
+Source: feeds/packages/net/snort
+Section: net
+Architecture: cn70xx
+Installed-Size: 2532110
+Description:  Snort is an open source network intrusion detection and prevention system.
+ It is capable of performing real-time traffic analysis, alerting, blocking
+ and packet logging on IP networks.  It utilizes a combination of protocol
+ analysis and pattern matching in order to detect anomalies, misuse and
+ attacks.

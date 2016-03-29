@@ -1,0 +1,9 @@
+Package: libxtables
+Version: 1.4.21-1
+Depends: libc, librt, libpthread
+Source: package/network/utils/iptables
+License: GPL-2.0
+Section: libs
+Architecture: cn70xx
+Installed-Size: 29849
+Description:  IPv4/IPv6 firewall - shared xtables library

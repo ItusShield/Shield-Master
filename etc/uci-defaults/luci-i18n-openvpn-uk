@@ -1,0 +1,1 @@
+uci set luci.languages.uk='украї́нська (Ukrainian)'; uci commit luci

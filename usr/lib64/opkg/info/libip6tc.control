@@ -1,0 +1,9 @@
+Package: libip6tc
+Version: 1.4.21-1
+Depends: libc, librt, libpthread
+Source: package/network/utils/iptables
+License: GPL-2.0
+Section: libs
+Architecture: cn70xx
+Installed-Size: 19990
+Description:  IPv6 firewall - shared libiptc library

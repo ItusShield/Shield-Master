@@ -1,0 +1,11 @@
+Package: libopenldap
+Version: 2.4.39-2
+Depends: libc, librt, libpthread, libopenssl, libsasl2
+Source: feeds/packages/libs/openldap
+Section: libs
+Maintainer: W. Michael Petullo <mike@flyn.org>
+Architecture: cn70xx
+Installed-Size: 385539
+Description:  OpenLDAP Software is an open source implementation of the
+ Lightweight Directory Access Protocol (LDAP).
+ This package contains the shared LDAP client libraries, needed by other programs.

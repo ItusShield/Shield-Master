@@ -1,0 +1,1 @@
+uci set luci.languages.de='Deutsch (German)'; uci commit luci

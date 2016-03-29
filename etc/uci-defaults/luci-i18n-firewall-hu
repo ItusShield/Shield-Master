@@ -1,0 +1,1 @@
+uci set luci.languages.hu='Magyar (Hungarian)'; uci commit luci

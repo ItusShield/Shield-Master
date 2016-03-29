@@ -1,0 +1,8 @@
+/usr/sbin/named-checkconf
+/usr/sbin/named-checkzone
+/usr/bin/dig
+/usr/bin/host
+/usr/sbin/dnssec-signzone
+/usr/sbin/rndc
+/usr/sbin/dnssec-keygen
+/usr/sbin/rndc-confgen
