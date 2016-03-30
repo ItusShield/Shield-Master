@@ -22,7 +22,13 @@ fi
 # Create secondary ip address for br-lan
 network_id=$(echo $ip_address | grep -o "${NET_ID_REGEX}")
 let host_id=$(echo $ip_address | cut -d'.' -f4)
-let host_id=$host_id+1
+if [ "$host_id" == 254 ]
+then
+	let host_id=$host_id-1
+else
+	let host_id=$host_id+1
+fi
+	
 ip=$(echo "$network_id$host_id")
 
 create_blockdomain()

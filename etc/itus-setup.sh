@@ -1,70 +1,87 @@
-#!/bin/sh
+#!/bin/sh                                                                        
 
-get_gateway()
-{
-        GATEWAY=`ip route show default | grep default | awk '{print $3}' | uniq`
-        echo $GATEWAY
-}
-
-get_ip()
-{
-        IP_REGEX="inet [0-9]\+\.[0-9]\+\.[0-9]\+\."
+. /usr/share/libubox/jshn.sh
+PRIVATE_ADDRESS="^(192\.168|10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.)"
+                                                                                 
+get_gateway()                                                                    
+{                                                                                
+        GATEWAY=`ip route show default | grep default | awk '{print $3}' | uniq` 
+        if [  `echo "$GATEWAY" | grep -E $PRIVATE_ADDRESS` ]           
+        then                                                                     
+                echo $GATEWAY                                                    
+        else                                                                     
+                echo None                                                        
+        fi                                                                               
+}                                                                                
+                                                                                 
+get_ip()                                                                         
+{                                                                                
+        IP_REGEX="inet [0-9]\+\.[0-9]\+\.[0-9]\+\."                              
         IP=`ip addr show br-lan | grep -o "${IP_REGEX}" | grep -o [0-9].* | uniq`
-        echo $IP
-}
-
-start_ettercap()
-{
-        GATEWAY=$(get_gateway)
-        IP=$(get_ip)
-        ettercap -D -oM arp:remote /$IP.1-254/ /$GATEWAY/ -i br-lan & >/dev/null
-        sleep 60
-}
-
-check_ettercap()
-{
-        pid=`pidof ettercap`
-        if [ "0$(echo $pid|tr -d ' ')" -eq "0$(echo $STAT|tr -d ' ')" ]
-        then
-            start_ettercap
-        fi
-}
-
-stop_ettercap()
-{
-        pid=`pidof ettercap`
-        kill -9 $pid
-}
-
-start_setip()
-{
-        GATEWAY=$(get_gateway)
-        IP1=$(get_ip)
-        IP2=`echo $IP1 | sed 's/$/111/'`
-        ifconfig br-lan $IP2            ## USE FOR GATEWAY MODE
-	route add default gw $GATEWAY
-        sleep 5
-}
-/etc/init.d/vnstat enable && /etc/init.d/vnstat start && sleep 1
-
-# Enable cron
-/etc/init.d/cron enable && /etc/init.d/cron start && sleep 1
-
-# Enable firmware upgrade
+        if [ `echo $IP | grep -E $PRIVATE_ADDRESS` ]                      
+        then                                                                    
+                echo $IP                                               
+        else                                                           
+                echo None                                                       
+        fi                                                             
+}                                                                      
+                                                                       
+/etc/init.d/vnstat enable && /etc/init.d/vnstat start && sleep 1       
+                                                                       
+# Enable cron                                                         
+/etc/init.d/cron enable && /etc/init.d/cron start && sleep 1          
+                                                                      
+# Enable firmware upgrade                                             
 /etc/init.d/fwupgrade enable && /etc/init.d/fwupgrade start && sleep 1
+                                                                      
+# Restart firewall                                                    
+/etc/init.d/firewall restart && sleep 1                               
+                                                                      
+# Get br-lan protocol status
+json_load "$(ubus call network.interface.lan status)"
+json_get_var protocol proto
+if [ "$protocol" == "dhcp" ]
+then
+	while true                                                            
+	do                                                                    
+		# Get gateway and dhcp leased address
+	        gateway=$(get_gateway)                                        
+	        dhcp_leased_ip=$(get_ip)                                                 
+	        if [ "$gateway" != "None" ] && [ "$dhcp_leased_ip" != "None" ]           
+	        then                                                          
+		
+			# Get current ip address information
+	               	ip_address=`ip addr show br-lan | grep $dhcp_leased_ip | awk '{ print $2 }'` 
+			netmask=`ipcalc.sh $ip_address | grep NETMASK | cut -d'=' -f2`
+			broadcast=`ipcalc.sh $ip_address | grep BROADCAST | cut -d'=' -f2`
+	                static_ip=`echo $dhcp_leased_ip | sed 's/$/111/'`                      
 
-# Restart firewall
-/etc/init.d/firewall restart && sleep 1
+			# Setup lan ip address
+		        uci set network.lan.proto=static
+		        uci set network.lan.ipaddr=$static_ip
+		        uci set network.lan.netmask=$netmask
+			uci set network.lan.gateway=$gateway
+			uci set network.lan.broadcast=$broadcast
+			uci set network.lan.dns=$gateway
+		        uci commit
+			ifup lan
+			
+			# wait for lan interface to come up
+			sleep 10
+	                break                                                 
+	        fi                                                            
+	        sleep 1                                                       
+	done                                                                  
+	logger -t "itus-setup" -s "Set lan ip address to ${static_ip}"
+fi
 
-# Restart NTP Client
-/etc/init.d/ntpclient restart && sleep 1
-
+sh /etc/itus/ituswebfilter.sh update
 sleep 10
 for i in `tail -n 3 /tmp/resolv.conf.auto | grep nameserver`; do
 if [ -z "`cat /etc/resolv.conf | grep "$i"`" ]; then
 echo "nameserver $i" >> /etc/resolv.conf
 fi
-done 
+done    
 
 sleep 1
 ethtool -s eth0 autoneg off
@@ -80,26 +97,8 @@ sleep 1
 ethtool -s eth2 autoneg on
 sleep 1
 
-counter=0
-
-start_setip
-
-start_ettercap
-
-while true
-do
-        sleep 60
-        if [ "$counter" -eq 2 ]
-        then
-                sleep 2
-                redirect_luci
-        fi
-        check_ettercap
-        if [ "$counter" -eq 1440 ]
-        then
-                counter=0
-                sleep 3
-        fi
-
-        counter=$((counter+1))
-done
+# Remove line from rc.local                                                
+if grep 'Can be safely removed' /etc/rc.local; then                        
+        sed -i '/next few lines/d' /etc/rc.local                           
+        sed -i '/Can be safely removed/d' /etc/rc.local                    
+fi 

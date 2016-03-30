@@ -24,10 +24,8 @@ start_service() {
                 echo "validation failed"
                 return 1
         }
-
 	sed -i '/^$/d' /etc/snort/rules/exclude.rules
 	sed -i '/^$/d' /etc/snort/rules/local.rules
-
 	sh /etc/snort/rules/exclude_rules.sh /etc/snort/rules/exclude.rules &>/dev/null
 
         rm -f /etc/snort/profile
@@ -44,16 +42,10 @@ start_service() {
         ln -sf $CONFIG $TMP_CONFIG
 
         procd_open_instance
-        snort --daq-dir /usr/lib/daq -QND -c /etc/snort/snort8.conf --create-pid --pid-path /var/run/  -G 0x8 -A fast &
-	procd_set_param command $PROG "--daq-dir" "/usr/lib/daq/" "-QND" "-c" "/etc/snort/snort7.conf" "--pid-path" "/var/snort/" "--create-pid" "-G" "0x7" "-A" "fast"
+	ifconfig eth0 up promisc
+	ifconfig eth2 up promisc
+	procd_set_param command $PROG "-i" "eth0:eth2" "--daq-dir" "/usr/lib/daq/" "-QND" "-c" "/etc/snort/snort_bridge.conf" "--pid-path" "/var/snort/" "--create-pid"
 
-        iptables -I FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout
-	ip6tables -I FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout		
-
-	SNORT8=$(pidof snort | cut -d' ' -f1)
-	SNORT7=$(pidof snort | cut -d' ' -f2)
-	schedtool -a 0 $SNORT7
-	schedtool -a 1 $SNORT8
         sleep 3
 
         procd_set_param $config_file1
@@ -66,14 +58,7 @@ start_service() {
 
 stop_service()
 {
-        iptables -D FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout
-	ip6tables -D FORWARD -j NFQUEUE --queue-balance 7:8 --queue-cpu-fanout	
-	SNORT8=$(pidof snort | cut -d' ' -f1)
 	service_stop ${PROG}
-
-#	SNORT7=$(pidof snort | cut -d' ' -f2)
-	kill -9 $SNORT8
-#	kill -9 $SNORT7
 }
 
 service_triggers()
