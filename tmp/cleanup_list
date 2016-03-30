@@ -1,0 +1,17 @@
+/HOTFIX_TEST.txt
+/etc/itus/hotfix.tar.gz
+/etc/itus/snort.rules
+/etc/update_blacklist.sh
+/etc/itus/blacklists.tar.gz
+/etc/itus/lists/porn
+/etc/itus/lists/drugs
+/etc/itus/lists/gambling
+/etc/itus/lists/proxies
+/etc/itus/lists/dating
+/etc/itus/lists/blasphemy
+/etc/itus/lists/racism
+/etc/itus/lists/malicious
+/etc/itus/lists/piracy
+/etc/itus/lists/social
+/etc/itus/lists/illegal
+/usr/lib/lua/luci/view/themes/itusnetworks/header_BACKUP

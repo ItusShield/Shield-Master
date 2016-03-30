@@ -67,7 +67,8 @@ cron_clean() {
 
 
 cron_seed() {
-        local cronstuff='*/'"$INTERVALMINUTES"' * * * *'
+        # local cronstuff='*/'"$INTERVALMINUTES"' * * * *'		# ITUS
+        local cronstuff='0 0 * * *' 					# run at midnight
         local reset="/etc/init.d/ntpclient restart"
 
         cron_clean

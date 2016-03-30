@@ -47,6 +47,16 @@ ads = s:taboption("tab_basic", Flag, "content_ads", translate("Ads"))
 ads.default=ads.enabled
 ads.rmempty = false
 
+malicious = s:taboption("tab_basic", Flag, "content_malicious", translate("Malicious"))
+malicious.default = malicious.disabled
+malicious.rmempty = false
+
+drugs = s:taboption("tab_basic", Flag, "content_drugs", translate("Drugs"))
+drugs.default=drugs.disabled
+drugs.rmempty = false
+
+------DISABLE FUNCTIONS NOT UPDATED VIA FW_UPGRADE-----
+if 1 == 2 then
 blasphemy = s:taboption("tab_basic", Flag, "content_blasphemy", translate("Blasphemy"))
 blasphemy.default=blasphemy.disabled
 blasphemy.rmempty = false
@@ -54,10 +64,6 @@ blasphemy.rmempty = false
 dating = s:taboption("tab_basic", Flag, "content_dating", translate("Dating"))
 dating.default = dating.disabled
 dating.rmempty = false
-
-drugs = s:taboption("tab_basic", Flag, "content_drugs", translate("Drugs"))
-drugs.default=drugs.disabled
-drugs.rmempty = false
 
 gambling = s:taboption("tab_basic", Flag, "content_gambling", translate("Gambling"))
 gambling.default=gambling.disabled
@@ -90,6 +96,10 @@ racism.rmempty = false
 social = s:taboption("tab_basic", Flag, "content_social", translate("Social"))
 social.default=social.disabled
 social.rmempty = false
+
+end
+
+-----ENDofDISABLE-----
 
 --------------------- WhiteList Tab ------------------------
 

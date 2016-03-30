@@ -621,13 +621,31 @@ start_service() {
 		echo "nameserver $DNS_SERVER" >> /tmp/resolv.conf
 	done
 
-	sh /etc/update_blacklist.sh
+	# Hans
+	mount_ramdisk							# mount ramdisk
+	sh /etc/itus/update_blacklist.sh
 	sh /etc/itus/write-categories.sh
 	sed -i '/^$/d' /etc/itus/lists/white.list
 	sed -i '/^$/d' /etc/itus/lists/black.list
 	sh /etc/itus/lists/whitelist.sh /etc/itus/lists/white.list
 	sh /etc/itus/lists/blacklist.sh /etc/itus/lists/black.list
 }
+
+mount_ramdisk() {
+	# check to see if there is a mount point in /mnt/ramdisk and if there is'nt it will creat one, this is used the first time you run this script on the shield to created the mount point.
+        if [ ! -d "/mnt/ramdisk" ]; then
+                mkdir /mnt/ramdisk
+        fi
+	
+	# check to see of /mnt/ramdisk is mounted if not will create the ramdisk in memory.
+        if mount | grep /mnt/ramdisk > /dev/null; then
+                echo "yes mounted"
+        else
+                echo "creating ramdisk"
+                mount -t tmpfs -o size=50000k tmpfs /mnt/ramdisk
+        fi
+}
+
 
 reload_service() {
 	rc_procd start_service "$@"

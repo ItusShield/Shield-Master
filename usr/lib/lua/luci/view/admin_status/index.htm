@@ -588,8 +588,9 @@
 		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
 		<tr><td width="33%"><%:Model%></td><td>S001</td></tr>
 		<tr><td width="33%"><%:Serial Number%></td><td><%=luci.sys.exec("cut -d \' \' -f 5 /proc/cmdline | cut -d \'=\' -f2") or "?"%></td></tr>
-		<tr><td width="33%"><%:Firmware Version%></td><td>v1.51 SP1</td></tr>
-		<tr><td width="33%"><%:Operating Mode%></td><td>UTM Gateway (Experimental)</td></tr>
+		<tr><td width="33%"><%:Firmware Version%></td><td>v1.51 SP1
+				    <%:+ Hotfix %><%=luci.sys.exec("cat /.hf_date | cut -c5-10") or "?"%></td></tr>
+		<tr><td width="33%"><%:Operating Mode%></td><td>UTM <%=luci.sys.exec("cat /.shield_mode") or "unknown"%></td></tr>
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:IPS Last Updated%></td><td><%=luci.sys.exec("ls -alst /etc/snort/rules/snort.rules | cut -c52-58") or "?"%></td></tr>
 		<tr><td width="33%"><%:Web Filter Last Updated%></td><td><%=luci.sys.exec("ls -alst /etc/itus/lists/ads | cut -c52-58") or "?"%></td></tr>
@@ -604,6 +605,7 @@
 
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Total Available%></td><td id="memtotal">-</td></tr>
+		<tr><td width="33%"><%:Free%></td><td id="memfree">-</td></tr>
 		<tr><td width="33%"><%:Buffered%></td><td id="membuff">-</td></tr>
 	</table>
 </fieldset>

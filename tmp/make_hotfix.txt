@@ -1,0 +1,98 @@
+Changes on/before 160109 by ITUS:
+1) /etc/ituswebfilter.sh 
+	- Fix for increment into the broadcast address.
+
+2) /etc/itus-setup.sh   
+	- bridge mode users cannot replace the x.x.x.111 address in the web UI. If a static IP address is assigned to br-lan it will add the address to the interface, but will not remove x.x.x.111. The user ends up with multiple address on the interface.  
+	- added a line to setup a DNS server to the static interface because I notice /tmp/resolve.conf.auto didn't have a dns server.
+
+3) /etc/itus/lists/log-gen.sh 
+	-  updated /etc/itus/lists/log-gen.sh to generate logs with blocked domains and changed the format to be more readable. 
+
+4) /etc/config/dhcp 
+	- Removed the DHCP server options from the lan interface
+
+5) /etc/init.d/snort 
+	- Ensure eth0 and eth2 are in promiscuous mode.
+        - Added ifconfig eth0 up promisc
+        - Added ifconfig eth2 up promisc
+        
+6) /etc/itus/factory_reset.sh
+	- Removed umount -a from them beginning of the file because it makes the entire file system read-only and the following commands in the script cannot successfully execute.
+
+7) /etc/rc.local
+	- Removed the first 5 or 6 lines of code that copies the /etc/config/network.br to /etc/config/network and /etc/init.d/snort.br to /etc/init.d/snort
+	- This prevents the system from reverting back to the default settings between reboots.
+
+8) /etc/config/network
+	- This is the default networking file for bridge mode and no changes were made. I added it to ensure itus-setup.sh and ituswebfilter would run correctly on the first run.
+
+9) /etc/snort/snort_bridge.conf
+	- Setup whitelist and blacklist for snort but the settings are commented out by default. Users can uncomment the lines, add an ip address to the whitelist or blacklist, and restart snort.
+        - Setup blacklisting - I discovered snort has a blacklist of ip addresses in /etc/snort/rules that we aren't using.
+        - Setup whitelisting - Snort will not process the rules for packets destined for ip addresses in the whitelist. This would be a good work around for     the PS4.
+
+10) /etc/snort/rules/L2.whitelist
+	- Users can add ip addresses to the whitelist
+
+11) *all in 1) to 10)
+	- solved the ownership of the files - no longer need to chown root.root of these files.
+
+Changes on/before 160301
+
+12) 	= DAILY UPDATE SCRIPT FOR IPS AND WF - version 6
+	> /sbin/fw_upgrade /etc/init.d/dnsmasq /etc/itus/update_blacklist.sh /etc/itus/write-categories.sh
+	- added the ramdisk functionality so that temporary files are kept in memory only.
+	- ref: http://itus.accessinnov.com/Update-script-fw-upgrade-td43.html
+
+
+13) 	= UPDATE TO SP1 
+	> /tmp/upgrade_rc_to_sp1.sh
+	- updated script to use dropbox as source of updates
+	- ref: http://itus.accessinnov.com/Upgrade-to-1-51SP1-td10.html
+
+14) 	= LUCI - LAST UPDATE DISPLAY
+	> /.hf_date /usr/lib/lua/luci/view/admin_status/index.htm
+	- added hotfix date visiblity to LuCI
+	- check Status > Overview > Firmware Version line
+
+15) 	= LUCI - DIAGNOSTICS
+	> /usr/lib/lua/luci/view/admin_network/diagnostics.htm
+	- change the default diagnostics URL from itusnetworks.com to www.msftncsi.com
+	- check Network > Diagnostics
+
+16) 	= CLI - CLEANING OF OBSOLETE FILES
+	> /tmp/cleanup.sh /tmp/cleanup_list CHANGED
+	- archives files listed in cleanup_list into cleanup_archive.tgz
+	- deletes files if the archive is created correctly
+	- restarts snort to download new rules
+	- run with "sh /tmp/cleanup.sh" 
+
+17)	= BOOT - NTP AND DROPBEAR
+	>  /etc/rc.local
+	- force a dropbear restart 30 seconds after last bood command
+	- restart NTP client after dropbear
+
+18) 	= INIT - NTP CRON
+	> /etc/init.d/ntpclient
+	- set the cron job to run at midnight instead of every 10 minutes.
+	- check system > scheduled tasks
+
+19) 	= OPKG - ARCH
+	> /etc/opkg.conf
+	- adds the architectures for cn70xx and octeon to the package list.
+
+20) 	= IPS - LOG PROBLEM
+	> /etc/snort/snort.conf
+	- disabled preproc_rules for preprocessor, decoder and sensitive date
+	- ref http://itus.accessinnov.com/Speed-issue-due-to-log-size-too-big-SOLUTION-td189.html
+
+21) 	= LUCI WF - CONTENT FILTERING OPTIONS
+	> /usr/lib/lua/luci/model/cbi/e2guardian.lua
+	- removed all but Ads, Malicious and Drugs from option list 
+	- this is related due to limitations of fw_upgrade script
+
+22) 	= LUCI - UTM MODE DISPLAY
+	> /usr/lib/lua/luci/view/admin_status/index.htm /etc/rc.local /.shield_mode /etc/itus/detect_mode.sh
+	- runs at startup detect-mode script. This determines router/bridge/gateway mode
+
