@@ -1,444 +1,198 @@
-#set -x
-#!/bin/sh
-###############################################################################################################################
-# fw_upgrade
-# Release Date: 11/24/2015
-# Copyright ITUS Networks 2015 - All rights reserved
-# The scripts function is to cleanup & update Itus Shield services and firmware
-# Log Location: /etc/itus/fw_upgrade.log
-###############################################################################################################################
+rm -R /tmp/*.rules
+	curl -ko /tmp/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
+	curl -ko /tmp/botcc.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.rules
+	curl -ko /tmp/ciarmy.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-ciarmy.rules
+	curl -ko /tmp/compromised.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-compromised.rules
+	curl -ko /tmp/dshield.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-dshield.rules
+	curl -ko /tmp/emerging-exploit.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-exploit.rules
+	curl -ko /tmp/emerging-malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-malware.rules
+	curl -ko /tmp/emerging-mobile_malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-mobile_malware.rules
+	curl -ko /tmp/emerging-user_agents.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-user_agents.rules
+	curl -ko /tmp/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
+	curl -ko /tmp/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
+	curl -ko /tmp/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
+#	curl -ko /tmp/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+#	curl -ko /tmp/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+#	curl -ko /tmp/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
+#	curl -ko /tmp/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
-SERIAL=`cut -d ' ' -f 5 /proc/cmdline | cut -d '=' -f2`
+cat /tmp/*.rules > alert.list
+sed -i 's/alert /drop /' alert.list
+sed '/^\#/d' alert.list >> temp.rules
+sed '/^$/d' temp.rules > snort.rules
 
-RESTORE_PART=/dev/mmcblk0p1
-MOUNT=/overlay
+	sed -i '/sid:2002802/s/^/#/' snort.rules
+	sed -i '/sid:2019237/s/^/#/' snort.rules
+	sed -i '/sid:2018194/s/^/#/' snort.rules
+	sed -i '/sid:2012251/s/^/#/' snort.rules
+	sed -i '/sid:2100527/s/^/#/' snort.rules
+	sed -i '/sid:2100649/s/^/#/' snort.rules
+	sed -i '/sid:2009080/s/^/#/' snort.rules
+	sed -i '/sid:2009205/s/^/#/' snort.rules
+	sed -i '/sid:2009206/s/^/#/' snort.rules
+	sed -i '/sid:2009207/s/^/#/' snort.rules
+	sed -i '/sid:2009208/s/^/#/' snort.rules
+	sed -i '/sid:2008975/s/^/#/' snort.rules
+	sed -i '/sid:2010515/s/^/#/' snort.rules
+	sed -i '/sid:2003099/s/^/#/' snort.rules
+	sed -i '/sid:2101201/s/^/#/' snort.rules
+	sed -i '/sid:2001689/s/^/#/' snort.rules
+	sed -i '/sid:2011695/s/^/#/' snort.rules
+	sed -i '/sid:2013359/s/^/#/' snort.rules
+	sed -i '/sid:2013358/s/^/#/' snort.rules
+	sed -i '/sid:2013357/s/^/#/' snort.rules
+	sed -i '/sid:2013355/s/^/#/' snort.rules
+	sed -i '/sid:2013354/s/^/#/' snort.rules
+	sed -i '/sid:2013353/s/^/#/' snort.rules
+	sed -i '/sid:2013360/s/^/#/' snort.rules
+	sed -i '/sid:2100648/s/^/#/' snort.rules
+	sed -i '/sid:2009080/s/^/#/' snort.rules
+	sed -i '/sid:2101390/s/^/#/' snort.rules
+	sed -i '/sid:2012086/s/^/#/' snort.rules
+	sed -i '/sid:2100650/s/^/#/' snort.rules
+	sed -i '/sid:2011803/s/^/#/' snort.rules
+	sed -i '/sid:2012510/s/^/#/' snort.rules
+	sed -i '/sid:2001219/s/^/#/' snort.rules
+	sed -i '/sid:2003068/s/^/#/' snort.rules
+	sed -i '/sid:2002995/s/^/#/' snort.rules
+	sed -i '/sid:2011347/s/^/#/' snort.rules
+	sed -i '/sid:2102925/s/^/#/' snort.rules
+	sed -i '/sid:2012263/s/^/#/' snort.rules
+	sed -i '/sid:2012848/s/^/#/' snort.rules
+	sed -i '/sid:2001046/s/^/#/' snort.rules
+	sed -i '/sid:2003055/s/^/#/' snort.rules
+	sed -i '/sid:2002993/s/^/#/' snort.rules
+	sed -i '/sid:2002992/s/^/#/' snort.rules
+	sed -i '/sid:2001353/s/^/#/' snort.rules
+	sed -i '/sid:2009205/s/^/#/' snort.rules
+	sed -i '/sid:2009206/s/^/#/' snort.rules
+	sed -i '/sid:2009207/s/^/#/' snort.rules
+	sed -i '/sid:2009208/s/^/#/' snort.rules
+	sed -i '/sid:2001046/s/^/#/' snort.rules
+	sed -i '/sid:2016950/s/^/#/' snort.rules
+	sed -i '/sid:2019509/s/^/#/' snort.rules
+	sed -i '/sid:2011507/s/^/#/' snort.rules
+	sed -i '/sid:2010514/s/^/#/' snort.rules
+	sed -i '/sid:2010516/s/^/#/' snort.rules
+	sed -i '/sid:2010518/s/^/#/' snort.rules
+	sed -i '/sid:2010520/s/^/#/' snort.rules
+	sed -i '/sid:2010522/s/^/#/' snort.rules
+	sed -i '/sid:2010525/s/^/#/' snort.rules
+	sed -i '/sid:2010527/s/^/#/' snort.rules
+	sed -i '/sid:2012056/s/^/#/' snort.rules
+	sed -i '/sid:2012075/s/^/#/' snort.rules
+	sed -i '/sid:2012119/s/^/#/' snort.rules
+	sed -i '/sid:2012205/s/^/#/' snort.rules
+	sed -i '/sid:2012272/s/^/#/' snort.rules
+	sed -i '/sid:2012398/s/^/#/' snort.rules
+	sed -i '/sid:2010931/s/^/#/' snort.rules
+	sed -i '/sid:2011764/s/^/#/' snort.rules
+	sed -i '/sid:2103088/s/^/#/' snort.rules
+	sed -i '/sid:2103192/s/^/#/' snort.rules
+	sed -i '/sid:2103134/s/^/#/' snort.rules
+	sed -i '/sid:2101852/s/^/#/' snort.rules
+	sed -i '/sid:2015526/s/^/#/' snort.rules
+	sed -i '/sid:2009151/s/^/#/' snort.rules
+	sed -i '/sid:2012997/s/^/#/' snort.rules
+	sed -i '/sid:2101201/s/^/#/' snort.rules
+	sed -i '/sid:2016672/s/^/#/' snort.rules
+	sed -i '/sid:2000538/s/^/#/' snort.rules
+	sed -i '/sid:2000540/s/^/#/' snort.rules
+	sed -i '/sid:2011367/s/^/#/' snort.rules
+	sed -i '/sid:2012251/s/^/#/' snort.rules
+	sed -i '/sid:2100528/s/^/#/' snort.rules
+	sed -i '/sid:2007994/s/^/#/' snort.rules
+	sed -i '/sid:2008066/s/^/#/' snort.rules
+	sed -i '/sid:2012180/s/^/#/' snort.rules
+	sed -i '/sid:2102925/s/^/#/' snort.rules
+	sed -i '/sid:2100628/s/^/#/' snort.rules
+	sed -i '/sid:2010697/s/^/#/' snort.rules
+	sed -i '/sid:2013479/s/^/#/' snort.rules
+	sed -i '/sid:2001046/s/^/#/' snort.rules
+	sed -i '/sid:2011803/s/^/#/' snort.rules
+	sed -i '/sid:2009768/s/^/#/' snort.rules
+	sed -i '/sid:2019490/s/^/#/' snort.rules
+	sed -i '/sid:2011347/s/^/#/' snort.rules
+	sed -i '/sid:2011037/s/^/#/' snort.rules
+	sed -i '/sid:2103133/s/^/#/' snort.rules 
+	sed -i '/sid:2103132/s/^/#/' snort.rules
+	sed -i '/sid:2017005/s/^/#/' snort.rules
+	sed -i '/sid:2006445/s/^/#/' snort.rules
+	sed -i '/sid:2003927/s/^/#/' snort.rules
+	sed -i '/sid:2010908/s/^/#/' snort.rules
+	sed -i '/sid:2014020/s/^/#/' snort.rules
+	sed -i '/sid:2017479/s/^/#/' snort.rules
+    
+rm alert.list
+rm temp.rules
 
-URL="https://api.itusnetworks.net/free/v1/$SERIAL?file="
-UPDATES=""
+echo "#*************************************************************" >> snort.rules
+echo "#" >> snort.rules
+echo "#  Copyright (c) 2003-2016, Emerging Threats" >> snort.rules
+echo "#  All rights reserved." >> snort.rules
+echo "#  " >> snort.rules
+echo "#  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the " >> snort.rules
+echo "#  following conditions are met:" >> snort.rules
+echo "#  " >> snort.rules
+echo "#  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following " >> snort.rules
+echo "#    disclaimer." >> snort.rules
+echo "#  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the " >> snort.rules
+echo "#    following disclaimer in the documentation and/or other materials provided with the distribution." >> snort.rules
+echo "#  * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived " >> snort.rules
+echo "#    from this software without specific prior written permission." >> snort.rules
+echo "#  " >> snort.rules
+echo "#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES," >> snort.rules 
+echo "#  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE " >> snort.rules
+echo "#  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, " >> snort.rules
+echo "#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR " >> snort.rules
+echo "#  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, " >> snort.rules
+echo "#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE " >> snort.rules
+echo "#  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. " >> snort.rules
+echo "#" >> snort.rules
+echo "#*************************************************************" >> snort.rules
 
-RESET=0
-RESET_FILES=""
-SCRIPT_LOG_FILE="/etc/itus/fw_upgrade.log"
-MAX_LOG_AGE=604800 #7 Days
-MAX_BACKUP_AGE=1209600 #14 Days
+sleep 1
 
-log(){
-if [ ! -z "$1" ]; then
-	logger -t "fw_upgrade" -s $1
-	echo $1 >> $SCRIPT_LOG_FILE
-fi    
-}
+rm /tmp/ads.tmp
+#### Ads Updates ####
+curl -s -d mimetype=plaintext -d hostformat=unixhosts http://pgl.yoyo.org/adservers/serverlist.php? | sort >> /tmp/ads.tmp
+curl -s http://winhelp2002.mvps.org/hosts.txt | grep -v "#" | grep -v "127.0.0.1" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | sed -e '1,3d' | sort >> /tmp/ads.tmp
+#curl -s http://someonewhocares.org/hosts/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ads.tmp
+curl -s http://sysctl.org/cameleon/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ads.tmp
+curl -s http://optimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt  | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ads.tmp
+curl -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ads.tmp
 
-add_nameserver(){
-	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
-}
+sleep 1
+sed 's/^/address=\//g' -i /tmp/ads.tmp
+sed -e 's/$/\/10.10.10.11/' -i /tmp/ads.tmp
+sleep 1
 
-remove_nameserver(){
-	 sed -i '$d' /etc/resolv.conf
-}
+rm /tmp/malicious.tmp
+### Malware Updates ###
+curl -s http://www.malwaredomainlist.com/hostslist/hosts.txt | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/malicious.tmp
+curl -s http://mirror1.malwaredomains.com/files/justdomains | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/malicious.tmp
+curl -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/malicious.tmp
+curl -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/malicious.tmp
+sleep 1
 
-cleanup_logs(){
-	if [ -e /.fw_script_timer ] && [ -e $SCRIPT_LOG_FILE ]; then
-		if [ `expr $(date +%s) - $(date +%s -r /.fw_script_timer)` -gt $MAX_LOG_AGE ]; then
-			cat /dev/null > $SCRIPT_LOG_FILE
-			date >> $SCRIPT_LOG_FILE
-			touch /.fw_script_timer
-		else
-			echo "" >> $SCRIPT_LOG_FILE
-			date >> $SCRIPT_LOG_FILE
-		fi
-	else
-		date > $SCRIPT_LOG_FILE
-		touch /.fw_script_timer
-	fi
-}
+sed 's/^/address=\//g' -i /tmp/malicious.tmp
+sed -e 's/$/\/10.10.10.11/' -i /tmp/malicious.tmp
 
-cleanup_system(){
-	[[ -f /tmp/md5sum ]] && rm -f /tmp/md5sum 
-    [[ -f /tmp/files ]] && rm -f /tmp/files
-	[[ -f /tmp/corruptfiles ]] && rm -rf /tmp/corruptfiles
-	if [ -n "`mount | grep ${MOUNT}`" ]; then
-		[[ -f ${MOUNT}/blacklists.tar.gz ]] && rm -rf ${MOUNT}/blacklists.tar.gz #Cleanup from legacy fw_upgrade
-		[[ -f ${MOUNT}/hotfix.tar.gz ]] && rm -rf ${MOUNT}/hotfix.tar.gz #Cleanup from legacy fw_upgrade
-		[[ -f ${MOUNT}/snort.rules ]] && rm -rf ${MOUNT}/snort.rules #Cleanup from legacy fw_upgrade
-		rm -f ${MOUNT}/FSCK*.REC > /dev/null 2>&1 #Cleanup from legacy fw_upgrade
-		
-		log "Checking current firmware files ...."
-		if [ -d $MOUNT/backup ]; then
-			for i in `find $MOUNT/backup -type f`; do
-				if [ `expr $(date +%s) - $(date +%s -r $i)` -gt $MAX_BACKUP_AGE ]; then
-					rm -f $i > /dev/null 2>&1
-				fi
-			done
-		fi
-		
-		for i in `find $MOUNT/ -type f`; do
-			MD5SUM=`md5sum $i | awk -F ' ' '{print $1}'` > /dev/null 2>&1
-			if [ -z "$MD5SUM" ]; then
-				echo $i >> /tmp/corruptfiles
-			elif [ $MD5SUM = "d41d8cd98f00b204e9800998ecf8427e" ]; then
-				echo $i >> /tmp/corruptfiles
-			fi
-		done
-		
-		if [ -e /tmp/corruptfiles ]; then
-			for i in `cat /tmp/corruptfiles`; do
-				umount $MOUNT
-				mount -o rw $RESTORE_PART $MOUNT
-				log "Removing corrupted firmware file ($i) ...."
-				rm -f $i > /dev/null 2>&1
-				if [ "$?" != "0" ]; then
-					log "Unable to remove corrupted firmware! Aborting ...."
-					log "Shield Update(s) Failed"
-					touch /.do_support
-					remove_nameserver
-					[[ -f /.do_date ]] && rm -rf /.do_date
-					date > /.do_date
-					exit 1
-				fi
-			done
-			umount $MOUNT
-			mount -o rw $RESTORE_PART $MOUNT
-		fi
-	fi
-}
+sleep 1
 
-unmount_filesystem(){
-	[[ -d ${MOUNT}/updates/ ]] && rm -rf ${MOUNT}/updates/*
-	[[ -n "`mount | grep ${MOUNT}`" ]] && umount $MOUNT > /dev/null 2>&1
-}
-
-error(){
-	unmount_filesystem
-	cleanup_system
-	remove_nameserver	
-	touch /.do_support
-	[[ -f /.do_date ]] && rm -rf /.do_date
-	date > /.do_date
-	log "Shield Update(s) Failed"
-	exit 1
-}
-
-mount_filesystem(){
-	[[ -n "`mount | grep ${MOUNT}`" ]] && umount $MOUNT > /dev/null 2>&1
-	mkdir -p ${MOUNT}
-	if [ -z "`mount | grep ${MOUNT}`" ]; then
-		mount -o rw $RESTORE_PART $MOUNT
-		[[ "$?" != "0" ]] && log "Unable to mount restore partition! Aborting ...." && error
-	fi
-	[[ -d ${MOUNT}/updates/ ]] && rm -rf ${MOUNT}/updates/*
-}
-
-determine_shield_mode () {
-	   if [ `df -h | grep -m1 mmcblk* | awk '{ print substr( $0, 6, 14 ) }'` ]; then
-                
-                DISK_PARTITION=`df -h | grep -m1 mmcblk* | awk '{ print substr( $0, 6, 14 ) }'`
-                
-                if [ $DISK_PARTITION = mmcblk0p2 ]; then
-                        SHIELD_MODE=Router
-                elif [ $DISK_PARTITION = mmcblk0p3 ]; then
-                        SHIELD_MODE=Gateway
-                elif [ $DISK_PARTITION = mmcblk0p4 ]; then
-                        SHIELD_MODE=Bridge
-                else
-                        log "Shields operation mode undetermined! Aborting ...."
-						error
-                fi
-                
-        else
-                log "Shields operation mode undetermined! Aborting ...."
-				error
-        fi
-}
-
-check_for_update() {
-        log "Fetching md5sums ...."
-        curl -o /tmp/md5sum ${URL}md5sum -k
-        [[ "$?" != "0" ]] && log "Unable to download new md5sums! Aborting ...." && error
-        sed -i '/^$/d' /tmp/md5sum
-		
-		if [ -n "`grep "No user registered to this serial number" /tmp/md5sum`" ]; then
-			log "No user registered to this serial number ($SERIAL)! Aborting ...."
-			touch /.do_register
-			unmount_filesystem
-			cleanup_system
-			[[ -f /.do_support ]] && rm -rf /.do_support
-			[[ -f /.do_date ]] && rm -rf /.do_date
-			date > /.do_date
-			remove_nameserver
-			log "Shield Update(s) Failed"
-			exit 0
-		elif [ -f /.do_register ]; then
-			rm -rf /.do_register
-		fi
-
-        log "Calculating updates ...."
-		
-		while read -r line; do
-			RESET_FILES="$RESET_FILES `echo $line | awk -F ' ' '{print $1}'`"
-		done < /tmp/md5sum
-		
-		for i in $RESET_FILES; do
-			if [ $i = fw_upgrade ]; then
-				find /sbin/ -name $i -type f -exec md5sum {} \; >> /tmp/files
-				[[ "$?" != "0" ]] && log "Unable to calculate md5sums! Aborting ...." && error
-			elif [ $i = snort.rules ] || [ $i = blacklists.tar.gz ] || [ $i = hotfix.tar.gz ]; then
-				find /etc/itus/ -name $i -type f -exec md5sum {} \; >> /tmp/files
-				[[ "$?" != "0" ]] && log "Unable to calculate md5sums! Aborting ...." && error
-			else
-				find ${MOUNT}/ -name backup -prune -o -name $i -type f -exec md5sum {} \; >> /tmp/files
-				[[ "$?" != "0" ]] && log "Unable to calculate md5sums! Aborting ...." && error
-			fi
-		done
-
-        for FILE in $RESET_FILES; do
-			MD5SUM_OLD=`grep $FILE /tmp/files | awk -F ' ' '{print $1}'`
-			MD5SUM_NEW=`grep $FILE /tmp/md5sum | awk -F ' ' '{print $2}'`
-			if [ -n "$MD5SUM_NEW" ] && [ "$MD5SUM_OLD" != "$MD5SUM_NEW" ]; then
-				UPDATES="$UPDATES $FILE"
-			fi
-		done
-		
-		if [ -n "$UPDATES" ]; then
-			[[ -n "`echo $UPDATES | grep "fw_upgrade"`" ]] && UPDATES="fw_upgrade"
-			log "Available updates: $UPDATES"
-		else 
-			log "No Available Updates ...."
-			unmount_filesystem
-			cleanup_system
-			[[ -f /.do_support ]] && rm -rf /.do_support
-			[[ -f /.do_date ]] && rm -rf /.do_date
-			date > /.do_date
-			remove_nameserver
-			log "Shield Update(s) Complete"
-			exit 0
-		fi
-}
-
-download_updates() {
-        log "Downloading updates ...."
-        mkdir -p ${MOUNT}/updates
-       
-	   for file in $UPDATES; do
-                log "Downloading: $file"
-                curl -o ${MOUNT}/updates/$file ${URL}$file -k
-                [[ "$?" != "0" ]] && log "Unable to download $file!  Aborting firmware updates." && error
-        done
-		
-		log "Validating downloads ...."
-		for file in `find ${MOUNT}/updates/ -type f`; do
-			CHECKSUM=""
-			CHECKSUM=`md5sum $file | awk '{print $1}'`
-			[[ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]] && log "Validation of downloaded updates failed! Aborting ...." && error
-		done
-}
-
-update(){
-    log "Updating ...."
-	mkdir -p ${MOUNT}/backup
-	mkdir -p ${MOUNT}/restore
-	for FILE in $UPDATES; do
-		CHECKSUM=""
-		log "Updating ${FILE}  ...."
-		[[ -f ${MOUNT}/backup/${FILE} ]] && rm -rf ${MOUNT}/backup/${FILE} > /dev/null 2>&1
-	
-		if [ $FILE = bridge.elf ] || [ $FILE = bridge.tar.gz ] || [ $FILE = router.elf ] || [ $FILE = router.tar.gz ] || [ $FILE = gateway.elf ] || [ $FILE = gateway.tar.gz ]; then
-			if [ -f ${MOUNT}/updates/${FILE} ];then
-				if [ -f ${MOUNT}/restore/${FILE} ]; then
-					cp -f ${MOUNT}/restore/${FILE} ${MOUNT}/backup/${FILE}
-					[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-					rm -rf ${MOUNT}/restore/${FILE} > /dev/null 2>&1
-				fi
-				cp -fp ${MOUNT}/updates/${FILE} ${MOUNT}/restore/${FILE}
-				CHECKSUM=`md5sum ${MOUNT}/restore/${FILE} | awk '{print $1}'`
-				if [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-					log "Update Failed! Aborting ...."
-					[[ -f ${MOUNT}/restore/${FILE} ]] && rm -rf ${MOUNT}/restore/${FILE} > /dev/null 2>&1
-					cp -f ${MOUNT}/backup/${FILE} ${MOUNT}/restore/${FILE}
-					CHECKSUM=`md5sum ${MOUNT}/restore/${FILE} | awk '{print $1}'`
-					[[ -z "`grep ${CHECKSUM} /tmp/files`" ]] && log "Old Firmware Restore Failed!" && error
-					log "Old Firmware Restored!"
-					chown root:root ${MOUNT}/restore/${FILE}
-					chmod 755 ${MOUNT}/restore/${FILE}
-					error
-				fi
-				chown root:root ${MOUNT}/restore/${FILE}
-				chmod 755 ${MOUNT}/restore/${FILE}
-			fi
-		elif [ $FILE = ItusbridgeImage ] || [ $FILE = ItusrouterImage ] || [ $FILE = ItusgatewayImage ] || [ $FILE = ItusrestoreImage ]; then
-	        if [ -f ${MOUNT}/updates/${FILE} ];then
-                if [ -f ${MOUNT}/${FILE} ]; then
-					cp -f ${MOUNT}/${FILE} ${MOUNT}/backup/${FILE}
-					[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-					rm -rf ${MOUNT}/${FILE} > /dev/null 2>&1
-				fi
-                cp -fp ${MOUNT}/updates/${FILE} ${MOUNT}/${FILE}
-				CHECKSUM=`md5sum ${MOUNT}/${FILE} | awk '{print $1}'`
-				if [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-					log "Update Failed! Aborting ...."
-					[[ -f ${MOUNT}/${FILE} ]] && rm -rf ${MOUNT}/${FILE} > /dev/null 2>&1
-					cp -f ${MOUNT}/backup/${FILE} ${MOUNT}/${FILE}
-					CHECKSUM=`md5sum ${MOUNT}/${FILE} | awk '{print $1}'`
-					[[ -z "`grep ${CHECKSUM} /tmp/files`" ]] && log "Old Firmware Restore Failed!" && error
-					log "Old Firmware Restored!"
-					chown root:root ${MOUNT}/${FILE}
-					chmod 755 ${MOUNT}/${FILE}
-					error
-				fi        
-				chown root:root ${MOUNT}/${FILE}
-				chmod 755 ${MOUNT}/${FILE}
-			fi
-		elif [ $FILE = ItusbetaImage ] && [ -f ${MOUNT}/updates/${FILE} ]; then
-			[[ -f ${MOUNT}/${FILE} ]] && rm -rf ${MOUNT}/${FILE} > /dev/null 2>&1
-			cp -f ${MOUNT}/updates/${FILE} ${MOUNT}/${FILE}
-			chown root:root ${MOUNT}/${FILE}
-			chmod 755 ${MOUNT}/${FILE}
-		elif [ $FILE = snort.rules ] && [ -f ${MOUNT}/updates/${FILE} ]; then
-				if [ -f "/etc/snort/rules/${FILE}" ]; then
-					cp -f /etc/snort/rules/${FILE} ${MOUNT}/backup/${FILE}
-					[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-					rm -rf /etc/snort/rules/${FILE} > /dev/null 2>&1
-				fi
-				[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-				cp -fp ${MOUNT}/updates/${FILE} /etc/itus/${FILE}
-				cp -fp /etc/itus/${FILE} /etc/snort/rules/${FILE}
-				CHECKSUM=`md5sum /etc/snort/rules/${FILE} | awk '{print $1}'`
-				if [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-					log "Update Failed! Aborting ...."
-					[[ -f /etc/snort/rules/${FILE} ]] && rm -rf /etc/snort/rules/${FILE} > /dev/null 2>&1
-					[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-					cp -fp ${MOUNT}/backup/${FILE} /etc/itus/${FILE}
-					cp -fp /etc/itus/${FILE} /etc/snort/rules/${FILE}
-					CHECKSUM=`md5sum /etc/snort/rules/${FILE} | awk '{print $1}'`
-					[[ -z "`grep ${CHECKSUM} /tmp/files`" ]] && log "Old Firmware Restore Failed!" && error
-					log "Old Rules Restored!"
-					chown root:root /etc/snort/rules/${FILE}
-					chmod 755 /etc/snort/rules/${FILE}
-					error
-				else
-					log "Restarting Snort ...."
-					chown root:root /etc/snort/rules/${FILE}
-					chmod 755 /etc/snort/rules/${FILE}
-					/etc/init.d/snort restart > /dev/null 2>&1
-					sleep 90
-				fi
-		elif [ $FILE = blacklists.tar.gz ] && [ -f ${MOUNT}/updates/${FILE} ]; then
-				[[ -d ${MOUNT}/backup/lists ]] && rm -f ${MOUNT}/backup/lists/* > /dev/null 2>&1
-				mkdir -p ${MOUNT}/backup/lists
-				for i in `tar -tzf ${MOUNT}/updates/${FILE}`; do
-					if [ -f /etc/itus/lists/$i ]; then
-						cp -f /etc/itus/lists/$i ${MOUNT}/backup/lists/
-						[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-						rm -rf /etc/itus/lists/$i > /dev/null 2>&1
-					fi
-				done
-				[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-				cp -fp ${MOUNT}/updates/${FILE} /etc/itus/${FILE}
-				chown root:root /etc/itus/${FILE}
-				chmod 755 /etc/itus/${FILE}
-				CHECKSUM=`md5sum /etc/itus/${FILE} | awk '{print $1}'`
-				x=0
-				tar -xzf /etc/itus/${FILE} -C /etc/itus/lists/ > /dev/null 2>&1
-				x=`expr $? + $x`
-				if [ "$x" != "0" ] || [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-					log "Update Failed! Aborting ...."
-					[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-					for i in `ls ${MOUNT}/backup/lists/`; do
-						[ -f /etc/itus/lists/$i ] && rm -f /etc/itus/lists/$i > /dev/null 2>&1
-						cp -f ${MOUNT}/backup/lists/$i /etc/itus/lists/
-						chown root:root /etc/itus/lists/$i
-						chmod 755 /etc/itus/lists/$i
-						[[ "$?" != "0" ]] && log "Old Rules Restore Failed!" && error
-					done
-					log "Old Rules Restored!"
-					error
-				else
-					log "Restarting Dnsmasq ...."
-					chown root:root /etc/itus/lists/*
-					chmod 755 /etc/itus/lists/*
-					/etc/init.d/dnsmasq restart > /dev/null 2>&1
-					sleep 30
-				fi
-		elif [ $FILE = hotfix.tar.gz ] && [ -f ${MOUNT}/updates/${FILE} ]; then
-				mkdir -p ${MOUNT}/backup/hotfix
-				if [ -f /etc/itus/${FILE} ]; then
-					cp -f /etc/itus/${FILE} ${MOUNT}/backup/hotfix/${FILE}
-					[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-					rm -rf /etc/itus/${FILE} > /dev/null 2>&1	
-				fi
-				for i in `tar -tzf ${MOUNT}/updates/${FILE}`; do
-					find / -name overlay -prune -o -type f -name $i -exec cp -f {} ${MOUNT}/backup/hotfix \; > /dev/null 2>&1
-				done
-				cp -fp ${MOUNT}/updates/${FILE} /etc/itus/${FILE}
-				CHECKSUM=`md5sum /etc/itus/${FILE} | awk '{print $1}'`
-                if [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-					log "Unable to verify hotfix! Aborting ...."
-					[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-					error
-				else 
-					chown root:root /etc/itus/${FILE}
-					chmod 755 /etc/itus/${FILE}
-					tar -xzf /etc/itus/${FILE} -C / > /dev/null 2>&1
-					if [ "$?" != "0" ]; then
-						log "Unable to unzip hotfix! Aborting ...."
-						[[ -f /etc/itus/${FILE} ]] && rm -rf /etc/itus/${FILE} > /dev/null 2>&1
-						error
-					fi
-					touch /tmp/.do_hotfix 
-				fi
-		elif [ $FILE = fw_upgrade ] && [ -f ${MOUNT}/updates/${FILE} ]; then
-            if [ -f /sbin/${FILE} ]; then
-				cp -f /sbin/${FILE} ${MOUNT}/backup/${FILE}
-				[[ "$?" != "0" ]] && log "Backup failed! Aborting ...." && error
-				rm -rf /sbin/${FILE} > /dev/null 2>&1
-			fi
-			cp -fp ${MOUNT}/updates/${FILE} /sbin/${FILE}
-			chown root:root /sbin/${FILE}
-			chmod 755 /sbin/${FILE}
-			CHECKSUM=`md5sum /sbin/${FILE} | awk '{print $1}'`
-            if [ -z "`grep ${CHECKSUM} /tmp/md5sum`" ]; then
-				log "Update Failed! Aborting ...."
-				[[ -f /sbin/${FILE} ]] && rm -rf /sbin/${FILE} > /dev/null 2>&1
-				cp -f ${MOUNT}/backup/${FILE} /sbin/${FILE}
-				chown root:root /sbin/${FILE}
-				chmod 755 /sbin/${FILE}
-				CHECKSUM=`md5sum /sbin/${FILE} | awk '{print $1}'`
-				[[ -z "`grep ${CHECKSUM} /tmp/files`" ]] && log "Restoring Old Firmware Script Failed!" && error
-				log "Old Firmware Upgrade Script Restored!"
-				error
-			fi
-        fi
-			
-		if [ $SHIELD_MODE = Bridge ]; then
-			if [ $FILE = bridge.elf ] || [ $FILE = bridge.tar.gz ] || [ $FILE = ItusbridgeImage ] || [ $FILE = ItusrestoreImage ]; then
-				touch /.do_upgrade 
-			fi
-		elif [ $SHIELD_MODE = Router ]; then
-			if [ $FILE = router.elf ] || [ $FILE = router.tar.gz ] || [ $FILE = ItusrouterImage ] || [ $FILE = ItusrestoreImage ]; then
-				touch /.do_upgrade 
-			fi
-		elif [ $SHIELD_MODE = Gateway  ]; then
-			if [ $FILE = gateway.elf ] || [ $FILE = gateway.tar.gz ] || [ $FILE = ItusgatewayImage ] || [ $FILE = ItusrestoreImage ]; then
-				touch /.do_upgrade 
-			fi
-		fi
-	done
-}
-
-add_nameserver
-determine_shield_mode
-mount_filesystem
-cleanup_logs
-cleanup_system
-check_for_update
-download_updates
-update
-unmount_filesystem
-cleanup_system
-remove_nameserver
-
-[[ -f /.do_support ]] && rm -rf /.do_support
-[[ -f /.do_date ]] && rm -rf /.do_date
+mv /tmp/ads.tmp /etc/itus/lists/ads
+sleep 1
+mv /tmp/malicious.tmp /etc/itus/lists/malicious
+sleep 1
+chmod 655 /etc/itus/lists/ads
+chmod 655 /etc/itus/lists/malicious
+sleep 1
+/etc/init.d/dnsmasq restart
+sleep 3
+mv snort.rules /etc/snort/rules/snort.rules
+sleep 2
+/etc/init.d/snort restart
+sleep 2
 date > /.do_date
-log "Shield Update(s) Complete"
+
 exit 0
