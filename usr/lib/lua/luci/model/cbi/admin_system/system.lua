@@ -126,4 +126,20 @@ function o.write(self, section, value)
 	m.uci:set("luci", "main", "lang", value)
 end
 
+o = s:taboption("language", ListValue, "_theme", translate("Theme"))
+
+for k, v in luci.util.kspairs(conf.themes) do	
+	if k:sub(1, 1) ~= "." then
+		o:value(v, k)
+	end
+end
+
+function o.cfgvalue(...)
+	return m.uci:get("luci", "main", "mediaurlbase")
+end
+
+function o.write(self, section, value)
+	m.uci:set("luci", "main", "mediaurlbase", value)
+end
+
 return m
