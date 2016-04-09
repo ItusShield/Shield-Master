@@ -126,9 +126,9 @@ function o.write(self, section, value)
 	m.uci:set("luci", "main", "lang", value)
 end
 
-o = s:taboption("language", ListValue, "_theme", translate("Theme"))
 
-for k, v in luci.util.kspairs(conf.themes) do	
+o = s:taboption("language", ListValue, "_mediaurlbase", translate("Design"))
+for k, v in pairs(conf.themes) do
 	if k:sub(1, 1) ~= "." then
 		o:value(v, k)
 	end
