@@ -107,7 +107,7 @@
   <%-= css %>
   </style>
   <% end -%>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="<%=resource%>/jquery.1.11.2.min.js"></script>
   <script src="<%=resource%>/xhr.js"></script>
   <script src="<%=media%>/custom.js"></script>
  </head>
@@ -116,7 +116,7 @@
   <header>
    <div class="fill">
     <div class="container">
-	    <a class="brand" href="#"><img src="/luci-static/itusnetworks/itus_logo.png" width="50px" height="50px" style="vertical-align: middle;"><b>  ITUS Networks</b></a>
+	    <a class="brand" href="#"><img src="<%=media%>/itus_logo.png" width="50px" height="50px" style="vertical-align: middle;"><b> <%=boardinfo.hostname or "?"%></b></a>
      <ul class="nav">
 	 <%-
 		local function submenu(prefix, node)
@@ -244,23 +244,12 @@ end
 </div>
 <%- end -%>
 
-<%- if file_exists("/.do_register") then -%>
-<div class="container">
-        <div class="alert-message warning">
-                <h4><%:Please register your Shield.%></h4>
-		<%:You must register in order to receive security and firmware updates. Registration may take 24 hours to take effect.%><br><br>
-	  	<%: -->> %><a href="<%=pcdata(luci.dispatcher.build_url("admin/status/overview"))%>"><%:Click here to locate your serial number.%></a><br>
-		<%: -->> %><a href="https://itusnetworks.com/register"><%:Click here to register your Shield.%></a>
-        </div>
-</div>
-<%- end -%>
-
 <%- if file_exists("/.do_support") then -%>
 <div class="container">
         <div class="alert-message warning">
                 <h4><%:Oops, something went wrong.%></h4>
 		<%:The last update didn't complete as expected. Shield will automatically try again to update itself again tomorrow. This message disappears automatically when the update is successful.%><br><br>
-		<%: -->> %><a href="https://itus.io/support/#Help"><%:Click here to get help.%></a>
+		<%: -->> %><a href="http://itus.accessinnov.com/"><%:Click here to get help.%></a>
         </div>
 </div>
 <%- end -%>
