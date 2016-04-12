@@ -3,10 +3,10 @@
 # File name  fw_upgrade                                                                        #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	                                       # 
-# VERSION NUMBER 1.51 - 7.1                                                                    #
-# Last Modified date 15th March 2016 							       #
-# Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake due to # 
-#			    testing		                                               #
+# VERSION NUMBER 1.51 - 7.2                                                                    #
+# Last Modified date 12th April 2016 							       #
+# Changes - roadrunnere42 - Added do_snort_restart=1 which  was missing (well spotted NoSukker)#
+# Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake due to # #			    testing		                                               #
 # Changes - roadrunnere42 - Checks for duplicate rules and removes, tidy code and bug fixes    #
 #           removed drug rule because www.shallalist.de sit is too up and down causing script  #
 #            to stall.									       #
@@ -48,10 +48,10 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
 	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
 	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
 	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
+	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+	curl -k -1 -m 40 -o /mnt/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
+	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
 	echo "working on snort rules please wait... may take upto a minute"
 	cat /mnt/ramdisk/*.rules > /mnt/ramdisk/alert.list
@@ -163,11 +163,12 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
  
 if [[ "$system_restarted" = "1" ]] ; then
 	mv /mnt/ramdisk/snort.rules /etc/snort/rules/snort.rules
+	
 else
  	value=$(cat "/sbin/counter")	
 	if [[ "$value" -le "14" ]] ; then	 
 		echo "It's been " $value "days since last full update, will automatically do full update when it's been 14 days"
-		grep -Fxvf  /etc/snort/rules/snort.rules /mnt/ramdisk/snort.rules > /etc/snort/rules/snort.rules
+		grep -Fxvf  /etc/snort/rules/snort.rules /mnt/ramdisk/snort.rules >> /etc/snort/rules/snort.rules
 		echo $((value+1)) >/sbin/counter # update counter by adding 1
 	else
 		# Is more that 14 days so use fresh copy of snort rules
@@ -182,6 +183,7 @@ fi
 	if [[ -f /mnt/ramdisk/snort.rules ]] ; then rm /mnt/ramdisk/snort.rules ; fi
 
 sleep 1
+do_snort_restart=1
 }
 
 ##########################################################################################
@@ -345,4 +347,3 @@ umount /mnt/ramdisk
 echo " Please ignore the error with PID as these are normal"
 
 exit 0
-
