@@ -1,14 +1,53 @@
+# update_blacklist.sh									#
+# By: ITUS 										#
+# version 3										#
+# Modified: 14th April 2016		  						#
+# called by: /etc/init.d/dnsmasq 							#
+# Purpose: To go through the selected web filter rules and the only ones ticked will   	#
+# be copied, sorted and duplicate one deleted, then copied to /etc/ITUS_DNS.txt. 	#
+# changes: roadrunnere42 made typo adjustments  and change way web contents are selected#
+# changes: roadrunnere42 Added checks for ramdisk, error checking for missing 		#
+# 	   or blank files, added comments.						#
+# changes: Hans added ram disk feature, orginal code left in.				#
+#########################################################################################
+
 # Clear files
 > /etc/ITUS_DNS.txt
 
-FILTERS=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1`
-for filter in $FILTERS
-do
-#        cat "/etc/itus/lists/$filter" >> /etc/ITUS_DNS.tmp
- 	cat "/mnt/ramdisk/$filter" >> /mnt/ramdisk/ITUS_DNS.tmp
-done
-# cat /etc/ITUS_DNS.tmp | sort | uniq > /etc/ITUS_DNS.txt
-# rm /etc/ITUS_DNS.tmp
-cat /mnt/ramdisk/ITUS_DNS.tmp | sort | uniq > /etc/ITUS_DNS.txt
-rm /mnt/ramdisk/ITUS_DNS.tmp
+##########################################################################################
+# Check to see if there is a mount point in /tmp/ramdisk. 
+# This is used the first time you run this script on the Shield to created the mount point.
+##########################################################################################
+	if [ ! -d "/tmp/ramdisk" ] ; then
+        	mkdir /tmp/ramdisk
+	fi
+
+##########################################################################################
+# Goes through and check which rules are ticked from gui then copies to ramdisk.
+##########################################################################################
+
+for filter in $(grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1)
+	do 
+     	cat /etc/itus/lists/$filter >> /tmp/ramdisk/ITUS_DNS.tmp
+	done
+
+##########################################################################################
+# Check to see if ITUS_DNS,tmp is blank or missing and if yes skip. The file can be empty#
+# if no rules are ticked in the gui causing error to happen, also it Sorts rules in      #
+# memory, deletes duplicate, ones and then copies back to /etc/ITUS_DNS.txt	         #
+##########################################################################################
+  
+if [ ! -f "/tmp/ramdisk/ITUS_DNS.tmp" ]  ;  then
+        echo " /tmp/ramdisk/ITUS_DNS.tmp file not found so creating blank file."
+fi
+
+if [ -s "/tmp/ramdisk/ITUS_DNS.tmp" ]  ;  then 
+	echo " copying new sorted rules....this may take a minute." 
+	cat /tmp/ramdisk/ITUS_DNS.tmp | sort | uniq > /etc/ITUS_DNS.txt
+	rm /tmp/ramdisk/ITUS_DNS.tmp
+else  
+  	echo "File appears to be  empty usually because no web filter rules selected"
+fi
+
+
 
