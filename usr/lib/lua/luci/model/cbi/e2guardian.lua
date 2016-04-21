@@ -39,7 +39,7 @@ s:tab("tab_block", translate("Block Page"))
 
 ----------------- Basic Settings Tab -----------------------
 
-local dummy1, ads, blasphemy, drugs, gambling, piracy, porn, proxies, racism, sexuality, weapons
+local dummy1, ads, religion, drugs, gambling, piracy, porn, proxies, racism, sexuality, weapons
 
 dummy1 = s:taboption("tab_basic", DummyValue, "dummy1", translate("<b>Content filtering: </b>"))
 
@@ -54,6 +54,30 @@ malicious.rmempty = false
 drugs = s:taboption("tab_basic", Flag, "content_drugs", translate("Drugs"))
 drugs.default=drugs.disabled
 drugs.rmempty = false
+
+religion = s:taboption("tab_basic", Flag, "content_religion", translate("Religion"))
+religion.default=religion.disabled
+religion.rmempty = false
+
+gamble = s:taboption("tab_basic", Flag, "content_gamble", translate("Gamble"))
+gamble.default=gamble.disabled
+gamble.rmempty = false
+
+porn = s:taboption("tab_basic", Flag, "content_porn", translate("Porn"))
+porn.default=porn.disabled
+porn.rmempty = false
+
+spyware = s:taboption("tab_basic", Flag, "content_spyware", translate("Spyware"))
+spyware.default=spyware.disabled
+spyware.rmempty = false
+
+redirector = s:taboption("tab_basic", Flag, "content_redirector", translate("Redirector"))
+redirector.default=redirector.disabled
+redirector.rmempty = false
+
+downloads = s:taboption("tab_basic", Flag, "content_downloads", translate("Downloads"))
+downloads.default=downloads.disabled
+downloads.rmempty = false
 
 ------DISABLE FUNCTIONS NOT UPDATED VIA FW_UPGRADE-----
 if 1 == 2 then
