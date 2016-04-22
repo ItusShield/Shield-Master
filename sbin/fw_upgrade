@@ -4,7 +4,7 @@
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
 # VERSION NUMBER 1.51 - 8.1                                                                    #
-# Last Modified date 15th April 2016 							       #
+# Last Modified date 15th April 2016							       #
 # Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
 # Changes - roadrunnere42 - Now allows full web filter listing, but this version must have 4   # 
 #           additional files changed for it to work, code has also been revisited and shortened#
@@ -376,4 +376,5 @@ date > /.do_date
 echo " Please ignore the error with PID as these are normal"
 
 exit 0
+
 
