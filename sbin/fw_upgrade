@@ -3,8 +3,10 @@
 # File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.1                                                                    #
-# Last Modified date 15th April 2016							       #
+# VERSION NUMBER 1.51 - 8.2                                                                    #
+# Last Modified date 27th April 2016							       #
+# Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
+#           removes the lowest revision number rule , snort only allow one sid number.	       #
 # Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
 # Changes - roadrunnere42 - Now allows full web filter listing, but this version must have 4   # 
 #           additional files changed for it to work, code has also been revisited and shortened#
@@ -39,7 +41,7 @@
 #set -x
 
 update_snort_rules() {
-
+# removes duplicate lines in the snort rules important if it;s the first time the script is run.
 if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/snort/rules/snort.rules ; touch /etc/snort/rules/test.file ; fi 
  
 	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
@@ -54,8 +56,8 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
-	#curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
-	#curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+# 	curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
@@ -64,6 +66,26 @@ cat /tmp/ramdisk/*.rules > /tmp/ramdisk/alert.list
 sed -i 's/alert /drop /' /tmp/ramdisk/alert.list 
 sed '/^\#/d' /tmp/ramdisk/alert.list >> /tmp/ramdisk/temp.rules
 sed '/^$/d' /tmp/ramdisk/temp.rules | sort | uniq > /tmp/ramdisk/snort.rules
+
+# removes duplicate rules that have the same sid number, but different rev numbers, snort only allows one sid number.
+
+cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2}' | awk -F";" '{print $1}' | sort | uniq -d > /tmp/ramdisk/numbers.txt
+
+> /tmp/ramdisk/tst.sed
+for i in $(cat /tmp/ramdisk/numbers.txt)
+do
+ 
+echo "0,/$i/{/$i/d}" >> /tmp/ramdisk/tst.sed
+done
+cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2 $1}' | sort > /tmp/ramdisk/snort.rules.tmp
+sed -i -f /tmp/ramdisk/tst.sed  /tmp/ramdisk/snort.rules.tmp
+sed -i 's/^/sid:/' /tmp/ramdisk/snort.rules.tmp
+
+cat /tmp/ramdisk/snort.rules.tmp | awk -F";)" '{print $2 $1}' | sort > /tmp/ramdisk/snort.rules
+sed -i 's/$/;\)/' /tmp/ramdisk/snort.rules
+
+rm -f /tmp/ramdisk/snort.rules.tmp /tmp/ramdisk/numbers.txt /tmp/ramdisk/tst.sed
+
 echo " Removing snort rules that ITUSnewtwork decided were causing people problems accessing web site's."
     
 	sed -i '/sid:2002802/s/^/#/' /tmp/ramdisk/snort.rules
