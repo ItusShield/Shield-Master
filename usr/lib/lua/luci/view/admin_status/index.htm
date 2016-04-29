@@ -594,7 +594,7 @@
 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
 		<tr><td width="33%"><%:IPS Last Updated%></td><td><%=luci.sys.exec("ls -alst /etc/snort/rules/snort.rules | cut -c52-58") or "?"%></td></tr>
 		<tr><td width="33%"><%:Web Filter Last Updated%></td><td><%=luci.sys.exec("ls -alst /etc/itus/lists/ads | cut -c52-58") or "?"%></td></tr>
-		<tr><td width="33%"><%:Shield Update Last Run%></td><td><%=luci.sys.exec("cat /.do_date .version  | cut -c5-10,29-51") or "?"%></td></tr>
+		<tr><td width="33%"><%:Shield Update Last Run%></td><td><%=luci.sys.exec("cat /.do_date .version  | cut -c5-10") or "?"%></td></tr>
 		<tr><td width="33%"><%:Fw_upgrade version%></td><td><%=luci.sys.exec("cat /.version ") or "?"%></td></tr>
 		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
 
