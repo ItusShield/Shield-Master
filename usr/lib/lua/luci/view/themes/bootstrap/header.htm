@@ -1,0 +1,299 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Copyright 2012 David Menting <david@nut-bolt.nl>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%
+	local sys  = require "luci.sys"
+	local util = require "luci.util"
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+
+	local boardinfo = util.ubus("system", "board")
+
+	local request  = disp.context.path
+	local request2 = disp.context.request
+
+	local category = request[1]
+	local cattree  = category and disp.node(category)
+
+	local leaf = request2[#request2]
+
+	local tree = disp.node()
+	local node = disp.context.dispatched
+
+	local categories = disp.node_childs(tree)
+
+	local c = tree
+	local i, r
+
+	-- tag all nodes leading to this page
+	for i, r in ipairs(request) do
+		if c.nodes and c.nodes[r] then
+			c = c.nodes[r]
+			c._menu_selected = true
+		end
+	end
+
+    -- send as HTML5
+	http.prepare_content("text/html")
+
+	local function nodeurl(prefix, name, query)
+		local url = controller .. prefix .. name .. "/"
+		if query then
+			url = url .. http.build_querystring(query)
+		end
+		return pcdata(url)
+	end
+
+	local function subtree(prefix, node, level)
+		if not level then
+			level = 1
+		end
+
+		local childs = disp.node_childs(node)
+		if #childs > 0 then
+
+            if level > 2 then
+%>
+	<ul class="tabs">
+		<%
+            end
+
+			local selected_node
+			local selected_name
+			local i, v
+
+			for i, v in ipairs(childs) do
+				local nnode = node.nodes[v]
+				if nnode._menu_selected then
+					selected_node = nnode
+					selected_name = v
+				end
+
+                if level > 2 then
+
+		%>
+			<li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then %> active<% end %>">
+			    <a href="<%=nodeurl(prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
+			</li>
+		<%      end
+			end
+
+            if level > 2 then
+
+		%>
+	</ul>
+<%          end
+
+			if selected_node then
+				subtree(prefix .. selected_name .. "/", selected_node, level + 1)
+			end
+		end
+	end
+
+-%>
+<!DOCTYPE html>
+<html lang="<%=luci.i18n.context.lang%>">
+ <head>
+  <meta charset="utf-8">
+  <title><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %> - LuCI</title>
+  <!--[if lt IE 9]><script src="<%=media%>/html5.js"></script><![endif]-->
+  <meta name="viewport" content="initial-scale=1.0">
+  <link rel="stylesheet" href="<%=media%>/cascade.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="<%=media%>/mobile.css" type="text/css" />
+  <link rel="shortcut icon" href="<%=media%>/favicon.ico">
+  <% if node and node.css then %><link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
+  <% end -%>
+  <% if css then %><style title="text/css">
+  <%-= css %>
+  </style>
+  <% end -%>
+  <script src="<%=resource%>/jquery.1.11.2.min.js"></script>
+  <script src="<%=resource%>/xhr.js"></script>
+ </head>
+
+ <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %>">
+  <header>
+   <div class="fill">
+    <div class="container">
+	    <a class="brand" href="#"><img src="<%=media%>/logo.png" width="40px" height="40px" style="vertical-align: middle;margin:-10px 10px -10px 0px"><b> <%=boardinfo.hostname or "?"%></b></a>
+     <ul class="nav">
+	 <%-
+		local function submenu(prefix, node)
+			local childs = disp.node_childs(node)
+			if #childs > 0 then
+	 %>
+	 <ul class="dropdown-menu">
+
+			<%-
+				for i, r in ipairs(childs) do
+					local nnode = node.nodes[r]
+
+
+					local href  = controller .. prefix .. r ..
+						(nnode.query and http.build_querystring(nnode.query) or "")
+			%>
+	  <li><a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a></li>
+
+			<%-
+				end
+
+
+			%>
+	</ul>
+	<%-
+			end
+		end
+
+
+		childs = disp.node_childs(cattree)
+
+
+
+		if #childs > 0 then
+			for i, r in ipairs(childs) do
+				local nnode = cattree.nodes[r]
+				local href  = controller .. "/" .. category .. "/" .. r ..
+					(nnode.query and http.build_querystring(k.query) or "")
+                local grandchildren = disp.node_childs(nnode)
+
+                if #grandchildren > 0 then
+	%>
+        <li class="dropdown">
+            <a class="menu" href="#"><%=pcdata(striptags(translate(nnode.title)))%></a>
+            <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
+
+
+
+
+        </li>
+	<%          else %>
+         <li>
+	        <a href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
+
+
+        </li>
+    <%
+                end
+
+
+			end
+		end
+	%>
+	</ul>
+
+
+	<%
+        -- calculate the number of unsaved changes
+		if tree.nodes[category] and tree.nodes[category].ucidata then
+			local ucichanges = 0
+
+			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
+				for k, l in pairs(j) do
+					for m, n in pairs(l) do
+						ucichanges = ucichanges + 1;
+					end
+
+				end
+
+
+
+
+
+
+
+
+
+			end
+	%>
+	<div class="pull-right">
+	<% io.input("/etc/itus/advanced.conf")
+	   line = io.read("*line")
+	   if line == "no" then
+	   	string = "basic"
+		color = "background-color: #46a546;"
+	   else
+	   	string = "advanced"
+		color = "background-color: #D70021;"
+	   end
+
+	%>
+	<a id="3pm" class="label" style="<%=color%>" href="<%=pcdata(luci.dispatcher.build_url("admin/status/itus"))%>"><span style="cursor: pointer"><%=string%></span></a>
+	<% if ucichanges > 0 then %>
+	  <a class="label notice" href="<%=controller%>/<%=category%>/uci/changes"><%:Unsaved Changes%>: <%=ucichanges%></a>
+	<% end %>
+     </div>
+	<% end %>
+    </div>
+   </div>
+  </header>
+
+<%- if luci.sys.process.info("uid") == 0 and luci.sys.user.getuser("root") and not luci.sys.user.getpasswd("root") then -%>
+<div class="container">
+	<div class="alert-message warning">
+		<h4><%:No password set!%></h4>
+		<%:There is no password set on this router. Please configure administrators password to protect the web interface and SSH access.%><br>
+        <a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+	</div>
+</div>
+<%- end -%>
+
+
+<%- if luci.sys.user.checkpasswd("root","itus") then -%>
+<div class="container">
+        <div class="alert-message warning">
+                <h4><%:Default password has not been changed!%></h4>
+                <%:Please change the administrator password to protect the web interface and SSH access.%><br>
+        <a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+        </div>
+</div>
+
+<%- end -%>
+
+<%
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+-%>
+
+<%- if file_exists("/.do_upgrade") then -%>
+<div class="container">
+        <div class="alert-message warning">
+                <h4><%:Update available!%></h4>
+		<%:Follow these steps to update the device:%><br>
+		<ul>
+  			<li>Reboot the device</li>
+  			<li>Hold the reset button on the back of the device for about 30 seconds as Shield powers on</li>
+  			<li>Wait a few minutes, device will boot into the selected operating mode when update is finished</li>
+		</ul>
+	<a href="<%=pcdata(luci.dispatcher.build_url("admin/status/itus"))%>"><%:Go to system management ...%></a>
+        </div>
+</div>
+<%- end -%>
+
+<%- if file_exists("/.do_support") then -%>
+<div class="container">
+        <div class="alert-message warning">
+                <h4><%:Oops, something went wrong.%></h4>
+		<%:The last update didn't complete as expected. Shield will automatically try again to update itself again tomorrow. This message disappears automatically when the update is successful.%><br><br>
+		<%: -->> %><a href="http://itus.accessinnov.com/"><%:Click here to get help.%></a>
+        </div>
+</div>
+<%- end -%>
+
+<%- if file_exists("/tmp/.do_hotfix") then -%>
+<div class="container">
+        <div class="alert-message warning">
+                <h4><%:Hotfix Applied!.%></h4>
+		<%:Your Shield has been updated via a hotfix. Please reboot for changes to take effect.%><br><br>
+	  	<%: -->> %><a href="<%=pcdata(luci.dispatcher.build_url("admin/status/itus"))%>"><%:Click here to continue.%></a><br>
+	        </div>
+</div>
+<%- end -%>
+
+<div id="maincontent" class="container">
+<% if category then subtree("/" .. category .. "/", cattree) end %>
