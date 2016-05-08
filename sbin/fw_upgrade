@@ -40,10 +40,12 @@
 ################################################################################################
 #set -x
 
+echo " "
 update_snort_rules() {
 # removes duplicate lines in the snort rules important if it;s the first time the script is run.
 if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/snort/rules/snort.rules ; touch /etc/snort/rules/test.file ; fi 
  
+	echo "Starting SNORT rule download..."
 	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
 	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.rules
 	curl -k -1 -m 40 -o /tmp/ramdisk/ciarmy.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-ciarmy.rules
@@ -61,7 +63,8 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
-echo "working on snort rules please wait... may take upto a minute"
+echo " "
+echo "Working on snort rules, please wait... may take up to a minute"
 cat /tmp/ramdisk/*.rules > /tmp/ramdisk/alert.list
 sed -i 's/alert /drop /' /tmp/ramdisk/alert.list 
 sed '/^\#/d' /tmp/ramdisk/alert.list >> /tmp/ramdisk/temp.rules
@@ -86,7 +89,7 @@ sed -i 's/$/;\)/' /tmp/ramdisk/snort.rules
 
 rm -f /tmp/ramdisk/snort.rules.tmp /tmp/ramdisk/numbers.txt /tmp/ramdisk/tst.sed
 
-echo " Removing snort rules that ITUSnewtwork decided were causing people problems accessing web site's."
+echo "Removing snort rules determined by ITUS Networks to cause problems accessing web sites"
     
 	sed -i '/sid:2002802/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2019237/s/^/#/' /tmp/ramdisk/snort.rules
@@ -181,7 +184,7 @@ echo " Removing snort rules that ITUSnewtwork decided were causing people proble
 	sed -i '/sid:2019490/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2011347/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2011037/s/^/#/' /tmp/ramdisk/snort.rules
-	sed -i '/sid:2103133/s/^/#/' /tmp/ramdisk/snort.rules 
+	sed -i '/sid:2103133/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2103132/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2017005/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2006445/s/^/#/' /tmp/ramdisk/snort.rules
@@ -196,12 +199,11 @@ if [[ "$system_restarted" = "1" ]] ; then
 else
  	value=$(cat "/sbin/counter")	
 	if [[ "$value" -le "14" ]] ; then	 
-		echo "It's been " $value "days since last full update, will automatically do full update when it's been 14 days"
+		echo "It's been" $value "days since last full update, will automatically do full update after 14 days"
 		grep -Fxvf  /etc/snort/rules/snort.rules /tmp/ramdisk/snort.rules > /etc/snort/rules/snort.rules
 		echo $((value+1)) >/sbin/counter # update counter by adding 1
 	else
-		# It's been 14 days so using a fresh copy of the snort rules
-		echo " It's been more than 14 days, so using fresh copy of rules"
+		echo "It's been more than 14 days, so using fresh copy of rules"
 		mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
 		echo 1 > /sbin/counter # set counter to 1
 	fi
@@ -212,9 +214,9 @@ do_snort_restart=1
 ##########################################################################################
 update_ads_rules() {
 	
-echo " starting Downloading ads rules"
 if [[ -f /tmp/ramdisk/snort.rules/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ; fi
 
+	echo "Starting ads rule download..."
 	curl -m 40 -s -d mimetype=plaintext -d hostformat=unixhosts http://pgl.yoyo.org/adservers/serverlist.php? | sort >> /tmp/ramdisk/ads.tmp
 	curl -m 40 -s http://winhelp2002.mvps.org/hosts.txt | grep -v "#" | grep -v "127.0.0.1" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | sed -e '1,3d' | sort >> /tmp/ramdisk/ads.tmp
 	#curl -m 40 -s http://someonewhocares.org/hosts/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
@@ -223,12 +225,11 @@ if [[ -f /tmp/ramdisk/snort.rules/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ;
 	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
 
 sleep 1
-	echo "Working on ads rules, this is sorting and deleting duplicate rules please wait..... may take upto 2 minutes"	
-	echo " "
-	echo " Number of lines in new ads rule downloads"	
+	echo "Working on ads rules, sorting and deleting duplicates... may take up to 2 minutes"
+	echo "Number of lines in new ads rule downloads"	
 	wc -l /tmp/ramdisk/ads.tmp
 	cat /tmp/ramdisk/ads.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/ads.tmp1
-	echo " Number of lines following sorting and deleting duplicate rules"	
+	echo "Number of lines following sorting and deleting duplicate rules"	
 	wc -l /tmp/ramdisk/ads.tmp1
 	mv /tmp/ramdisk/ads.tmp1 /etc/itus/lists/ads
 	chmod 655 /etc/itus/lists/ads	
@@ -242,22 +243,22 @@ update_malicious_rules() {
 if [[ -f /tmp/ramdisk/malicious.tmp ]] ; then rm -r /tmp/ramdisk/malicious.tmp 2>/dev/null ; fi
 
 ### Malware Updates ###
+	echo "Starting malicious rule download..."
 	curl -m 40 -s http://www.malwaredomainlist.com/hostslist/hosts.txt | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
 	curl -m 40 -s http://mirror1.malwaredomains.com/files/justdomains | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp
 	curl -m 40 -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp	
 	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
 	sleep 1
-	echo " "	
-	echo " Working on malicious rules, sorting and deleting duplicate rules is underway please wait..... may take upto 2 minutes"
-	echo " Number of lines in new malicious rule downloads"	
+	echo "Working on malicious rules, sorting and deleting duplicates... may take up to 2 minutes"
+	echo "Number of lines in new malicious rule downloads"	
 	wc -l /tmp/ramdisk/malicious.tmp
 	cat /tmp/ramdisk/malicious.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/malicious.tmp1
-	echo " Number of lines following sorting and deleting duplicate rules"
+	echo "Number of lines following sorting and deleting duplicate rules"
 	wc -l /tmp/ramdisk/malicious.tmp1
 	mv /tmp/ramdisk/malicious.tmp1 /etc/itus/lists/malicious
-	echo " "
 	sleep 1
 	chmod 655 /etc/itus/lists/malicious
+	echo " "
 }
 
 ##########################################################################################
@@ -271,11 +272,12 @@ FILTERS=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | c
 
 echo "$FILTERS" > /tmp/ramdisk/FILTERS
 if [ -s /tmp/ramdisk/FILTERS ] ; then
+	echo "Starting web filter rule download"
 	wget -N http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
 	if [[ "$?" != 0 ]] ; then
-	      echo "There has been a problem downloading file"
+	      echo "There was a problem downloading the web filter rules"
 	else
-	    echo "Success in downloading new web filter rules"
+	    echo "Successfully downloaded new web filter rules"
 	    cd /tmp/ramdisk
 	    for filter in $(cat /tmp/ramdisk/FILTERS)
 		do
@@ -284,7 +286,7 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 	        fi
 			tar -zxvf /tmp/ramdisk/shallalist.tar.gz "BL/${filter}/domains"
 			if  [ -f /tmp/ramdisk/BL/${filter}/domains ] ; then
-			echo "working on rules please wait may... take upto a minute"
+			echo "Working on rules please wait... may take up to a minute"
 			sed -i 's/^/address=\//g'  /tmp/ramdisk/BL/${filter}/domains
 			sed  -i -e 's/$/\/10.10.10.11/'  /tmp/ramdisk/BL/${filter}/domains
 				if [ "$filter" == "porn" ] ; then
@@ -295,11 +297,11 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 # check to see if an new drug rules have been add and if not skip writing to file
 			if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then 
 # Stripe out duplicate drug listens
-				echo "Number of ip's BEFORE sorting"
+				echo "Number of IP addresses BEFORE sorting"
 				wc -l /etc/itus/lists/${filter}
 				sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
 				sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
-				echo "Number of ip's AFTER sorting"
+				echo "Number of IP addresses AFTER sorting"
 				wc -l /etc/itus/lists/${filter}
 			fi
 			fi
@@ -363,7 +365,7 @@ fi
 	if [[ -f "/etc/itus/lists/proxies" ]] ; then mv "/etc/itus/lists/proxies /etc/itus/lists/spyware" ; fi
 	if [[ -f "/etc/itus/lists/racism" ]] ; then mv "/etc/itus/lists/racism /etc/itus/lists/redirector" ; fi
 	if [[ -f "/etc/itus/lists/social" ]] ; then mv "/etc/itus/lists/social /etc/itus/lists/downloads" ; fi
-	echo "Updating  rules"
+	echo "Updating WEB FILTER rules"
 	update_web_filter_rules	
 	do_dnsmasq_restart=1
 
@@ -371,6 +373,7 @@ fi
 # restart DNSMASQ
 
 	if [ $do_dnsmasq_restart = 1 ] ; then
+		echo " "
 		echo "Restarting DNSMASQ service" 
 		/etc/init.d/dnsmasq restart
 		echo "Restarted DNSMASQ"
@@ -381,7 +384,9 @@ fi
 # restart SNORT
 
 	if [ $do_snort_restart = 1 ] ; then
+		echo " "
 		echo "Restarting SNORT service"
+		echo "(please ignore PID errors - these are expected)"
 		sleep 1
 		/etc/init.d/snort restart
 		echo "Restarted SNORT"
@@ -394,9 +399,9 @@ fi
 date > /.do_date
 
 ##########################################################################################
-	if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
-echo " Please ignore the error with PID as these are normal"
+if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
+echo " "
 exit 0
 
 
