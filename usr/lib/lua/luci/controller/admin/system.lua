@@ -176,9 +176,10 @@ function action_flashops()
 	local upgrade_avail = fs.access("/lib/upgrade/platform.sh")
 	local reset_avail   = os.execute([[grep '"rootfs_data"' /proc/mtd >/dev/null 2>&1]]) == 0
 
-	local restore_cmd = "tar -xzC/ >/dev/null 2>&1"
+	local restore_cmd = "tar -C / -xzf %q >/dev/null 2>&1"
 	local backup_cmd  = "sysupgrade --create-backup - 2>/dev/null"
 	local image_tmp   = "/tmp/firmware.img"
+	local archive_tmp = "/tmp/restore.tar.gz"
 
 	local function image_supported()
 		return (os.execute("sysupgrade -T %q >/dev/null" % image_tmp) == 0)
@@ -216,6 +217,15 @@ function action_flashops()
 		function(meta, chunk, eof)
 			-- local sys = require "luci.sys"
 			-- sys.call("echo smece > tmp/smece")
+			if not fp and meta and meta.name == "archive" then
+				fp = io.open(archive_tmp, "w")
+			end
+			if fp and chunk then
+				fp:write(chunk)
+			end
+			if fp and eof then
+				fp:close()
+			end
 		end
 	)
 
@@ -234,9 +244,10 @@ function action_flashops()
 		--
 		local upload = luci.http.formvalue("archive")
 		if upload and #upload > 0 then
+			os.execute(restore_cmd % archive_tmp)
 			luci.template.render("admin_system/applyreboot")
 --			luci.sys.reboot()
-			luci.sys.call("reboot -f")
+			fork_exec("sleep 1; reboot -f")
 		end
 	elseif luci.http.formvalue("image") or luci.http.formvalue("step") then
 		--
@@ -313,7 +324,7 @@ function action_reboot()
 	luci.template.render("admin_system/reboot", {reboot=reboot})
 	if reboot then
 --		luci.sys.reboot()
-		luci.sys.call("reboot -f")
+		fork_exec("sleep 1; reboot -f")
 	end
 end
 

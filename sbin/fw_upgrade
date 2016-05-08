@@ -1,12 +1,21 @@
-#!/bin/bash 
+#!/bin/sh
 ################################################################################################
-# File name  fw_upgrade                                                                        #
+# File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
-# Original version from firmware 1.51 sp1              	                                       # 
-# VERSION NUMBER 1.51 - 7.1                                                                    #
-# Last Modified date 15th March 2016 							       #
-# Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake due to # 
-#			    testing		                                               #
+# Original version from firmware 1.51 sp1              	        			       # 
+# VERSION NUMBER 1.51 - 8.2                                                                    #
+# Last Modified date 27th April 2016							       #
+# Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
+#           removes the lowest revision number rule , snort only allow one sid number.	       #
+# Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
+# Changes - roadrunnere42 - Now allows full web filter listing, but this version must have 4   # 
+#           additional files changed for it to work, code has also been revisited and shortened#
+#	    ramdrive removed and now use the shields tmpfs which is in ram                     #		 
+#	    usr/lib/lua/luci.model/cbi/e2guardion.lua					       #
+#	    etc/config/e2guardion							       #
+#	    etc/init.d/dnsmasq								       #
+#	    etc/itus/write-categories.sh		       				       #
+# Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake testing#
 # Changes - roadrunnere42 - Checks for duplicate rules and removes, tidy code and bug fixes    #
 #           removed drug rule because www.shallalist.de sit is too up and down causing script  #
 #            to stall.									       #
@@ -30,261 +39,295 @@
 # This will make it easied to time to come to identiy what your you have and who did what.     #
 ################################################################################################
 #set -x
+
+echo " "
 update_snort_rules() {
-# check to see if ramdisk is empty and if not remove all rules.
-if [[ "$(ls -A /mnt/ramdisk)"  ]] ; then rm -r /mnt/ramdisk/*.rules ; fi 
-# check if snort rules have been sorted, this is for the first time run just to make sure file has no duplicates
+# removes duplicate lines in the snort rules important if it;s the first time the script is run.
 if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/snort/rules/snort.rules ; touch /etc/snort/rules/test.file ; fi 
  
-	curl -k -1 -m 40 -o /mnt/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/botcc.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/ciarmy.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-ciarmy.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/compromised.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-compromised.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/dshield.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-dshield.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-exploit.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-exploit.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-malware.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-mobile_malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-mobile_malware.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-user_agents.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-user_agents.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
-	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
-#	curl -k -1 -m 40 -o /mnt/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
+	echo "Starting SNORT rule download..."
+	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/ciarmy.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-ciarmy.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/compromised.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-compromised.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/dshield.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-dshield.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-exploit.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-exploit.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-malware.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-mobile_malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-mobile_malware.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-user_agents.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-user_agents.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
+#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+# 	curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
+#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
-	echo "working on snort rules please wait... may take upto a minute"
-	cat /mnt/ramdisk/*.rules > /mnt/ramdisk/alert.list
-	sed -i 's/alert /drop /' /mnt/ramdisk/alert.list
-	sed '/^\#/d' /mnt/ramdisk/alert.list >> /mnt/ramdisk/temp.rules
-	sed '/^$/d' /mnt/ramdisk/temp.rules | sort | uniq > /mnt/ramdisk/snort.rules
+echo " "
+echo "Working on snort rules, please wait... may take up to a minute"
+cat /tmp/ramdisk/*.rules > /tmp/ramdisk/alert.list
+sed -i 's/alert /drop /' /tmp/ramdisk/alert.list 
+sed '/^\#/d' /tmp/ramdisk/alert.list >> /tmp/ramdisk/temp.rules
+sed '/^$/d' /tmp/ramdisk/temp.rules | sort | uniq > /tmp/ramdisk/snort.rules
 
-	sed -i '/sid:2002802/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2019237/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2018194/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012251/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100527/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100649/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009080/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009205/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009206/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009207/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009208/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2008975/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010515/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2003099/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2101201/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001689/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011695/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013359/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013358/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013357/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013355/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013354/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013353/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013360/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100648/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009080/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2101390/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012086/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100650/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011803/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012510/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001219/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2003068/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2002995/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011347/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2102925/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012263/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012848/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001046/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2003055/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2002993/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2002992/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001353/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009205/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009206/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009207/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009208/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001046/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2016950/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2019509/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011507/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010514/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010516/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010518/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010520/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010522/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010525/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010527/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012056/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012075/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012119/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012205/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012272/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012398/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010931/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011764/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2103088/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2103192/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2103134/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2101852/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2015526/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009151/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012997/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2101201/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2016672/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2000538/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2000540/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011367/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012251/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100528/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2007994/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2008066/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2012180/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2102925/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2100628/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010697/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2013479/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2001046/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011803/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2009768/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2019490/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011347/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2011037/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2103133/s/^/#/' /mnt/ramdisk/snort.rules 
-	sed -i '/sid:2103132/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2017005/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2006445/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2003927/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2010908/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2014020/s/^/#/' /mnt/ramdisk/snort.rules
-	sed -i '/sid:2017479/s/^/#/' /mnt/ramdisk/snort.rules
+# removes duplicate rules that have the same sid number, but different rev numbers, snort only allows one sid number.
+
+cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2}' | awk -F";" '{print $1}' | sort | uniq -d > /tmp/ramdisk/numbers.txt
+
+> /tmp/ramdisk/tst.sed
+for i in $(cat /tmp/ramdisk/numbers.txt)
+do
+ 
+echo "0,/$i/{/$i/d}" >> /tmp/ramdisk/tst.sed
+done
+cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2 $1}' | sort > /tmp/ramdisk/snort.rules.tmp
+sed -i -f /tmp/ramdisk/tst.sed  /tmp/ramdisk/snort.rules.tmp
+sed -i 's/^/sid:/' /tmp/ramdisk/snort.rules.tmp
+
+cat /tmp/ramdisk/snort.rules.tmp | awk -F";)" '{print $2 $1}' | sort > /tmp/ramdisk/snort.rules
+sed -i 's/$/;\)/' /tmp/ramdisk/snort.rules
+
+rm -f /tmp/ramdisk/snort.rules.tmp /tmp/ramdisk/numbers.txt /tmp/ramdisk/tst.sed
+
+echo "Removing snort rules determined by ITUS Networks to cause problems accessing web sites"
+    
+	sed -i '/sid:2002802/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2019237/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2018194/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012251/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100527/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100649/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009080/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009205/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009206/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009207/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009208/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2008975/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010515/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2003099/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2101201/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001689/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011695/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013359/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013358/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013357/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013355/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013354/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013353/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013360/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100648/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009080/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2101390/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012086/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100650/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011803/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012510/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001219/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2003068/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2002995/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011347/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2102925/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012263/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012848/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001046/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2003055/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2002993/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2002992/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001353/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009205/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009206/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009207/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009208/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001046/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2016950/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2019509/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011507/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010514/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010516/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010518/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010520/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010522/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010525/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010527/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012056/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012075/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012119/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012205/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012272/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012398/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010931/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011764/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2103088/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2103192/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2103134/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2101852/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2015526/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009151/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012997/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2101201/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2016672/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2000538/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2000540/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011367/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012251/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100528/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2007994/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2008066/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2012180/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2102925/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2100628/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010697/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2013479/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2001046/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011803/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2009768/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2019490/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011347/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2011037/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2103133/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2103132/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2017005/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2006445/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2003927/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2010908/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2014020/s/^/#/' /tmp/ramdisk/snort.rules
+	sed -i '/sid:2017479/s/^/#/' /tmp/ramdisk/snort.rules
  
 if [[ "$system_restarted" = "1" ]] ; then
-	mv /mnt/ramdisk/snort.rules /etc/snort/rules/snort.rules
+	echo  "Shield has been restarted so using a fresh copy of snort rules"
+	mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
 else
  	value=$(cat "/sbin/counter")	
 	if [[ "$value" -le "14" ]] ; then	 
-		echo "It's been " $value "days since last full update, will automatically do full update when it's been 14 days"
-		grep -Fxvf  /etc/snort/rules/snort.rules /mnt/ramdisk/snort.rules > /etc/snort/rules/snort.rules
+		echo "It's been" $value "days since last full update, will automatically do full update after 14 days"
+		grep -Fxvf  /etc/snort/rules/snort.rules /tmp/ramdisk/snort.rules > /etc/snort/rules/snort.rules
 		echo $((value+1)) >/sbin/counter # update counter by adding 1
 	else
-		# Is more that 14 days so use fresh copy of snort rules
-		mv /mnt/ramdisk/snort.rules /etc/snort/rules/snort.rules
+		echo "It's been more than 14 days, so using fresh copy of rules"
+		mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
 		echo 1 > /sbin/counter # set counter to 1
 	fi
 fi
-# remove files from ramdisk.
-	rm /mnt/ramdisk/*.rules
-	if [[ -f /mnt/ramdisk/alert.list ]] ; then rm /mnt/ramdisk/alert.list ; fi 
-	if [[ -f /mnt/ramdisk/temp.rules ]] ; then rm /mnt/ramdisk/temp.rules ; fi	
-	if [[ -f /mnt/ramdisk/snort.rules ]] ; then rm /mnt/ramdisk/snort.rules ; fi
-
-sleep 1
+do_snort_restart=1
 }
 
 ##########################################################################################
 update_ads_rules() {
 	
-echo "starting Downloading Rules"
-if [[ -f /mnt/ramdisk/snort.rules/ads.tmp  ]] ; then rm -r /mnt/ramdisk/ads.tmp ; fi
+if [[ -f /tmp/ramdisk/snort.rules/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ; fi
 
-	curl -m 40 -s -d mimetype=plaintext -d hostformat=unixhosts http://pgl.yoyo.org/adservers/serverlist.php? | sort >> /mnt/ramdisk/ads.tmp
-	curl -m 40 -s http://winhelp2002.mvps.org/hosts.txt | grep -v "#" | grep -v "127.0.0.1" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | sed -e '1,3d' | sort >> /mnt/ramdisk/ads.tmp
-	#curl -m 40 -s http://someonewhocares.org/hosts/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/ads.tmp
-	curl -m 40 -s http://sysctl.org/cameleon/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/ads.tmp
-	curl -m 40 -s http://ohow to check if web site is downptimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt  | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/ads.tmp
-	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/ads.tmp
+	echo "Starting ads rule download..."
+	curl -m 40 -s -d mimetype=plaintext -d hostformat=unixhosts http://pgl.yoyo.org/adservers/serverlist.php? | sort >> /tmp/ramdisk/ads.tmp
+	curl -m 40 -s http://winhelp2002.mvps.org/hosts.txt | grep -v "#" | grep -v "127.0.0.1" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | sed -e '1,3d' | sort >> /tmp/ramdisk/ads.tmp
+	#curl -m 40 -s http://someonewhocares.org/hosts/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
+	curl -m 40 -s http://sysctl.org/cameleon/hosts | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
+	curl -m 40 -s http://ohow to check if web site is downptimate.dl.sourceforge.net/project/adzhosts/HOSTS.txt  | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | grep -v '^\\' | grep -v '\\$' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
+	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/ads.tmp
 
 sleep 1
-	echo "working on ads rules, this is sorting and deleting duplicate rules please wait..... may take upto 2 minutes"	
-	wc -l /mnt/ramdisk/ads.tmp
-	sort -u /mnt/ramdisk/ads.tmp > /mnt/ramdisk/ads.tmp1
-	sed '/^$/d' /mnt/ramdisk/ads.tmp1 > /mnt/ramdisk/ads.tmp
-	sed 's/^/address=\//g' -i /mnt/ramdisk/ads.tmp
-	sed -e 's/$/\/10.10.10.11/' -i /mnt/ramdisk/ads.tmp
-	wc -l /mnt/ramdisk/ads.tmp	
-	mv /mnt/ramdisk//ads.tmp /etc/itus/lists/ads
-	sleep 1
-	chmod 655 /etc/itus/lists/ads
-	if [[ -f /mnt/ramdisk/ads.tmp  ]] ; then rm -r /mnt/ramdisk/ads.tmp ; fi
-	if [[ -f /mnt/ramdisk/ads.tmp1  ]] ; then rm -r /mnt/ramdisk/ads.tmp1 ; fi
-	
+	echo "Working on ads rules, sorting and deleting duplicates... may take up to 2 minutes"
+	echo "Number of lines in new ads rule downloads"	
+	wc -l /tmp/ramdisk/ads.tmp
+	cat /tmp/ramdisk/ads.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/ads.tmp1
+	echo "Number of lines following sorting and deleting duplicate rules"	
+	wc -l /tmp/ramdisk/ads.tmp1
+	mv /tmp/ramdisk/ads.tmp1 /etc/itus/lists/ads
+	chmod 655 /etc/itus/lists/ads	
+	echo " "
 }
+
 ############################################################################################
 update_malicious_rules() {
 
-# if the malicious.tmp file is present remove it, this justs frees up more space in memory
-if [[ -f /mnt/ramdisk/malicious.tmp  ]] ; then rm -r /mnt/ramdisk/malicious.tmp ; fi
+# if the malicious.tmp file is present remove it,this just saves confusion if script crashes and reruns.
+if [[ -f /tmp/ramdisk/malicious.tmp ]] ; then rm -r /tmp/ramdisk/malicious.tmp 2>/dev/null ; fi
 
-	### Malware Updates ###
-	curl -m 40 -s http://www.malwaredomainlist.com/hostslist/hosts.txt | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/malicious.tmp
-	curl -m 40 -s http://mirror1.malwaredomains.com/files/justdomains | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /mnt/ramdisk/malicious.tmp
-	curl -m 40 -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /mnt/ramdisk/malicious.tmp	
-	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /mnt/ramdisk/malicious.tmp
+### Malware Updates ###
+	echo "Starting malicious rule download..."
+	curl -m 40 -s http://www.malwaredomainlist.com/hostslist/hosts.txt | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
+	curl -m 40 -s http://mirror1.malwaredomains.com/files/justdomains | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp
+	curl -m 40 -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp	
+	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
 	sleep 1
-	echo "working on malicious rules this is sorting and deleting duplicate rules please wait..... may take upto 2 minutes"
-	wc -l /mnt/ramdisk/malicious.tmp
-	sort -u /mnt/ramdisk/malicious.tmp > /mnt/ramdisk/malicious.tmp1
-	sed '/^$/d' /mnt/ramdisk/malicious.tmp1 > /mnt/ramdisk/malicious.tmp
-	sed 's/^/address=\//g' -i /mnt/ramdisk/malicious.tmp
-	sed -e 's/$/\/10.10.10.11/' -i /mnt/ramdisk/malicious.tmp
-	wc -l /mnt/ramdisk/malicious.tmp
-	mv /mnt/ramdisk/malicious.tmp /etc/itus/lists/malicious
+	echo "Working on malicious rules, sorting and deleting duplicates... may take up to 2 minutes"
+	echo "Number of lines in new malicious rule downloads"	
+	wc -l /tmp/ramdisk/malicious.tmp
+	cat /tmp/ramdisk/malicious.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/malicious.tmp1
+	echo "Number of lines following sorting and deleting duplicate rules"
+	wc -l /tmp/ramdisk/malicious.tmp1
+	mv /tmp/ramdisk/malicious.tmp1 /etc/itus/lists/malicious
 	sleep 1
 	chmod 655 /etc/itus/lists/malicious
-	sleep 1
+	echo " "
 }
 
+##########################################################################################
+update_web_filter_rules() {
+##########################################################################################
+
+FILTERS=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1`
+
+#copy list of web filter from /etc/config/e2guardian to ramdisk so they can be changed to match what is in shallalist
+# ie blasphemy is in ITUS list but in shallalist.de list it's called called religion
+
+echo "$FILTERS" > /tmp/ramdisk/FILTERS
+if [ -s /tmp/ramdisk/FILTERS ] ; then
+	echo "Starting web filter rule download"
+	wget -N http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
+	if [[ "$?" != 0 ]] ; then
+	      echo "There was a problem downloading the web filter rules"
+	else
+	    echo "Successfully downloaded new web filter rules"
+	    cd /tmp/ramdisk
+	    for filter in $(cat /tmp/ramdisk/FILTERS)
+		do
+	        if [ "$filter" == "ads" -o "$filter" == "malicious" ] ; then
+	           continue
+	        fi
+			tar -zxvf /tmp/ramdisk/shallalist.tar.gz "BL/${filter}/domains"
+			if  [ -f /tmp/ramdisk/BL/${filter}/domains ] ; then
+			echo "Working on rules please wait... may take up to a minute"
+			sed -i 's/^/address=\//g'  /tmp/ramdisk/BL/${filter}/domains
+			sed  -i -e 's/$/\/10.10.10.11/'  /tmp/ramdisk/BL/${filter}/domains
+				if [ "$filter" == "porn" ] ; then
+					awk 'FNR==NR{a[$0];next}!($0 in a)' /etc/itus/lists/porn /tmp/ramdisk/BL/${filter}/domains >> /tmp/ramdisk/${filter}
+				else
+					grep -Fxvf  /etc/itus/lists/${filter} /tmp/ramdisk/BL/${filter}/domains >> /tmp/ramdisk/${filter}
+				fi
+# check to see if an new drug rules have been add and if not skip writing to file
+			if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then 
+# Stripe out duplicate drug listens
+				echo "Number of IP addresses BEFORE sorting"
+				wc -l /etc/itus/lists/${filter}
+				sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
+				sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
+				echo "Number of IP addresses AFTER sorting"
+				wc -l /etc/itus/lists/${filter}
+			fi
+			fi
+		done
+	fi
+fi
+}
 
 ##########################################################################################
 # Prevent DNSMASQ/SNORT restart unless updates are needed
-
 
 	do_dnsmasq_restart=0	# 0 = no restart, 1 = restart
 	do_snort_restart=0	# 0 = no restart, 1 = restart
 
 ##########################################################################################
-# Check to see if there is a mount point in /mnt/ramdisk and if there is'nt it will creat one. 
-
-
-# This is used the first time you run this script on the Shield to created the mount point.
-	if [[ ! -d "/mnt/ramdisk" ]] ; then mkdir /mnt/ramdisk ; fi
-
-##########################################################################################
-# Check to see for /mnt/ramdisk is mounted, if not will create the ramdisk in memory.
-
-	if mount | grep /mnt/ramdisk > /dev/null ; then
-    		echo "yes mounted"
-	else
-    		echo "Creating Ramdisk"
-		mount -t tmpfs -o size=50000k tmpfs /mnt/ramdisk
-	fi
-##########################################################################################
-# check to see if there is a mount point in /mnt/restart-var and if there isn't it will 
+# check to see if there is a mount point in /tmp/restart-var and if there isn't it will 
 # create one, this is used the first time you run this script on the shield to create the
 # mount point.
 
-	if [ ! -d "/mnt/restart-var" ] ; then
-        	mkdir /mnt/restart-var
+	if [ ! -d "/tmp/restart-var" ] ; then
+        	mkdir /tmp/restart-var
 		echo 1 > /sbin/counter
-        fi
-##########################################################################################
-# check to see if /mnt/restart-var is mounted if not will create the restart-var in memory.
-
-	if mount | grep /mnt/restart-var > /dev/null ; then
-    		echo "System has not been restarted"
-		
-	else
-    		echo "Creating restart-ramdisk"
-		mount -t tmpfs -o size=1k tmpfs /mnt/restart-var
 		system_restarted="1"
-                echo $system_restart
 	fi
-##########################################################################################
-# update snort rules
 
+##########################################################################################
 # To prevent the snort rules from updating put # in front (# update_snort_rules)
 	update_snort_rules
 	sleep 1	
@@ -311,12 +354,29 @@ if [[ -f /mnt/ramdisk/malicious.tmp  ]] ; then rm -r /mnt/ramdisk/malicious.tmp 
 		do_dnsmasq_restart=1
 	fi
 
+
+
+##########################################################################################
+# renane the original Itusnetwork web filter files to match new download rules
+##########################################################################################
+
+	if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv "/etc/itus/lists/blasphemy /etc/itus/lists/religion" ; fi 
+	if [[ -f "/etc/itus/lists/gambling" ]] ; then mv "/etc/itus/lists/gambling /etc/itus/lists/gamble" ; fi
+	if [[ -f "/etc/itus/lists/proxies" ]] ; then mv "/etc/itus/lists/proxies /etc/itus/lists/spyware" ; fi
+	if [[ -f "/etc/itus/lists/racism" ]] ; then mv "/etc/itus/lists/racism /etc/itus/lists/redirector" ; fi
+	if [[ -f "/etc/itus/lists/social" ]] ; then mv "/etc/itus/lists/social /etc/itus/lists/downloads" ; fi
+	echo "Updating WEB FILTER rules"
+	update_web_filter_rules	
+	do_dnsmasq_restart=1
+
 ##########################################################################################
 # restart DNSMASQ
 
 	if [ $do_dnsmasq_restart = 1 ] ; then
-		echo "Restarting DNSMASQ service"
+		echo " "
+		echo "Restarting DNSMASQ service" 
 		/etc/init.d/dnsmasq restart
+		echo "Restarted DNSMASQ"
 		sleep 1
 	fi
 
@@ -324,10 +384,12 @@ if [[ -f /mnt/ramdisk/malicious.tmp  ]] ; then rm -r /mnt/ramdisk/malicious.tmp 
 # restart SNORT
 
 	if [ $do_snort_restart = 1 ] ; then
+		echo " "
 		echo "Restarting SNORT service"
+		echo "(please ignore PID errors - these are expected)"
 		sleep 1
 		/etc/init.d/snort restart
-		echo "Restarted"
+		echo "Restarted SNORT"
 		sleep 1
 	fi
 
@@ -337,12 +399,9 @@ if [[ -f /mnt/ramdisk/malicious.tmp  ]] ; then rm -r /mnt/ramdisk/malicious.tmp 
 date > /.do_date
 
 ##########################################################################################
-# umounts the ramdisk so freeing up memory.
+if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
-if [[ -d "/mnt/ramdisk" ]] ; then rm -r /mnt/ramdisk/*.* ; fi
-umount /mnt/ramdisk
-
-echo " Please ignore the error with PID as these are normal"
-
+echo " "
 exit 0
+
 
