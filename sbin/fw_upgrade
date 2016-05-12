@@ -3,8 +3,9 @@
 # File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.2                                                                    #
-# Last Modified date 27th April 2016							       #
+# VERSION NUMBER 1.51 - 8.3                                                                    #
+# Last Modified date 11th May 2016							       #
+# Changes - roadrunnere42 - Rectified syntax errors on web filter renaming		       #
 # Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
 #           removes the lowest revision number rule , snort only allow one sid number.	       #
 # Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
@@ -360,11 +361,11 @@ fi
 # renane the original Itusnetwork web filter files to match new download rules
 ##########################################################################################
 
-	if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv "/etc/itus/lists/blasphemy /etc/itus/lists/religion" ; fi 
-	if [[ -f "/etc/itus/lists/gambling" ]] ; then mv "/etc/itus/lists/gambling /etc/itus/lists/gamble" ; fi
-	if [[ -f "/etc/itus/lists/proxies" ]] ; then mv "/etc/itus/lists/proxies /etc/itus/lists/spyware" ; fi
-	if [[ -f "/etc/itus/lists/racism" ]] ; then mv "/etc/itus/lists/racism /etc/itus/lists/redirector" ; fi
-	if [[ -f "/etc/itus/lists/social" ]] ; then mv "/etc/itus/lists/social /etc/itus/lists/downloads" ; fi
+	if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv /etc/itus/lists/blasphemy /etc/itus/lists/religion ; fi 
+	if [[ -f "/etc/itus/lists/gambling" ]] ; then mv /etc/itus/lists/gambling /etc/itus/lists/gamble ; fi
+	if [[ -f "/etc/itus/lists/proxies" ]] ; then mv /etc/itus/lists/proxies /etc/itus/lists/spyware ; fi
+	if [[ -f "/etc/itus/lists/racism" ]] ; then mv /etc/itus/lists/racism /etc/itus/lists/redirector ; fi
+	if [[ -f "/etc/itus/lists/social" ]] ; then mv /etc/itus/lists/social /etc/itus/lists/downloads ; fi
 	echo "Updating WEB FILTER rules"
 	update_web_filter_rules	
 	do_dnsmasq_restart=1
@@ -403,5 +404,3 @@ if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
 echo " "
 exit 0
-
-
