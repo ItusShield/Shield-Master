@@ -3,8 +3,9 @@
 # File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.3                                                                    #
-# Last Modified date 11th May 2016							       #
+# VERSION NUMBER 1.51 - 8.3.1								       #
+# Last Modified 22 May 2016								       #
+# Changes - Gnomad - Parse version above into .do_date to avoid need for separate .version     #
 # Changes - roadrunnere42 - Rectified syntax errors on web filter renaming		       #
 # Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
 #           removes the lowest revision number rule , snort only allow one sid number.	       #
@@ -12,8 +13,8 @@
 # Changes - roadrunnere42 - Now allows full web filter listing, but this version must have 4   # 
 #           additional files changed for it to work, code has also been revisited and shortened#
 #	    ramdrive removed and now use the shields tmpfs which is in ram                     #		 
-#	    usr/lib/lua/luci.model/cbi/e2guardion.lua					       #
-#	    etc/config/e2guardion							       #
+#	    usr/lib/lua/luci.model/cbi/e2guardian.lua					       #
+#	    etc/config/e2guardian							       #
 #	    etc/init.d/dnsmasq								       #
 #	    etc/itus/write-categories.sh		       				       #
 # Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake testing#
@@ -273,8 +274,8 @@ FILTERS=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | c
 
 echo "$FILTERS" > /tmp/ramdisk/FILTERS
 if [ -s /tmp/ramdisk/FILTERS ] ; then
-	echo "Starting web filter rule download"
-	wget -N http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
+	echo "Starting web filter rule download..."
+	wget http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
 	if [[ "$?" != 0 ]] ; then
 	      echo "There was a problem downloading the web filter rules"
 	else
@@ -395,9 +396,11 @@ fi
 	fi
 
 ##########################################################################################
-# update last-update date
+# Shield Update Version: parse version number from the comments at the top of this script
+grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.do_date
 
-date > /.do_date
+# Shield Update Last Run: append current date
+date >> /.do_date
 
 ##########################################################################################
 if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
