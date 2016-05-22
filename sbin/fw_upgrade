@@ -288,7 +288,7 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 	        fi
 			tar -zxvf /tmp/ramdisk/shallalist.tar.gz "BL/${filter}/domains"
 			if  [ -f /tmp/ramdisk/BL/${filter}/domains ] ; then
-			echo "Working on rules please wait... may take up to a minute"
+			echo "Working on $filter rules, please wait... may take up to a minute"
 			sed -i 's/^/address=\//g'  /tmp/ramdisk/BL/${filter}/domains
 			sed  -i -e 's/$/\/10.10.10.11/'  /tmp/ramdisk/BL/${filter}/domains
 				if [ "$filter" == "porn" ] ; then
