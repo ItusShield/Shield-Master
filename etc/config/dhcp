@@ -9,6 +9,7 @@ config dnsmasq
 	option expandhosts '1'
 	option authoritative '1'
 	option readethers '1'
+	#option leasefile '/tmp/dhcp.leases'
 	option leasefile '/tmp/dhcp.leases'
 	option resolvfile '/tmp/resolv.conf.auto'
 	option localservice '1'
