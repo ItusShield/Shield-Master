@@ -3,8 +3,10 @@
 # File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.3.1								       #
-# Last Modified 22 May 2016								       #
+# VERSION NUMBER 1.51 - 8.3.12								       #
+# Last Modified 3 July 2016                                                                    #
+# Changes - roadrunnere42 -  Added check for Fatal Errors after downloading snort rules        #
+#           resulting in lose of internet                                                      #
 # Changes - Gnomad - Parse version above into .do_date to avoid need for separate .version     #
 # Changes - roadrunnere42 - Rectified syntax errors on web filter renaming		       #
 # Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
@@ -330,6 +332,15 @@ fi
 	fi
 
 ##########################################################################################
+# Check to see for /tmp/ramdisk if not will make the folder.
+
+#	if mount | grep /tmp/ramdisk > /dev/null ; then
+#    		echo "yes created"
+#	else
+#    		echo "make folder"
+#		mkdir /tmp/ramdisk
+#	fi
+##########################################################################################
 # To prevent the snort rules from updating put # in front (# update_snort_rules)
 	update_snort_rules
 	sleep 1	
@@ -405,5 +416,48 @@ date >> /.do_date
 ##########################################################################################
 if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
+
+##########################################################################################
+#check if snort error has occured after restarting following downloading new rules
+sleep 5
+logread > /tmp/logfile.log
+if [ "$(grep -c "FATAL ERROR" /tmp/logfile.log)" -ge 1 ]; then
+
+    if [[ ! -f /tmp/error-var ]] ; then
+	touch /tmp/error-var 
+	echo 1 > /tmp/error-var 
+	else
+	echo "file present already"
+    fi
+	
+
+    echo " Found FATAL ERROR AFTER RESTART - making backup of old snort rules then deleting snort rules"
+    echo " after deleted restarting fw_upgrade script"
+    sleep 5
+    mv -f /etc/snort/rules/snort.rules /etc/snort/rules/snort.rules.old
+    rm -f /etc/snort/rules/snort.rules
+
+# If starting fw_upgrade 3 times and FATAL ERROR still present then stop running script"
+# as the error need sorting by human intervention"    
+    value=$(cat "/tmp/error-var")	
+	if [[ "$value" -le "3" ]] ; then	 
+		
+		echo $((value+1)) >/tmp/error-var # update error counter by adding 1
+		/etc/init.d/snort restart
+		sleep 5
+		sh /sbin/fw_upgrade
+	else
+	    echo " Stopping error checking after 3 attempts, FATAL ERROR still present"
+	    rm -f /tmp/error-var
+	    sleep 5
+	    exit 0
+	fi
+
+else
+  echo  " No fatal error found after restart"
+sleep 2 
+fi
+
 echo " "
 exit 0
+
