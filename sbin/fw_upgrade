@@ -3,7 +3,7 @@
 # File name  fw_upgrade                                                      		       #
 # Created by ITUS                                                                              #
 # Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.3.12								       #
+# VERSION NUMBER 1.51 - 8.3.2								       #
 # Last Modified 3 July 2016                                                                    #
 # Changes - roadrunnere42 -  Added check for Fatal Errors after downloading snort rules        #
 #           resulting in lose of internet                                                      #
