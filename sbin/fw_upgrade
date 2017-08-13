@@ -67,6 +67,12 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
+	# SSL Blacklist (SSLBL) is a project maintained by abuse.ch. The goal is to provide a list of "bad" SSL certificates identified 
+	# by abuse.ch to be associated with malware or botnet activities. SSLBL relies on SHA1 fingerprints of malicious SSL certificates 
+	# and offers various blacklists that can found in the SSL Blacklist section. 
+	curl -k -1 -m 40 -o /tmp/ramdisk/abuse-sslbl.rules https://sslbl.abuse.ch/blacklist/sslipblacklist.rules
+	curl -k -1 -m 40 -o /tmp/ramdisk/abuse-dyre.rules https://sslbl.abuse.ch/blacklist/dyre_sslipblacklist.rules
+
 echo " "
 echo "Working on snort rules, please wait... may take up to a minute"
 cat /tmp/ramdisk/*.rules > /tmp/ramdisk/alert.list
