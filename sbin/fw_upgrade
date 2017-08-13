@@ -1,38 +1,40 @@
 #!/bin/sh
 ################################################################################################
-# File name  fw_upgrade                                                      		       #
+# File name  fw_upgrade                                                                        #
 # Created by ITUS                                                                              #
-# Original version from firmware 1.51 sp1              	        			       # 
-# VERSION NUMBER 1.51 - 8.3.2								       #
-# Last Modified 3 July 2016                                                                    #
+# Original version from firmware 1.51 sp1                                                      #
+# VERSION NUMBER 1.51 - 8.3.3                                                                  #
+# Last Modified 24 Nov 2016                                                                    #
+# Changes - added some more snort rules and minor error checkes, also added to new webfilters  #
+#           violence and tracker, file writecategories.sh modified for additional web filters  #
 # Changes - roadrunnere42 -  Added check for Fatal Errors after downloading snort rules        #
 #           resulting in lose of internet                                                      #
 # Changes - Gnomad - Parse version above into .do_date to avoid need for separate .version     #
-# Changes - roadrunnere42 - Rectified syntax errors on web filter renaming		       #
+# Changes - roadrunnere42 - Rectified syntax errors on web filter renaming                     #
 # Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
-#           removes the lowest revision number rule , snort only allow one sid number.	       #
+#           removes the lowest revision number rule , snort only allow one sid number.         #
 # Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
-# Changes - roadrunnere42 - Now allows full web filter listing, but this version must have 4   # 
+# Changes - roadrunnere42 - Now allows full web filter listing, but this version must have four#
 #           additional files changed for it to work, code has also been revisited and shortened#
-#	    ramdrive removed and now use the shields tmpfs which is in ram                     #		 
-#	    usr/lib/lua/luci.model/cbi/e2guardian.lua					       #
-#	    etc/config/e2guardian							       #
-#	    etc/init.d/dnsmasq								       #
-#	    etc/itus/write-categories.sh		       				       #
+#           ramdrive removed and now use the shields tmpfs which is in ram                     #
+#           - usr/lib/lua/luci.model/cbi/e2guardian.lua                                        #
+#           - etc/config/e2guardian                                                            #
+#           - etc/init.d/dnsmasq                                                               #
+#           - etc/itus/write-categories.sh                                                     #
 # Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake testing#
 # Changes - roadrunnere42 - Checks for duplicate rules and removes, tidy code and bug fixes    #
 #           removed drug rule because www.shallalist.de sit is too up and down causing script  #
-#            to stall.									       #
+#           to stall.                                                                          #
 # Changes - roadrunnere42 - Only new snort rules are added to the list instead of rewritting   #
-#           the whole list, complete new snort list download ever 14 days. Malicious and       # 
+#           the whole list, complete new snort list download ever 14 days. Malicious and       #
 #           ads list, downloaded in memory and duplicate ip's are removed before writting.     #
-#	    Drug rules are now updated in memory from http://www.shallalist.de and added to    #
-#	    original from Itus, only updated if selected in gui.			       #
-#											       #
+#           Drug rules are now updated in memory from http://www.shallalist.de and added to    #
+#           original from Itus, only updated if selected in gui.                               #
+#                                                                                              #
 # Changes - Hans run webfilter based on ads/malicious settings in UCI                          #
 #           Perform DNSMASQ restart / SNORT restart only in case of updates                    #
 # Changes - Hans correction in line 17 based on Wisywig error                                  #
-# Changes - Hans added rules function calls into scripts                                       #            
+# Changes - Hans added rules function calls into scripts                                       #
 # Changes - roadrunnere42 added ramdisk and checks to see if files exist before removing       #
 # Changes - user8446 added option switches to curl commands as follows: added -1 to force      #
 # connections =/> TLS1.0 for IPS, -m to exit if connection drops or host is down to keep script#
@@ -40,7 +42,7 @@
 #                                                                                              #
 # When changing the script please update WHAT YOU CHANGED OR ADDED, ADD 1 TO THE VERSION       #
 # NUMBER AND DATE CHANGED.                                                                     #
-# This will make it easied to time to come to identiy what your you have and who did what.     #
+# This will make it easier in time to come to identiy what changed and who did what.           #
 ################################################################################################
 #set -x
 
@@ -63,7 +65,7 @@ if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/sn
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
-# 	curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+#	curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
 #	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
 
@@ -305,112 +307,116 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 					grep -Fxvf  /etc/itus/lists/${filter} /tmp/ramdisk/BL/${filter}/domains >> /tmp/ramdisk/${filter}
 				fi
 # check to see if an new drug rules have been add and if not skip writing to file
-			if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then 
+            if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then
 # Stripe out duplicate drug listens
-				echo "Number of IP addresses BEFORE sorting"
-				wc -l /etc/itus/lists/${filter}
-				sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
-				sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
-				echo "Number of IP addresses AFTER sorting"
-				wc -l /etc/itus/lists/${filter}
-			fi
-			fi
-		done
-	fi
+                echo "Number of IP addresses BEFORE sorting"
+                wc -l /etc/itus/lists/${filter}
+                sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
+                sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
+                echo "Number of IP addresses AFTER sorting"
+                wc -l /etc/itus/lists/${filter}
+            fi
+            fi
+        done
+    fi
 fi
 }
 
 ##########################################################################################
 # Prevent DNSMASQ/SNORT restart unless updates are needed
 
-	do_dnsmasq_restart=0	# 0 = no restart, 1 = restart
-	do_snort_restart=0	# 0 = no restart, 1 = restart
+    do_dnsmasq_restart=0    # 0 = no restart, 1 = restart
+    do_snort_restart=0  # 0 = no restart, 1 = restart
 
 ##########################################################################################
-# check to see if there is a mount point in /tmp/restart-var and if there isn't it will 
+# check to see if there is a mount point in /tmp/restart-var and if there isn't it will
 # create one, this is used the first time you run this script on the shield to create the
 # mount point.
 
-	if [ ! -d "/tmp/restart-var" ] ; then
-        	mkdir /tmp/restart-var
-		echo 1 > /sbin/counter
-		system_restarted="1"
-	fi
+    if [ ! -d "/tmp/restart-var" ] ; then
+            mkdir /tmp/restart-var
+        echo 1 > /sbin/counter
+        system_restarted="1"
+    fi
 
 ##########################################################################################
-# Check to see for /tmp/ramdisk if not will make the folder.
-
-#	if mount | grep /tmp/ramdisk > /dev/null ; then
-#    		echo "yes created"
-#	else
-#    		echo "make folder"
-#		mkdir /tmp/ramdisk
-#	fi
+# Check for /tmp/ramdisk. If not, make the folder as it's needed when fw_upgrade script 
+# is run before restarting Shield, straight after a factory reset. 
+	if [ ! -d "/tmp/ramdisk" ] ; then
+		mkdir /tmp/ramdisk
+	else
+		echo " ramdisk already present"
+	fi
+	
 ##########################################################################################
 # To prevent the snort rules from updating put # in front (# update_snort_rules)
-	update_snort_rules
-	sleep 1	
+    update_snort_rules
+    sleep 1
 
 ##########################################################################################
 # Update ads rules
 # Managed via LUCI>SERVICES>Web Filter > Content filter - Ads
 
-	if [ $(uci get e2guardian.e2guardian.content_ads) = 1 ] ; then
-		echo "Updating ADS rules"
-		update_ads_rules
-		sleep 1
-		do_dnsmasq_restart=1
-	fi
+    if [ $(uci get e2guardian.e2guardian.content_ads) = 1 ] ; then
+        echo "Updating ADS rules"
+        update_ads_rules
+        sleep 1
+        do_dnsmasq_restart=1
+    fi
 
 ##########################################################################################
 # Update malicious sites rules
 # Managed via LUCI>SERVICES>Web Filter > Content filter - Malicious
 
-	if [ $(uci get e2guardian.e2guardian.content_malicious) = 1 ] ; then
-		echo "Updating MALICIOUS rules"
-		update_malicious_rules	
-		sleep 1
-		do_dnsmasq_restart=1
-	fi
+    if [ $(uci get e2guardian.e2guardian.content_malicious) = 1 ] ; then
+        echo "Updating MALICIOUS rules"
+        update_malicious_rules
+        sleep 1
+        do_dnsmasq_restart=1
+    fi
 
 
 
 ##########################################################################################
 # renane the original Itusnetwork web filter files to match new download rules
+# and added mew categories violence and tracker
 ##########################################################################################
 
-	if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv /etc/itus/lists/blasphemy /etc/itus/lists/religion ; fi 
-	if [[ -f "/etc/itus/lists/gambling" ]] ; then mv /etc/itus/lists/gambling /etc/itus/lists/gamble ; fi
-	if [[ -f "/etc/itus/lists/proxies" ]] ; then mv /etc/itus/lists/proxies /etc/itus/lists/spyware ; fi
-	if [[ -f "/etc/itus/lists/racism" ]] ; then mv /etc/itus/lists/racism /etc/itus/lists/redirector ; fi
-	if [[ -f "/etc/itus/lists/social" ]] ; then mv /etc/itus/lists/social /etc/itus/lists/downloads ; fi
-	echo "Updating WEB FILTER rules"
-	update_web_filter_rules	
-	do_dnsmasq_restart=1
+    if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv /etc/itus/lists/blasphemy /etc/itus/lists/religion ; fi
+    if [[ -f "/etc/itus/lists/gambling" ]] ; then mv /etc/itus/lists/gambling /etc/itus/lists/gamble ; fi
+    if [[ -f "/etc/itus/lists/proxies" ]] ; then mv /etc/itus/lists/proxies /etc/itus/lists/spyware ; fi
+    if [[ -f "/etc/itus/lists/racism" ]] ; then mv /etc/itus/lists/racism /etc/itus/lists/redirector ; fi
+    if [[ -f "/etc/itus/lists/social" ]] ; then mv /etc/itus/lists/social /etc/itus/lists/downloads ; fi
+    if [[ ! -f "/etc/itus/lists/violence" ]] ; then  touch /etc/itus/lists/violence ; fi
+    if [[ ! -f "/etc/itus/lists/tracker" ]] ; then  touch /etc/itus/lists/tracker ; fi
+
+    echo "Updating WEB FILTER rules"
+    update_web_filter_rules
+    do_dnsmasq_restart=1
 
 ##########################################################################################
 # restart DNSMASQ
 
-	if [ $do_dnsmasq_restart = 1 ] ; then
-		echo " "
-		echo "Restarting DNSMASQ service" 
-		/etc/init.d/dnsmasq restart
-		echo "Restarted DNSMASQ"
-		sleep 1
-	fi
+    if [ $do_dnsmasq_restart = 1 ] ; then
+        echo " "
+        echo "Restarting DNSMASQ service"
+        /etc/init.d/dnsmasq restart
+        echo "Restarted DNSMASQ"
+        sleep 1
+    fi
 
-##########################################################################################	
+##########################################################################################
 # restart SNORT
 
-	if [ $do_snort_restart = 1 ] ; then
-		echo " "
-		echo "Restarting SNORT service"
-		echo "(please ignore PID errors - these are expected)"
-		sleep 1
-		/etc/init.d/snort restart
-		echo "Restarted SNORT"
-		sleep 1
-	fi
+    if [ $do_snort_restart = 1 ] ; then
+        echo " "
+        echo "Restarting SNORT service"
+        echo "(please ignore PID errors - these are expected)"
+        sleep 1
+        /etc/init.d/snort restart
+        echo "Restarted SNORT"
+        sleep 1
+    fi
 
 ##########################################################################################
 # Shield Update Version: parse version number from the comments at the top of this script
@@ -424,44 +430,45 @@ if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
 
 ##########################################################################################
-#check if snort error has occured after restarting following downloading new rules
+# check if snort error has occured after restarting following downloading new rules
 sleep 5
 logread > /tmp/logfile.log
-if [ "$(grep -c "FATAL ERROR" /tmp/logfile.log)" -ge 1 ]; then
+if [ "$(grep -c "FATAL ERROR: /etc/snort/rules/" /tmp/logfile.log)" -ge 1 ]; then
 
     if [[ ! -f /tmp/error-var ]] ; then
-	touch /tmp/error-var 
-	echo 1 > /tmp/error-var 
-	else
-	echo "file present already"
+    touch /tmp/error-var
+    echo 1 > /tmp/error-var
+    else
+    echo "file present already"
     fi
-	
+
 
     echo " Found FATAL ERROR AFTER RESTART - making backup of old snort rules then deleting snort rules"
     echo " after deleted restarting fw_upgrade script"
     sleep 5
     mv -f /etc/snort/rules/snort.rules /etc/snort/rules/snort.rules.old
     rm -f /etc/snort/rules/snort.rules
+    touch /etc/snort/rules/snort.rules
 
 # If starting fw_upgrade 3 times and FATAL ERROR still present then stop running script"
-# as the error need sorting by human intervention"    
-    value=$(cat "/tmp/error-var")	
-	if [[ "$value" -le "3" ]] ; then	 
-		
-		echo $((value+1)) >/tmp/error-var # update error counter by adding 1
-		/etc/init.d/snort restart
-		sleep 5
-		sh /sbin/fw_upgrade
-	else
-	    echo " Stopping error checking after 3 attempts, FATAL ERROR still present"
-	    rm -f /tmp/error-var
-	    sleep 5
-	    exit 0
-	fi
+# as the error need sorting by human intervention"
+    value=$(cat "/tmp/error-var")
+    if [[ "$value" -le "3" ]] ; then
+
+        echo $((value+1)) >/tmp/error-var # update error counter by adding 1
+        /etc/init.d/snort restart
+        sleep 5
+        sh /sbin/fw_upgrade
+    else
+        echo " Stopping error checking after 3 attempts, FATAL ERROR still present"
+        rm -f /tmp/error-var
+        sleep 5
+        exit 0
+    fi
 
 else
   echo  " No fatal error found after restart"
-sleep 2 
+sleep 2
 fi
 
 echo " "
