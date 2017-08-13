@@ -4,7 +4,7 @@
 sleep 5
 ethtool -K eth0 gro off
 ethtool -K eth0 gso off
-ethtool -K eth0 lro off
+ethtool -K eth0 tx-nocache-copy off
 ifconfig eth0 up
 sleep 1
 ethtool -s eth0 autoneg off
@@ -13,7 +13,7 @@ ethtool -s eth0 autoneg on
 sleep 1
 ethtool -K eth1 gro off
 ethtool -K eth1 gso off
-ethtool -K eth1 lro off
+ethtool -K eth1 tx-nocache-copy off
 ifconfig eth1 up
 sleep 1
 ethtool -s eth1 autoneg off
@@ -22,7 +22,7 @@ ethtool -s eth1 autoneg on
 sleep 1
 ethtool -K eth2 gro off
 ethtool -K eth2 gso off
-ethtool -K eth2 lro off
+ethtool -K eth2 tx-nocache-copy off
 ifconfig eth2 up
 sleep 1
 ethtool -s eth2 autoneg off
@@ -33,7 +33,7 @@ sleep 1
 chown -R nobody:nogroup /tmp/*
 
 sleep 1
-/etc/itus/detect_mode.sh 	# Detects the shield mode 
+sh /etc/itus/detect_mode.sh 	# Detects the shield mode
 
 sleep 1
 /etc/init.d/vnstat enable	# Vnstat Enable Autostart
@@ -45,11 +45,10 @@ sleep 2
 touch /var/run/ddns/lucihelper.err
 sh /etc/itus-setup.sh &>/dev/null
 
-sleep 30 
-/etc/init.d/dropbear restart 
+sleep 30
+/etc/init.d/dropbear restart
 
 sleep 10
 /usr/sbin/ntpclient -s -p 123 -h 0.us.pool.ntp.org || /etc/init.d/ntpclient restart
 
-exit 0                 
-
+exit 0
