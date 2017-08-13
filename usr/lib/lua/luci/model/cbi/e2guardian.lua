@@ -34,12 +34,14 @@ s:tab("tab_basic", translate("Basic Settings"))
 s:tab("tab_white", translate("White List"))
 s:tab("tab_black", translate("Black List"))
 s:tab("tab_logs", translate("Logs"))
+s:tab("tab_blocked_filters", translate("Blocked Filters"))
 s:tab("tab_block", translate("Block Page"))
 
 
 ----------------- Basic Settings Tab -----------------------
 
-local dummy1, ads, religion, drugs, gambling, piracy, porn, proxies, racism, sexuality, weapons
+
+local dummy1, ads, malicious, drugs, religion, gamble, porn, spyware, redirector, downloads, violence, tracker
 
 dummy1 = s:taboption("tab_basic", DummyValue, "dummy1", translate("<b>Content filtering: </b>"))
 
@@ -48,7 +50,7 @@ ads.default=ads.enabled
 ads.rmempty = false
 
 malicious = s:taboption("tab_basic", Flag, "content_malicious", translate("Malicious"))
-malicious.default = malicious.disabled
+malicious.default=malicious.disabled
 malicious.rmempty = false
 
 drugs = s:taboption("tab_basic", Flag, "content_drugs", translate("Drugs"))
@@ -79,51 +81,15 @@ downloads = s:taboption("tab_basic", Flag, "content_downloads", translate("Downl
 downloads.default=downloads.disabled
 downloads.rmempty = false
 
-------DISABLE FUNCTIONS NOT UPDATED VIA FW_UPGRADE-----
-if 1 == 2 then
-blasphemy = s:taboption("tab_basic", Flag, "content_blasphemy", translate("Blasphemy"))
-blasphemy.default=blasphemy.disabled
-blasphemy.rmempty = false
+violence = s:taboption("tab_basic", Flag, "content_violence", translate("Violence"))
+violence.default=violence.disabled
+violence.rmempty = false
 
-dating = s:taboption("tab_basic", Flag, "content_dating", translate("Dating"))
-dating.default = dating.disabled
-dating.rmempty = false
+tracker = s:taboption("tab_basic", Flag, "content_tracker", translate("Tracker"))
+tracker.default=tracker.disabled
+tracker.rmempty = false
 
-gambling = s:taboption("tab_basic", Flag, "content_gambling", translate("Gambling"))
-gambling.default=gambling.disabled
-gambling.rmempty = false
 
-illegal = s:taboption("tab_basic", Flag, "content_illegal", translate("Illegal"))
-illegal.default = illegal.disabled
-illegal.rmempty = false
-
-malicious = s:taboption("tab_basic", Flag, "content_malicious", translate("Malicious"))
-malicious.default = malicious.disabled
-malicious.rmempty = false
-
-piracy = s:taboption("tab_basic", Flag, "content_piracy", translate("Piracy"))
-piracy.default=piracy.disabled
-piracy.rmempty = false
-
-porn = s:taboption("tab_basic", Flag, "content_porn", translate("Porn"))
-porn.default=porn.disabled
-porn.rmempty = false
-
-proxies = s:taboption("tab_basic", Flag, "content_proxies", translate("Proxies"))
-proxies.default=proxies.disabled
-proxies.rmempty = false
-
-racism = s:taboption("tab_basic", Flag, "content_racism", translate("Racism"))
-racism.default=racism.disabled
-racism.rmempty = false
-
-social = s:taboption("tab_basic", Flag, "content_social", translate("Social"))
-social.default=social.disabled
-social.rmempty = false
-
-end
-
------ENDofDISABLE-----
 
 --------------------- WhiteList Tab ------------------------
 
@@ -176,49 +142,69 @@ end
 		end
 	end
 
----------------------------- Logs Tab -----------------------------
+	---------------------------- Logs Tab -----------------------------
 
-e2guardian_logfile = s:taboption("tab_logs", TextValue, "lines", "")
-e2guardian_logfile.wrap = "off"
-e2guardian_logfile.rows = 25
-e2guardian_logfile.rmempty = true
+	e2guardian_logfile = s:taboption("tab_logs", TextValue, "lines", "")
+	e2guardian_logfile.wrap = "off"
+	e2guardian_logfile.rows = 25
+	e2guardian_logfile.rmempty = true
 
-function e2guardian_logfile.cfgvalue()
-	local uci = require "luci.model.uci".cursor_state()
-	file = "/tmp/dns.log"
-	if file then
-		return fs.readfile(file) or ""
-	else
-		return "Can't read log file"
+	function e2guardian_logfile.cfgvalue()
+		local uci = require "luci.model.uci".cursor_state()
+		file = "/tmp/dns.log"
+		if file then
+			return fs.readfile(file) or ""
+		else
+			return "Can't read log file"
+		end
 	end
-end
 
-function e2guardian_logfile.write()
-end
+	function e2guardian_logfile.write()
+	end
 
-      ---------------------- Custom Block Page ------------------------
-                                                                              
-        config_file4 = s:taboption("tab_block", TextValue, "text9", "")
-        config_file4.wrap = "off"
-        config_file4.rows = 25
-        config_file4.rmempty = false
-                                 
-        function config_file4.cfgvalue()
-                local uci = require "luci.model.uci".cursor_state()
-                file = "/www/block/index.html"
-                if file then
-                        return fs.readfile(file) or ""
-                else
-                        return ""
-                end
-        end
+	---------------------------- Blocked Filters Tab -----------------------------
 
-        function config_file4.write(self, section, value)
-                if value then
-                        local uci = require "luci.model.uci".cursor_state()
-                        file = "/www/block/index.html"
-                        fs.writefile(file, value:gsub("\r\n", "\n"))
-                end
-        end                  
+	e2guardian_blockedfile = s:taboption("tab_blocked_filters", TextValue, "lines", "")
+	e2guardian_blockedfile.wrap = "off"
+	e2guardian_blockedfile.rows = 25
+	e2guardian_blockedfile.rmempty = true
+
+	function e2guardian_blockedfile.cfgvalue()
+		local uci = require "luci.model.uci".cursor_state()
+		file = "/tmp/dns_stopped.log"
+		if file then
+			return fs.readfile(file) or ""
+		else
+			return "Can't read log file"
+		end
+	end
+
+	function e2guardian_blockedfile.write()
+	end
+
+	---------------------- Custom Block Page ------------------------
+
+	config_file4 = s:taboption("tab_block", TextValue, "text9", "")
+	config_file4.wrap = "off"
+	config_file4.rows = 25
+	config_file4.rmempty = false
+
+	function config_file4.cfgvalue()
+			local uci = require "luci.model.uci".cursor_state()
+			file = "/www/block/index.html"
+			if file then
+					return fs.readfile(file) or ""
+			else
+					return ""
+			end
+	end
+
+	function config_file4.write(self, section, value)
+			if value then
+					local uci = require "luci.model.uci".cursor_state()
+					file = "/www/block/index.html"
+					fs.writefile(file, value:gsub("\r\n", "\n"))
+			end
+	end
 
 return m
