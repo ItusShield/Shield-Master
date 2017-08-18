@@ -2,7 +2,7 @@
 
 #set -x
 
-# Regular expressiosn for ip addresses
+# Regular expressions for ip addresses
 PRIVATE_ADDRESS="^(192\.168|10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.)"
 NET_ID_REGEX="[0-9]\+\.[0-9]\+\.[0-9]\+\."
 IP_REGEX="[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+"
@@ -115,7 +115,7 @@ destroy_http_server()
 
 if [ "$1" == "create" ]
 then
-	Add blacklist to dnsmasq
+	# Add blacklist to dnsmasq
 	echo "conf-file=/etc/ITUS_DNS.txt" >> /etc/dnsmasq.conf
 
 	# Create blockdomain and firewall redirect rules
@@ -146,7 +146,7 @@ then
 	destroy_fw_redirects
 	destroy_http_server
 
-	Add blacklist to dnsmasq
+	# Add blacklist to dnsmasq
 	echo "conf-file=/etc/ITUS_DNS.txt" >> /etc/dnsmasq.conf
 
 	# Create blockdomain interface and firewall redirect rules
