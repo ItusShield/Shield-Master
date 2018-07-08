@@ -3,8 +3,9 @@
 # File name  fw_upgrade
 # Created by ITUS
 # Original version from firmware 1.51 sp1
-# VERSION NUMBER 1.51 - 8.3.5
-# Last Modified 13 Aug 2017
+# VERSION NUMBER 1.51 - 8.3.6
+# Last Modified 8 Jul 2018
+# Changes	Increase curl timeout to 120 seconds for large snort .rules files
 # Changes	Added /etc/itus/program-version.sh to get latest programs version from website
 #		to /etc/itus/program_versions.log$
 #		used in gui status --> itus setting --> itus program versions
@@ -127,12 +128,14 @@ echo "Starting SNORT rule download..."
 		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-worm.rules'" }' >> /tmp/rule_counter.log
 		echo \ >>/tmp/rule_counter.log
 
-	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
+# 2018-07 file size is ~1.5MB - increase timeout to 120 seconds
+	curl -k -1 -m 120 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
 		cat /tmp/ramdisk/emerging-current_events.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
 		wc -l < /tmp/temp1 | awk  '{print  $1, "'emerging-current_events.rules'" , " - These are rules that we dont intend to keep in the ruleset for long, or that need to be tested before they are considered for inclusion. Most often these will be simple sigs for the Storm binary URL of the day, sigs to catch CLSIDs of newly found vulnerable apps where we dont have any detail on the exploit etc Useful sigs but not for the long term "}' >> /tmp/rule_counter.log
 		echo \ >>/tmp/rule_counter.log
 
-	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+# 2018-07 file size is ~3MB - increase timeout to 120 seconds
+	curl -k -1 -m 120 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
 	cat /tmp/ramdisk/emerging-trojan.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
 	wc -l < /tmp/temp1 | awk  '{print  $1, "emerging-trojan.rules" }' >> /tmp/rule_counter.log
 	echo \ >>/tmp/rule_counter.log
