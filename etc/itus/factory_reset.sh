@@ -1,9 +1,10 @@
-#############################################################################
-# Version 1                                                                 #
-# Allows a factory reset to occur from either gui or running this command   #
-# from the command line.                                                    #
-# Called by: from gui or command line                                       #
-#############################################################################
+#################################################################################
+# Version 2									#
+# Modified August 2017								#
+# Allows a factory reset to occur from either gui or running this command	#
+# from the command line.							#
+# Called by: from gui or command line						#
+#################################################################################
 
 if [[ `df | grep -c overlay` == "1" ]]; then
 	umount /overlay
@@ -31,10 +32,10 @@ sleep 5
      echo "copying new router image"
 cp ItusrestoreImage ItusrouterImage
 sleep 15
-     echo "copying new router image"
+     echo "copying new gateway image"
 cp ItusrestoreImage ItusgatewayImage
 sleep 15
-     echo "copying new router image"
+     echo "copying new bridge image"
 cp ItusrestoreImage ItusbridgeImage
 sleep 15
 

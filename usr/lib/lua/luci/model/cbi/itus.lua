@@ -8,10 +8,16 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Author: Daniel
 
+version 1
+Modified by Roadrunnere42 to include a tab called program versions which displays version numbers of certain program-versions
+this requires the following files to be changed or added
+/etc/itus/program-versions.sh       - added
+/etc/itus/program-version.log       - added
+/usr/lib/lua/luci/mode/cbi/itus.lua - changed
 ]]--
 
 local fs = require "nixio.fs"
@@ -22,7 +28,7 @@ m = Map("itus", translate("ITUS Settings"), translate("System Update runs automa
 m.on_after_commit = function() luci.sys.call("if `grep -qs yes /etc/config/itus` ; then echo yes > /etc/itus/advanced.conf ; else echo no > /etc/itus/advanced.conf; fi") end
 
 m.on_init = function()
-	luci.sys.call("sh /etc/itus/fw-log.sh")
+	luci.sys.call("sh /etc/itus/fw-log.sh & sh /etc/itus/program-versions.sh")
 end
 
 s = m:section(TypedSection, "itus")
@@ -31,6 +37,7 @@ s.addremove = false
 
 s:tab("tab_ITUS1", translate("Advanced Settings"))
 s:tab("tab_ITUS3", translate("ITUS Update Log"))
+s:tab("tab_ITUS7", translate("ITUS Program versions"))
 s:tab("tab_ITUS5", translate("Remove Banners"))
 s:tab("tab_ITUS2", translate("Update Shield"))
 s:tab("tab_ITUS6", translate("Reboot Shield"))
@@ -45,48 +52,62 @@ io.input("/etc/itus/advanced.conf")
 line = io.read("*line")
 
 
-fwlog = s:taboption("tab_ITUS3",TextValue,"fwlog","")                                      
-fwlog.wrap = "off"                                                                         
-fwlog.rows = 25                                                                            
-fwlog.rmempty = false                                                                      
-        function fwlog.cfgvalue()
-        local uci = require "luci.model.uci".cursor_state()
-        local file = "/etc/itus/fw.log"
-                if file then
-                        return fs.readfile(file) or ""
-                else
-                        return ""
-                end
-        end
+fwlog = s:taboption("tab_ITUS3",TextValue,"fwlog","")
+fwlog.wrap = "off"
+fwlog.rows = 25
+fwlog.rmempty = false
+	function fwlog.cfgvalue()
+	local uci = require "luci.model.uci".cursor_state()
+	local file = "/etc/itus/fw.log"
+		if file then
+		return fs.readfile(file) or ""
+		else
+		return ""
+		end
+	end
+
+programversion = s:taboption("tab_ITUS7",TextValue,"programversion","")
+programversion.wrap = "on"
+programversion.rows = 25
+programversion.rmempty = false
+	function programversion.cfgvalue()
+	local uci = require "luci.model.uci".cursor_state()
+	local file = "/etc/itus/program-versions.log"
+		if file then
+			return fs.readfile(file) or ""
+		else
+		return ""
+		end
+	end
 
 
-buttonzero = s:taboption("tab_ITUS5",Button,"banners", translate("System Notification Banners:"))                                         
-buttonzero.inputtitle = "Remove"                                                                                                          
-        function buttonzero.write(self, section,value)                                                                                    
-                sys.call("sh /etc/itus/remove_banners.sh &>/dev/null")                                                                                
-        end 
+buttonzero = s:taboption("tab_ITUS5",Button,"banners", translate("System Notification Banners:"))
+buttonzero.inputtitle = "Remove"
+	function buttonzero.write(self, section,value)
+		sys.call("sh /etc/itus/remove_banners.sh &>/dev/null")
+	end
 
 
 if line == "yes" then
 
-buttonone = s:taboption("tab_ITUS2",Button, "update", translate("Run System Update:"))                                                    
-buttonone.inputtitle = "Start"                                                                                                            
-        function buttonone.write(self, section,value)                                                                                     
-                sys.call("sh /sbin/fw_upgrade &>/dev/null")                                                                                
-        end  
+buttonone = s:taboption("tab_ITUS2",Button, "update", translate("Run System Update:"))
+buttonone.inputtitle = "Start"
+	function buttonone.write(self, section,value)
+		sys.call("sh /sbin/fw_upgrade &>/dev/null")
+	end
 
 
-buttonthree = s:taboption("tab_ITUS6",Button, "restart", translate("Reboot Shield:"))                
+buttonthree = s:taboption("tab_ITUS6",Button, "restart", translate("Reboot Shield:"))
 buttonthree.inputtitle = "Restart"
-        function buttonthree.write(self, section,value)                                            
-                sys.call("reboot -f &>/dev/null")                             
-        end  
+	function buttonthree.write(self, section,value)
+		sys.call("reboot -f &>/dev/null")
+	end
 
 buttontwo = s:taboption("tab_ITUS4",Button, "reset", translate("Factory Reset:"))
 buttontwo.inputtitle = "Start"
 	function buttontwo.write(self, section,value)
 		sys.call("sh /etc/itus/factory_reset.sh &>/dev/null")
-	end      
+	end
 
 end
 

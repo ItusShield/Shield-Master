@@ -1,5 +1,11 @@
 #!/bin/sh
 
+#########################################################################################################################
+# version 1														#
+# Changed so if creating secondary ip address and it already at 254 it will not add 1 to the ip but will decrease	#
+# ip by one.														#
+#.Called by:														#
+# #######################################################################################################################
 #set -x
 
 # Regular expressions for ip addresses

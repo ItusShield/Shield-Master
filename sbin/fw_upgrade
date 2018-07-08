@@ -1,84 +1,180 @@
 #!/bin/sh
-################################################################################################
-# File name  fw_upgrade                                                                        #
-# Created by ITUS                                                                              #
-# Original version from firmware 1.51 sp1                                                      #
-# VERSION NUMBER 1.51 - 8.3.3                                                                  #
-# Last Modified 24 Nov 2016                                                                    #
-# Changes - added some more snort rules and minor error checkes, also added to new webfilters  #
-#           violence and tracker, file writecategories.sh modified for additional web filters  #
-# Changes - roadrunnere42 -  Added check for Fatal Errors after downloading snort rules        #
-#           resulting in lose of internet                                                      #
-# Changes - Gnomad - Parse version above into .do_date to avoid need for separate .version     #
-# Changes - roadrunnere42 - Rectified syntax errors on web filter renaming                     #
-# Changes - roadrunnere42 - checks for duplicate sid numbers with different revison numbers.   #
-#           removes the lowest revision number rule , snort only allow one sid number.         #
-# Changes - roadrunnere42 - fixed logic bug, and added version number in lua status            #
-# Changes - roadrunnere42 - Now allows full web filter listing, but this version must have four#
-#           additional files changed for it to work, code has also been revisited and shortened#
-#           ramdrive removed and now use the shields tmpfs which is in ram                     #
-#           - usr/lib/lua/luci.model/cbi/e2guardian.lua                                        #
-#           - etc/config/e2guardian                                                            #
-#           - etc/init.d/dnsmasq                                                               #
-#           - etc/itus/write-categories.sh                                                     #
-# Changes - roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake testing#
-# Changes - roadrunnere42 - Checks for duplicate rules and removes, tidy code and bug fixes    #
-#           removed drug rule because www.shallalist.de sit is too up and down causing script  #
-#           to stall.                                                                          #
-# Changes - roadrunnere42 - Only new snort rules are added to the list instead of rewritting   #
-#           the whole list, complete new snort list download ever 14 days. Malicious and       #
-#           ads list, downloaded in memory and duplicate ip's are removed before writting.     #
-#           Drug rules are now updated in memory from http://www.shallalist.de and added to    #
-#           original from Itus, only updated if selected in gui.                               #
-#                                                                                              #
-# Changes - Hans run webfilter based on ads/malicious settings in UCI                          #
-#           Perform DNSMASQ restart / SNORT restart only in case of updates                    #
-# Changes - Hans correction in line 17 based on Wisywig error                                  #
-# Changes - Hans added rules function calls into scripts                                       #
-# Changes - roadrunnere42 added ramdisk and checks to see if files exist before removing       #
-# Changes - user8446 added option switches to curl commands as follows: added -1 to force      #
-# connections =/> TLS1.0 for IPS, -m to exit if connection drops or host is down to keep script#
-# from hanging for all curl commands                                                           #
-#                                                                                              #
-# When changing the script please update WHAT YOU CHANGED OR ADDED, ADD 1 TO THE VERSION       #
-# NUMBER AND DATE CHANGED.                                                                     #
-# This will make it easier in time to come to identiy what changed and who did what.           #
-################################################################################################
+#########################################################################################################
+# File name  fw_upgrade
+# Created by ITUS
+# Original version from firmware 1.51 sp1
+# VERSION NUMBER 1.51 - 8.3.5
+# Last Modified 13 Aug 2017
+# Changes	Added /etc/itus/program-version.sh to get latest programs version from website
+#		to /etc/itus/program_versions.log$
+#		used in gui status --> itus setting --> itus program versions
+# Changes	Added number of snort rules to be displayed in intrusion prevention	rule counter
+#	/usr/lib/ula/model/cbi/snort.lua
+#	added web filter one off full download so if web filters are selected then rules
+#	will apply straight away instead of waiting for nightly update.
+# Changes	added some more snort rules and minor error checkes, also added to new webfilters
+#		violence and tracker, file writecategories.sh modified for additional web filters
+# Changes	roadrunnere42	Added check for Fatal Errors after downloading snort rules
+#		resulting in loss of internet
+# Changes	Gnomad - Parse version above into .do_date to avoid need for separate .version
+# Changes	roadrunnere42 - Rectified syntax errors on web filter renaming.
+# Changes	roadrunnere42 - checks for duplicate sid numbers with different revison numbers.
+#		removes the lowest revision number rule , snort only allow one sid number.
+# Changes	roadrunnere42 - fixed logic bug, and added version number in lua status
+# Changes	roadrunnere42 - Now allows full web filter listing, but this version must have 4
+#		additional files changed for it to work, code has also been revisited and shortened
+#	ramdrive removed and now use the shields tmpfs which is in ram
+#	usr/lib/lua/luci.model/cbi/e2guardian.lu
+#	etc/config/e2guardian
+#	etc/init.d/dnsmasq
+#	etc/itus/write-categories.sh
+# Changes	roadrunnere42 - forgot to uncomment webfilter and one snort rule my mistake testing
+# Changes	roadrunnere42 - Checks for duplicate rules and removes, tidy code and bug fixes
+#		removed drug rule because www.shallalist.de sit is too up and down causing script
+#		to stall.
+# Changes	roadrunnere42	Only new snort rules are added to the list instead of rewritting
+#		the whole list, complete new snort list download ever 14 days. Malicious and
+#		ads list, downloaded in memory and duplicate ip's are removed before writting.
+#	Drug rules are now updated in memory from http://www.shallalist.de and added to
+#	original from Itus, only updated if selected in gui.
+# Changes	Hans run webfilter based on ads/malicious settings in UCI
+#		Perform DNSMASQ restart / SNORT restart only in case of updates
+# Changes	Hans correction in line 17 based on Wisywig error
+# Changes	Hans added rules function calls into scripts
+# Changes	roadrunnere42 added ramdisk and checks to see if files exist before removing
+# Changes	user8446 added option switches to curl commands as follows: added -1 to force
+# connections =/> TLS1.0 for IPS, -m to exit if connection drops or host is down to keep script
+# from hanging for all curl commands
+#
+# When changing the script please update WHAT YOU CHANGED OR ADDED, ADD 1 TO THE VERSION
+# NUMBER AND DATE CHANGED.
+# This will make it easier in time to come to identiy what changed and who did what.
+#########################################################################################################
 #set -x
 
 echo " "
 update_snort_rules() {
 # removes duplicate lines in the snort rules important if it;s the first time the script is run.
-if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/snort/rules/snort.rules ; touch /etc/snort/rules/test.file ; fi 
- 
-	echo "Starting SNORT rule download..."
-	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
+if [[ -f /etc/snort/rules/test.file ]] ; then snorted="1" ; else sort -u /etc/snort/rules/snort.rules ; touch /etc/snort/rules/test.file ; fi
+# remove multiple files, this is needed if the script is run several time and crashes before file is deleted, device memory will fill up.
+rm /tmp/ramdisk/alert.list /tmp/ramdisk/temp.rules /tmp/ramdisk/temp.rules /tmp/temp1  2>/dev/null
+
+##############################################################################################################################
+# Gets the blockdomain ip from uci and assigns to blockdomain. added echo $blockdomain_ip just to check # That they is an ip #
+##############################################################################################################################
+ip_regex="[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+"
+blockdomain_ip=$(uci get network.blockdomain.ipaddr)
+echo $blockdomain_ip " this is the blocked domains ip"  # added as display point for checking only
+
+
+touch /tmp/rule_counter.log
+echo "These are the rules that have been selected and shows the number of rules in each selection. You can change the selected rules but only via the command line as present" > /tmp/rule_counter.log
+echo \ >> /tmp/rule_counter.log
+echo "Starting SNORT rule download..."
+
+		curl -k -1 -m 40 -o /tmp/ramdisk/botcc.portgrouped.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.portgrouped.rules
+		cat /tmp/ramdisk/botcc.portgrouped.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-botcc.portgrouped.rules'", " - These rules detect with high reliable indications that a host is communicating with a known and active Bot or Malware command and control server " }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/botcc.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-botcc.rules
+		cat /tmp/ramdisk/botcc.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-botcc.rules'"," - These rules detect with high reliable indications that a host is communicating with a known and active Bot or Malware command and control server " }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/ciarmy.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-ciarmy.rules
+		cat /tmp/ramdisk/ciarmy.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-ciarmy.rules'" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/compromised.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-compromised.rules
+		cat /tmp/ramdisk/compromised.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-compromised.rules'"," - This ruleset contents are hosts that are known to be compromised by bots, phishing sites, etc, or known to be spewing hostile traffic. These are not your everyday infected and sending a bit of spam hosts, these are significantly infected and hostile hosts" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/dshield.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-dshield.rules
+		cat /tmp/ramdisk/dshield.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-dshield.rules'"," - This ruleset takes a daily list of the top attackers reported to Dshield and converts them into Snort signatures, Bro Signatures, and Firewall rules. " }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-exploit.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-exploit.rules
+		cat /tmp/ramdisk/emerging-exploit.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-exploit.rules'"," - Rules to detect direct exploits. Generally if you are looking for a windows exploit, Veritas, etc, they will be here. Things like SQL injection and the like, whie they are exploits, have their own category. " }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-malware.rules
+		cat /tmp/ramdisk/emerging-malware.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-malware.rules'"," - There is more than just spyware in here, but rest assured nothing in here is something you want running on your net or PC. There are URL hooks for known update schemed, User-Agent strings of known malware, and a load of other goodies. If you can only run one ruleset to jsutify your IDS infrastructure, this is it!" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-mobile_malware.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-mobile_malware.rules
+		cat /tmp/ramdisk/emerging-mobile_malware.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1"\t", "'emerging-mobile_malware.rules'" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-user_agents.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-user_agents.rules
+		cat /tmp/ramdisk/emerging-user_agents.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-user_agents.rules'" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_client.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_client.rules
+		cat /tmp/ramdisk/emerging-web_client.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-web_client.rules'" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-worm.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-worm.rules
+		cat /tmp/ramdisk/emerging-worm.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'emerging-worm.rules'" }' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-current_events.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-current_events.rules
-#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
-#	curl -k -1 -m 40 -o /tmp/ramdisk/drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
-#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
-#	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
+		cat /tmp/ramdisk/emerging-current_events.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+		wc -l < /tmp/temp1 | awk  '{print  $1, "'emerging-current_events.rules'" , " - These are rules that we dont intend to keep in the ruleset for long, or that need to be tested before they are considered for inclusion. Most often these will be simple sigs for the Storm binary URL of the day, sigs to catch CLSIDs of newly found vulnerable apps where we dont have any detail on the exploit etc Useful sigs but not for the long term "}' >> /tmp/rule_counter.log
+		echo \ >>/tmp/rule_counter.log
 
-	# SSL Blacklist (SSLBL) is a project maintained by abuse.ch. The goal is to provide a list of "bad" SSL certificates identified 
-	# by abuse.ch to be associated with malware or botnet activities. SSLBL relies on SHA1 fingerprints of malicious SSL certificates 
-	# and offers various blacklists that can found in the SSL Blacklist section. 
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-trojan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-trojan.rules
+	cat /tmp/ramdisk/emerging-trojan.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1, "emerging-trojan.rules" }' >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
+
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-drop.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-drop.rules
+	cat /tmp/ramdisk/emerging-drop.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "emerging-drop.rules" }' >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
+
+#  curl -k -1 -m 40 -o /tmp/ramdisk/emerging-web_specific_apps.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-web_specific_apps.rules
+#	 cat /tmp/ramdisk/emerging-web_specific_apps.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+# 	 wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "emerging-web_specific_apps.rules" }' >> /tmp/rule_counter.log
+#   echo \ >>/tmp/rule_counter.log
+
+	curl -k -1 -m 40 -o /tmp/ramdisk/emerging-scan.rules https://rules.emergingthreats.net/open/snort-edge/rules/emerging-scan.rules
+	cat /tmp/ramdisk/emerging-scan.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "emerging-scan.rules" }' >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
+
+# new rule site as suggested SSL Blacklist (SSLBL) is a project maintained by abuse.ch. The goal is to provide a list of "bad" SSL certificates identified
+# by abuse.ch to be associated with malware or botnet activities. SSLBL relies on SHA1 fingerprints of malicious SSL certificates
+# and offers various blacklists that can found in the SSL Blacklist section.
+
 	curl -k -1 -m 40 -o /tmp/ramdisk/abuse-sslbl.rules https://sslbl.abuse.ch/blacklist/sslipblacklist.rules
-	curl -k -1 -m 40 -o /tmp/ramdisk/abuse-dyre.rules https://sslbl.abuse.ch/blacklist/dyre_sslipblacklist.rules
+	cat /tmp/ramdisk/abuse-sslbl.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'sslipblacklist.rules'" , " - The SSL IP Blacklist (CSV) contains all hosts (IP addresses) that SSLBL has seen in the past 30 days being associated with a malicious SSL certificate." }' >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
 
-echo " "
+	curl -k -1 -m 40 -o /tmp/ramdisk/abuse-dyre.rules https://sslbl.abuse.ch/blacklist/dyre_sslipblacklist_aggressive.rules
+	cat /tmp/ramdisk/abuse-dyre.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1, "'dyre_sslipblacklist_aggressive.rules'" , " - The aggressive version of the SSL IP Blacklist contains all IPs that SSLBL ever detected being associated with a malicious SSL certificate. Since IP addresses can be reused (e.g. when the customer changes), this blacklist may cause false positives. Hence I highly recommend you to use the standard version instead of the aggressive one."}'  >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
+
+	curl -k -1 -m 40 -o /tmp/ramdisk/zeus.rules https://zeustracker.abuse.ch/blocklist.php?download=snort
+	cat /tmp/ramdisk/zeus.rules | sed '/^\#/d' | sed '/^$/d' > /tmp/temp1
+	wc -l < /tmp/temp1 | awk  '{print  $1,"\t", "'zeus.rules'" , " - Zeus command and control servers." }' >> /tmp/rule_counter.log
+	echo \ >>/tmp/rule_counter.log
+
+	echo " "
 echo "Working on snort rules, please wait... may take up to a minute"
 cat /tmp/ramdisk/*.rules > /tmp/ramdisk/alert.list
-sed -i 's/alert /drop /' /tmp/ramdisk/alert.list 
+sed -i 's/alert /drop /' /tmp/ramdisk/alert.list
 sed '/^\#/d' /tmp/ramdisk/alert.list >> /tmp/ramdisk/temp.rules
 sed '/^$/d' /tmp/ramdisk/temp.rules | sort | uniq > /tmp/ramdisk/snort.rules
 
@@ -89,7 +185,7 @@ cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2}' | awk -F";" '{print $1}
 > /tmp/ramdisk/tst.sed
 for i in $(cat /tmp/ramdisk/numbers.txt)
 do
- 
+
 echo "0,/$i/{/$i/d}" >> /tmp/ramdisk/tst.sed
 done
 cat /tmp/ramdisk/snort.rules | awk -F"sid:" '{print $2 $1}' | sort > /tmp/ramdisk/snort.rules.tmp
@@ -102,7 +198,7 @@ sed -i 's/$/;\)/' /tmp/ramdisk/snort.rules
 rm -f /tmp/ramdisk/snort.rules.tmp /tmp/ramdisk/numbers.txt /tmp/ramdisk/tst.sed
 
 echo "Removing snort rules determined by ITUS Networks to cause problems accessing web sites"
-    
+
 	sed -i '/sid:2002802/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2019237/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2018194/s/^/#/' /tmp/ramdisk/snort.rules
@@ -204,29 +300,38 @@ echo "Removing snort rules determined by ITUS Networks to cause problems accessi
 	sed -i '/sid:2010908/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2014020/s/^/#/' /tmp/ramdisk/snort.rules
 	sed -i '/sid:2017479/s/^/#/' /tmp/ramdisk/snort.rules
- 
+
+
 if [[ "$system_restarted" = "1" ]] ; then
 	echo  "Shield has been restarted so using a fresh copy of snort rules"
 	mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
 else
- 	value=$(cat "/sbin/counter")	
-	if [[ "$value" -le "14" ]] ; then	 
-		echo "It's been" $value "days since last full update, will automatically do full update after 14 days"
-		grep -Fxvf  /etc/snort/rules/snort.rules /tmp/ramdisk/snort.rules > /etc/snort/rules/snort.rules
-		echo $((value+1)) >/sbin/counter # update counter by adding 1
+	value=$(cat "/sbin/counter")
+	if [[ "$value" -le "14" ]] ; then
+
+		if [ -s /etc/snort/rules/snort.rules ] ;	then
+			echo "File not empty"
+					echo "It's been" $value "days since last full update, will automatically do full update after 14 days"
+					grep -Fxvf  /etc/snort/rules/snort.rules /tmp/ramdisk/snort.rules > /etc/snort/rules/snort.rules
+					echo $((value+1)) >/sbin/counter # update counter by adding 1
+				else
+					echo "File empty"
+					 mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
+		fi
 	else
-		echo "It's been more than 14 days, so using fresh copy of rules"
-		mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
-		echo 1 > /sbin/counter # set counter to 1
+			echo "It's been more than 14 days, so using fresh copy of rules"
+			mv /tmp/ramdisk/snort.rules /etc/snort/rules/snort.rules
+			echo 1 > /sbin/counter # set counter to 1
 	fi
+
 fi
 do_snort_restart=1
 }
 
 ##########################################################################################
 update_ads_rules() {
-	
-if [[ -f /tmp/ramdisk/snort.rules/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ; fi
+
+if [[ -f /tmp/ramdisk/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ; fi
 
 	echo "Starting ads rule download..."
 	curl -m 40 -s -d mimetype=plaintext -d hostformat=unixhosts http://pgl.yoyo.org/adservers/serverlist.php? | sort >> /tmp/ramdisk/ads.tmp
@@ -238,13 +343,13 @@ if [[ -f /tmp/ramdisk/snort.rules/ads.tmp ]] ; then rm -r /tmp/ramdisk/ads.tmp ;
 
 sleep 1
 	echo "Working on ads rules, sorting and deleting duplicates... may take up to 2 minutes"
-	echo "Number of lines in new ads rule downloads"	
+	echo "Number of lines in new ads rule downloads"
 	wc -l /tmp/ramdisk/ads.tmp
-	cat /tmp/ramdisk/ads.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/ads.tmp1
-	echo "Number of lines following sorting and deleting duplicate rules"	
+	cat /tmp/ramdisk/ads.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e "s/$/\/$blockdomain_ip/" | sort -u >> /tmp/ramdisk/ads.tmp1
+	echo "Number of lines following sorting and deleting duplicate rules"
 	wc -l /tmp/ramdisk/ads.tmp1
 	mv /tmp/ramdisk/ads.tmp1 /etc/itus/lists/ads
-	chmod 655 /etc/itus/lists/ads	
+	chmod 655 /etc/itus/lists/ads
 	echo " "
 }
 
@@ -258,13 +363,20 @@ if [[ -f /tmp/ramdisk/malicious.tmp ]] ; then rm -r /tmp/ramdisk/malicious.tmp 2
 	echo "Starting malicious rule download..."
 	curl -m 40 -s http://www.malwaredomainlist.com/hostslist/hosts.txt | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $3}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
 	curl -m 40 -s http://mirror1.malwaredomains.com/files/justdomains | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp
-	curl -m 40 -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp	
-	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
+# These seem to have stopped working #####################################################
+#	curl -m 40 -s https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | sort >> /tmp/ramdisk/malicious.tmp
+#	curl -m 40 -s https://hosts.neocities.org/ -k | grep -v "#" | sed '/^$/d' | sed 's/\ /\\ /g' | awk '{print $2}' | grep -v '^\\' | grep -v '\\$' | sort >> /tmp/ramdisk/malicious.tmp
+#############################################################################################
+
+	curl -k -m40 https://ransomwaretracker.abuse.ch/downloads/RW_DOMBL.txt | grep -F -v "#" | sort >> /tmp/ramdisk/malicious.tmp
+	curl -k -m40 https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist | grep -F -v "#" | sort >> /tmp/ramdisk/malicious.tmp
+
+#############################################################################################
 	sleep 1
 	echo "Working on malicious rules, sorting and deleting duplicates... may take up to 2 minutes"
-	echo "Number of lines in new malicious rule downloads"	
+	echo "Number of lines in new malicious rule downloads"
 	wc -l /tmp/ramdisk/malicious.tmp
-	cat /tmp/ramdisk/malicious.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e 's/$/\/10.10.10.11/' | sort -u >> /tmp/ramdisk/malicious.tmp1
+	cat /tmp/ramdisk/malicious.tmp | sed '/^$/d' | sed 's/^/address=\//g' | sed -e "s/$/\/$blockdomain_ip/" | sort -u >> /tmp/ramdisk/malicious.tmp1
 	echo "Number of lines following sorting and deleting duplicate rules"
 	wc -l /tmp/ramdisk/malicious.tmp1
 	mv /tmp/ramdisk/malicious.tmp1 /etc/itus/lists/malicious
@@ -276,7 +388,9 @@ if [[ -f /tmp/ramdisk/malicious.tmp ]] ; then rm -r /tmp/ramdisk/malicious.tmp 2
 ##########################################################################################
 update_web_filter_rules() {
 ##########################################################################################
-
+#blank web filter log
+#touch /tmp/web_filter_counter.log
+echo "update_web_filter_rules"
 FILTERS=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1`
 
 #copy list of web filter from /etc/config/e2guardian to ramdisk so they can be changed to match what is in shallalist
@@ -287,15 +401,16 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 	echo "Starting web filter rule download..."
 	wget http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
 	if [[ "$?" != 0 ]] ; then
-	      echo "There was a problem downloading the web filter rules"
+		echo "There was a problem downloading the web filter rules"
 	else
-	    echo "Successfully downloaded new web filter rules"
-	    cd /tmp/ramdisk
-	    for filter in $(cat /tmp/ramdisk/FILTERS)
+		echo "Successfully downloaded new web filter rules"
+		cd /tmp/ramdisk
+		for filter in $(cat /tmp/ramdisk/FILTERS)
 		do
-	        if [ "$filter" == "ads" -o "$filter" == "malicious" ] ; then
-	           continue
-	        fi
+		if [ "$filter" == "ads" -o "$filter" == "malicious" ] ; then
+						#wc -l  /etc/itus/lists/$filter | awk  '{print $filter }' >> /tmp/web_filter_counter.log
+			continue
+		fi
 			tar -zxvf /tmp/ramdisk/shallalist.tar.gz "BL/${filter}/domains"
 			if  [ -f /tmp/ramdisk/BL/${filter}/domains ] ; then
 			echo "Working on $filter rules, please wait... may take up to a minute"
@@ -306,165 +421,244 @@ if [ -s /tmp/ramdisk/FILTERS ] ; then
 				else
 					grep -Fxvf  /etc/itus/lists/${filter} /tmp/ramdisk/BL/${filter}/domains >> /tmp/ramdisk/${filter}
 				fi
+
 # check to see if an new drug rules have been add and if not skip writing to file
-            if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then
+			if [ $(cat /tmp/ramdisk/${filter} | wc -l) -gt 0 ] ; then
 # Stripe out duplicate drug listens
-                echo "Number of IP addresses BEFORE sorting"
-                wc -l /etc/itus/lists/${filter}
-                sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
-                sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
-                echo "Number of IP addresses AFTER sorting"
-                wc -l /etc/itus/lists/${filter}
-            fi
-            fi
-        done
-    fi
+				echo "Number of IP addresses BEFORE sorting"
+				wc -l /etc/itus/lists/${filter}
+				sort -u /tmp/ramdisk/${filter} > /tmp/ramdisk/tmp.tmp1
+				sed '/^$/d' /tmp/ramdisk/tmp.tmp1 >> /etc/itus/lists/${filter}
+				echo "Number of IP addresses AFTER sorting"
+				wc -l /etc/itus/lists/${filter}
+
+			fi
+			fi
+		done
+	fi
+fi
+}
+
+##########################################################################################
+one_off_web_filter_rules_update() {
+##########################################################################################
+# one off download of all web filter rules, so when selecting web filters which have not
+# been selected before and before fw_upgrade is run, rules are present but would be a
+# day out of date.
+# check to see if file exists indicating that a full web filter download of all rules has
+# been done, will not run again till file is not present ie factory restart
+
+echo "one_off_web_filter_rules_update"
+if [ ! -f "/etc/itus/full_web_filter_done" ] ; then
+			 #touch /etc/itus/full_web_filter_done
+			 update_ads_rules
+			 update_malicious_rules
+			 echo "Starting web filter rule download..."
+			 wget http://www.shallalist.de/Downloads/shallalist.tar.gz -O /tmp/ramdisk/shallalist.tar.gz
+				if [[ "$?" != 0 ]] ; then
+						echo "There was a problem downloading the web filter rules"
+				else
+					echo "Successfully downloaded new web filter rules"
+					cd /tmp/ramdisk
+					for filters in $(cat /etc/itus/web_filter_selection)
+						do
+							if [ "$filters" == "ads" -o "$filters" == "malicious" ] ; then
+								 continue
+				fi
+						tar -zxvf /tmp/ramdisk/shallalist.tar.gz "BL/${filters}/domains"
+						if  [ -f /tmp/ramdisk/BL/${filters}/domains ] ; then
+						echo "Working on $filters rules, please wait... may take up to a minute"
+						sed -i 's/^/address=\//g'  /tmp/ramdisk/BL/${filters}/domains
+						sed  -i -e 's/$/\/10.10.10.11/'  /tmp/ramdisk/BL/${filters}/domains
+							if [ "$filters" == "porn" ] ; then
+								awk 'FNR==NR{a[$0];next}!($0 in a)' /etc/itus/lists/porn /tmp/ramdisk/BL/${filters}/domains >> /tmp/ramdisk/${filters}
+								else
+								grep -Fxvf  /etc/itus/lists/${filters} /tmp/ramdisk/BL/${filters}/domains >> /tmp/ramdisk/${filters}
+							fi
+							cp /tmp/ramdisk/${filters} /etc/itus/lists/${filters}
+								touch /etc/itus/full_web_filter_done
+			else
+	 						echo " full _web_filter_done file is present "
+			fi
+
+					done
+			fi
 fi
 }
 
 ##########################################################################################
 # Prevent DNSMASQ/SNORT restart unless updates are needed
 
-    do_dnsmasq_restart=0    # 0 = no restart, 1 = restart
-    do_snort_restart=0  # 0 = no restart, 1 = restart
+	do_dnsmasq_restart=0	# 0 = no restart, 1 = restart
+	do_snort_restart=0	# 0 = no restart, 1 = restart
 
 ##########################################################################################
 # check to see if there is a mount point in /tmp/restart-var and if there isn't it will
 # create one, this is used the first time you run this script on the shield to create the
 # mount point.
 
-    if [ ! -d "/tmp/restart-var" ] ; then
-            mkdir /tmp/restart-var
-        echo 1 > /sbin/counter
-        system_restarted="1"
-    fi
+	if [ ! -d "/tmp/restart-var" ] ; then
+		mkdir /tmp/restart-var
+		echo 1 > /sbin/counter
+		system_restarted="1"
+	fi
 
 ##########################################################################################
-# Check for /tmp/ramdisk. If not, make the folder as it's needed when fw_upgrade script 
-# is run before restarting Shield, straight after a factory reset. 
-	if [ ! -d "/tmp/ramdisk" ] ; then
-		mkdir /tmp/ramdisk
+# Check to see for /tmp/ramdisk if not will make the folder, this is need if fw_upgrade script
+# is run before restart Shield straight after factory restart
+ if [ ! -d "/tmp/ramdisk" ] ; then
+				mkdir /tmp/ramdisk
 	else
 		echo " ramdisk already present"
 	fi
-	
 ##########################################################################################
 # To prevent the snort rules from updating put # in front (# update_snort_rules)
-    update_snort_rules
-    sleep 1
+	update_snort_rules
+	sleep 1
+
+##########################################################################################
+# Delete the original Itusnetwork web filter categories and create new list, needed when
+# updating old obsolete web categories
+#
+##########################################################################################
+
+	echo "One off web filters update "
+	if [ ! -f "/etc/itus/full_web_filter_done" ] ; then
+		if [[ -f "/etc/itus/lists/dating" ]] ; then rm /etc/itus/lists/dating ; fi
+		if [[ -f "/etc/itus/lists/gambling" ]] ; then rm /etc/itus/lists/gambling ; fi
+		if [[ -f "/etc/itus/lists/proxies" ]] ; then rm /etc/itus/lists/proxies ; fi
+		if [[ -f "/etc/itus/lists/racism" ]] ; then rm /etc/itus/lists/racism ; fi
+		if [[ -f "/etc/itus/lists/social" ]] ; then rm /etc/itus/lists/social ; fi
+		if [[ -f "/etc/itus/lists/blasphemy" ]] ; then rm /etc/itus/lists/blasphemy ; fi
+		if [[ -f "/etc/itus/lists/piracy" ]] ; then rm /etc/itus/lists/piracy ; fi
+		if [[ -f "/etc/itus/lists/illegal" ]] ; then rm /etc/itus/lists/illegal ; fi
+
+		if [[ ! -f "/etc/itus/lists/ads" ]] ; then  touch /etc/itus/lists/ads ; fi
+		if [[ ! -f "/etc/itus/lists/malicious" ]] ; then  touch /etc/itus/lists/malicious ; fi
+		if [[ ! -f "/etc/itus/lists/drugs" ]] ; then  touch /etc/itus/lists/drugs ; fi
+		if [[ ! -f "/etc/itus/lists/religion" ]] ; then  touch /etc/itus/lists/religion ; fi
+		if [[ ! -f "/etc/itus/lists/gamble" ]] ; then  touch /etc/itus/lists/gamble ; fi
+		if [[ ! -f "/etc/itus/lists/porn" ]] ; then  touch /etc/itus/lists/porn ; fi
+		if [[ ! -f "/etc/itus/lists/spyware" ]] ; then  touch /etc/itus/lists/spyware ; fi
+		if [[ ! -f "/etc/itus/lists/redirector" ]] ; then  touch /etc/itus/lists/redirector ; fi
+		if [[ ! -f "/etc/itus/lists/downloads" ]] ; then  touch /etc/itus/lists/downloads  ; fi
+		if [[ ! -f "/etc/itus/lists/violence" ]] ; then  touch /etc/itus/lists/violence ; fi
+		if [[ ! -f "/etc/itus/lists/tracker" ]] ; then  touch /etc/itus/lists/tracker ; fi
+
+		# call function	to download complete web filter rule set
+		one_off_web_filter_rules_update
+		update_web_filter_rules
+	else
+		 update_web_filter_rules
+
+	fi
+do_dnsmasq_restart=1
 
 ##########################################################################################
 # Update ads rules
 # Managed via LUCI>SERVICES>Web Filter > Content filter - Ads
 
-    if [ $(uci get e2guardian.e2guardian.content_ads) = 1 ] ; then
-        echo "Updating ADS rules"
-        update_ads_rules
-        sleep 1
-        do_dnsmasq_restart=1
-    fi
+	if [ $(uci get e2guardian.e2guardian.content_ads) = 1 ] ; then
+		echo "Updating ADS rules"
+		update_ads_rules
+		sleep 1
+		do_dnsmasq_restart=1
+	fi
 
 ##########################################################################################
 # Update malicious sites rules
 # Managed via LUCI>SERVICES>Web Filter > Content filter - Malicious
 
-    if [ $(uci get e2guardian.e2guardian.content_malicious) = 1 ] ; then
-        echo "Updating MALICIOUS rules"
-        update_malicious_rules
-        sleep 1
-        do_dnsmasq_restart=1
-    fi
+	if [ $(uci get e2guardian.e2guardian.content_malicious) = 1 ] ; then
+		echo "Updating MALICIOUS rules"
+		update_malicious_rules
+		sleep 1
+		do_dnsmasq_restart=1
+	fi
 
-
-
-##########################################################################################
-# renane the original Itusnetwork web filter files to match new download rules
-# and added mew categories violence and tracker
-##########################################################################################
-
-    if [[ -f "/etc/itus/lists/blasphemy" ]] ; then mv /etc/itus/lists/blasphemy /etc/itus/lists/religion ; fi
-    if [[ -f "/etc/itus/lists/gambling" ]] ; then mv /etc/itus/lists/gambling /etc/itus/lists/gamble ; fi
-    if [[ -f "/etc/itus/lists/proxies" ]] ; then mv /etc/itus/lists/proxies /etc/itus/lists/spyware ; fi
-    if [[ -f "/etc/itus/lists/racism" ]] ; then mv /etc/itus/lists/racism /etc/itus/lists/redirector ; fi
-    if [[ -f "/etc/itus/lists/social" ]] ; then mv /etc/itus/lists/social /etc/itus/lists/downloads ; fi
-    if [[ ! -f "/etc/itus/lists/violence" ]] ; then  touch /etc/itus/lists/violence ; fi
-    if [[ ! -f "/etc/itus/lists/tracker" ]] ; then  touch /etc/itus/lists/tracker ; fi
-
-    echo "Updating WEB FILTER rules"
-    update_web_filter_rules
-    do_dnsmasq_restart=1
 
 ##########################################################################################
 # restart DNSMASQ
 
-    if [ $do_dnsmasq_restart = 1 ] ; then
-        echo " "
-        echo "Restarting DNSMASQ service"
-        /etc/init.d/dnsmasq restart
-        echo "Restarted DNSMASQ"
-        sleep 1
-    fi
+	if [ $do_dnsmasq_restart = 1 ] ; then
+		echo " "
+		echo "Restarting DNSMASQ service"
+		/etc/init.d/dnsmasq restart
+		echo "Restarted DNSMASQ"
+		sleep 1
+	fi
 
 ##########################################################################################
 # restart SNORT
 
-    if [ $do_snort_restart = 1 ] ; then
-        echo " "
-        echo "Restarting SNORT service"
-        echo "(please ignore PID errors - these are expected)"
-        sleep 1
-        /etc/init.d/snort restart
-        echo "Restarted SNORT"
-        sleep 1
-    fi
+	if [ $do_snort_restart = 1 ] ; then
+		echo " "
+		echo "Restarting SNORT service"
+		echo "(please ignore PID errors - these are expected)"
+		sleep 1
+		/etc/init.d/snort restart
+		echo "Restarted SNORT"
+		sleep 1
+	fi
 
 ##########################################################################################
 # Shield Update Version: parse version number from the comments at the top of this script
-grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.do_date
+
+#	grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.do_date
+rm -f /.version
+grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.version
 
 # Shield Update Last Run: append current date
-date >> /.do_date
+#date >> /.do_date
+rm -f /.do_date
+date > /.do_date
+#
+##########################################################################################################
+# run /etc/itus/program-version.sh to get latest programs version to /etc/itus/program_versions.log
+# used in gui status --> itus setting --> itus program versions
+#########################################################################################################
+sh /etc/itus/program-versions.sh
 
-##########################################################################################
+#########################################################################################################
 if [[ -d "/tmp/ramdisk" ]] ; then rm -r /tmp/ramdisk/*  2>/dev/null ; fi
 
-
-##########################################################################################
-# check if snort error has occured after restarting following downloading new rules
+#########################################################################################################
+# check if snort error has occured after restarting following downloading new rules			#
+#########################################################################################################
 sleep 5
 logread > /tmp/logfile.log
 if [ "$(grep -c "FATAL ERROR: /etc/snort/rules/" /tmp/logfile.log)" -ge 1 ]; then
 
-    if [[ ! -f /tmp/error-var ]] ; then
-    touch /tmp/error-var
-    echo 1 > /tmp/error-var
-    else
-    echo "file present already"
-    fi
+	if [[ ! -f /tmp/error-var ]] ; then
+	touch /tmp/error-var
+	echo 1 > /tmp/error-var
+	else
+	echo "file present already"
+	fi
 
-
-    echo " Found FATAL ERROR AFTER RESTART - making backup of old snort rules then deleting snort rules"
-    echo " after deleted restarting fw_upgrade script"
-    sleep 5
-    mv -f /etc/snort/rules/snort.rules /etc/snort/rules/snort.rules.old
-    rm -f /etc/snort/rules/snort.rules
-    touch /etc/snort/rules/snort.rules
+	echo " Found FATAL ERROR AFTER RESTART - making backup of old snort rules then deleting snort rules"
+	echo " after deleted restarting fw_upgrade script"
+	sleep 5
+	mv -f /etc/snort/rules/snort.rules /etc/snort/rules/snort.rules.old
+	rm -f /etc/snort/rules/snort.rules
+		touch /etc/snort/rules/snort.rules
+		touch /tmp/logfile.log
 
 # If starting fw_upgrade 3 times and FATAL ERROR still present then stop running script"
 # as the error need sorting by human intervention"
-    value=$(cat "/tmp/error-var")
-    if [[ "$value" -le "3" ]] ; then
+	value=$(cat "/tmp/error-var")
+	if [[ "$value" -le "3" ]] ; then
 
-        echo $((value+1)) >/tmp/error-var # update error counter by adding 1
-        /etc/init.d/snort restart
-        sleep 5
-        sh /sbin/fw_upgrade
-    else
-        echo " Stopping error checking after 3 attempts, FATAL ERROR still present"
-        rm -f /tmp/error-var
-        sleep 5
-        exit 0
-    fi
+		echo $((value+1)) >/tmp/error-var # update error counter by adding 1
+		/etc/init.d/snort restart
+		sleep 5
+		sh /sbin/fw_upgrade
+	else
+		echo " Stopping error checking after 3 attempts, FATAL ERROR still present"
+		rm -f /tmp/error-var
+		sleep 5
+		exit 0
+	fi
 
 else
   echo  " No fatal error found after restart"
@@ -473,4 +667,3 @@ fi
 
 echo " "
 exit 0
-

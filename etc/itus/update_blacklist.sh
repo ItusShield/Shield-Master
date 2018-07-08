@@ -1,15 +1,14 @@
 #!/bin/sh
-#set +x
 #################################################################################
 # update_blacklist.sh								#
 # created By: Hans								#
 # Modified: 14th March 2016							#
 # called by: /etc/init.d/dnsmasq						#
 # Purpose: To retreive blockdomain ip and blacklist ip, compare and if changed	#
-# 	   update all rules with new ip.					#
-#  changes:roadrunnere42 Added checks for ramdisk, error checking for missing 	#
-# 	   or blank files, corrected loading errors, added comments.		#
-# changes: Hans created                     					#
+# update all rules with new ip.							#
+# changes:roadrunnere42 Added checks for ramdisk, error checking for missing 	#
+# or blank files, corrected loading errors, added comments.			#
+# changes: Hans created								#
 #################################################################################
 
 ############################################################################################################################
@@ -30,7 +29,7 @@ echo $blockdomain_ip " this is the blocked domains ip"  # added as display point
 		echo $blacklist_ip " this is the blacklist ip" # added as display point for checking only
 	else
 		echo "Error file appears to be missing or empty"
-        	exit
+		exit
 	fi
 
 ############################################################################################################################
@@ -47,31 +46,31 @@ then
 # blacklist is now pulled from /etc/config/e2gaurdian so allowing only the ones that are select to be downloads.
 # & at end of list alowing process to run in background
 
-        blacklist=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1`
-        for list in ${blacklist}
+	blacklist=`grep content_ /etc/config/e2guardian | grep \'1\' | cut -d "_" -f 2 | cut -d ' ' -f 1`
+	for list in ${blacklist}
 	 do
-		if [ ! -d "/tmp/ramdisk/$list " ] ; then # check if the rule folder is in ramdisk,if not copy over.
-		cp   /etc/itus/lists/$list /tmp/ramdisk/$list      	
+		if [ ! -d "/mnt/ramdisk/$list " ] ; then # check if the rule folder is in ramdisk,if not copy over.
+		cp   /etc/itus/lists/$list /mnt/ramdisk/$list      	
 		fi
 		            
-    		# sed -i -E "s/\/[0-9]+.[0-9]+.[0-9]+.[0-9]+$|\/$/\/$blockdomain_ip/g" /etc/itus/lists/$list &
-		echo /tmp/ramdisk/$list  # added as display point for checking only
-		sed -i -E "s/\/[0-9]+.[0-9]+.[0-9]+.[0-9]+$|\/$/\/$blockdomain_ip/g" /tmp/ramdisk/$list &
+		# sed -i -E "s/\/[0-9]+.[0-9]+.[0-9]+.[0-9]+$|\/$/\/$blockdomain_ip/g" /etc/itus/lists/$list &
+		echo /mnt/ramdisk/$list  # added as display point for checking only
+		sed -i -E "s/\/[0-9]+.[0-9]+.[0-9]+.[0-9]+$|\/$/\/$blockdomain_ip/g" /mnt/ramdisk/$list &
 
-        done
+	done
 
-        # Wait for the last process to complete before exiting
-        wait
+	# Wait for the last process to complete before exiting
+	wait
 
-############################################################################################################################
-# Run through rule list and copy back to /etc/itus/lists/$list								   #
-############################################################################################################################
+#########################################################################################################################
+# Run through rule list and copy back to /etc/itus/lists/$list								#
+#########################################################################################################################
 
 	for list in ${blacklist}
-        do
-                mv /tmp/ramdisk/$list /etc/itus/lists/$list
-        done
+	do
+		mv /mnt/ramdisk/$list /etc/itus/lists/$list
+	done
 
 echo "finished"
-        logger -s "update_blacklist" -t "Updated redirect ip address: $blockdomain_ip" 
+	logger -s "update_blacklist" -t "Updated redirect ip address: $blockdomain_ip" 
 fi

@@ -1,13 +1,13 @@
 #!bin/sh
 #################################################################################
-# update_blacklist.sh						                                    #
-# By: Hans 									                                    #
-# version 2									                                    #
-# Modified: 14th March 2016							                            #
-# called by: /etc/rc.local                                                      #
-# writes to: file called .shield_mode in root   	                            #
-# Purpose: To determine which mode the Shield is running in.            	    #
-# changes: 									                                    #
+# update_blacklist.sh								#
+# By: Hans 									#
+# version 2									#
+# Modified: 14th March 2016							#
+# called by: /etc/rc.local							#
+# writes to: file called .shield_mode in root					#
+# Purpose: To determine which mode the Shield is running in.			#
+# changes:									#
 #################################################################################
 
 
@@ -26,7 +26,7 @@ fi
 # 	if  [ `df -h | grep -m1 mmcblk* | awk '{ print substr( $0, 6, 14 )  }'` ]; then
 		DISK_PARTITION=`df -h | grep -m1 mmcblk* | awk '{ print substr( $0, 6, 14 ) }'`
 # 	fi
-# Determine shield mode
+# Determnne shield mode
 	if   [ $DISK_PARTITION = 'mmcblk0p2' ]; then
 		SHIELD_MODE='Router'
 	elif [ $DISK_PARTITION = 'mmcblk0p3' ]; then
@@ -38,5 +38,4 @@ fi
 	fi
 
 echo $SHIELD_MODE > $MODE_FILE
-# echo ""
-# cat $MODE_FILE
+

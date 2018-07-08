@@ -1,6 +1,11 @@
 #!/bin/sh /etc/rc.common
-# Copyright (c) 2009 OpenWrt.org
-# Copyright (c) 2009 Stefan Katerkamp <s@katerkamp.de>
+#################################################################################
+# Copyright (c) 2009 OpenWrt.org						#
+# Copyright (c) 2009 Stefan Katerkamp <s@katerkamp.de>				#
+# version 2									#
+# Chanced cron job from every 10 minutes to run every sunday at midnight	#
+# changed by Hans								#
+#################################################################################
 
 START=99
 
@@ -18,12 +23,12 @@ create_config_ntpclient() {
 	uci_set_default ntpclient <<-EOR
 	config ntpserver
 		option hostname $NTPSERVER
-		option port     $NTPPORT
+		option port	$NTPPORT
 	config ntpclient
 		option interval	$(($INTERVALMINUTES * 60))
-		option count    $COUNT
+		option count	$COUNT
 	EOR
-	
+
 	config_load ntpclient
 }
 
@@ -35,6 +40,14 @@ ntpcommand() {
 	fi
 }
 
+#ntpcommand() {
+#	if [ "$NTPPORT" == "0" ]; then
+#		echo /usr/sbin/ntpclient -s -h $NTPSERVER
+#	else
+#		echo /usr/sbin/ntpclient -s -p $NTPPORT -h $NTPSERVER
+#	fi
+#}
+
 #cron_clean() {
 #	crontab -l >&- 2>&-
 #	if [ $? -eq 0 ]; then
@@ -45,7 +58,7 @@ ntpcommand() {
 #cron_seed() {
 #	local cronstuff='*/'"$INTERVALMINUTES"' * * * *'
 #	local reset="/etc/init.d/ntpclient restart"
-#	
+#
 #	cron_clean
 #
 #	crontab -l >&- 2>&-
@@ -58,35 +71,35 @@ ntpcommand() {
 #}
 
 cron_clean() {
-        crontab -l >&- 2>&-
-        if [ $? -ne 0 ]; then
-                crontab -l | sed -e /ntpclient/d | crontab -
-        fi
+	crontab -l >&- 2>&-
+	if [ $? -ne 0 ]; then
+		crontab -l | sed -e /ntpclient/d | crontab -
+	fi
 }
 
 
 
 cron_seed() {
-        # local cronstuff='*/'"$INTERVALMINUTES"' * * * *'		# ITUS
-        local cronstuff='0 0 * * *' 					# run at midnight
-        local reset="/etc/init.d/ntpclient restart"
+	#local cronstuff='*/'"$INTERVALMINUTES"' * * * *'
+	#local reset="/etc/init.d/ntpclient restart"
+	local cronstuff='41 3 * * 0' 					# run each Sunday at 3.41
+	local reset="/etc/init.d/ntpclient restart"
+	cron_clean
 
-        cron_clean
-
-        crontab -l >&- 2>&-
-        if [ $? -ne 0 ]; then
-                crontab -l | sed -e '$a\'"$cronstuff $(ntpcommand) || $reset" | crontab -
-        else
-                echo "$cronstuff $(ntpcommand) || $reset" | crontab -
-        fi
-        [ -L /var/spool/cron/crontabs ] || /etc/init.d/cron restart >&- 2>&-
+	crontab -l >&- 2>&-
+	if [ $? -ne 0 ]; then
+		crontab -l | sed -e '$a\'"$cronstuff $(ntpcommand) || $reset" | crontab -
+	else
+	echo "$cronstuff $(ntpcommand) || $reset" | crontab -
+	fi
+	[ -L /var/spool/cron/crontabs ] || /etc/init.d/cron restart >&- 2>&-
 }
 
 
 
 pick_server() {
 	local rand
-	
+
 	[ -n "${NTPSERVERS// /}" ] || {
 		NTPSERVERS="$NTPSERVER"
 		NTPPORTS="$NTPPORT"
@@ -98,7 +111,7 @@ pick_server() {
 	SPOS=$(($rand % $SNUM))
 	SPOS=$(($SPOS + 1))
 	eval NTPSERVER=\${$SPOS}
-	
+
 	set -- $NTPPORTS
 	eval NTPPORT=\${$SPOS}
 }
@@ -163,4 +176,3 @@ stop() {
 	cron_clean
 	logger "Stopped ntpclient."
 }
-

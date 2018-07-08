@@ -1,5 +1,34 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
+sleep 2
+sh /etc/itus/detect_mode.sh 	# Detects the shield mode
+mode=$(cat "/.shield_mode") # Obtain which mode the Shield is in.
+# if this is the first time the Shield has been started in gateway mode then copy network configs over
+if [[ "$mode" = "Gateway" ]] ; then							# Can be safely removed
+	if [[ -f /etc/gateway-first-time-start-up-check-file ]] ; then			# Can be safely removed
+		echo "file exists, shield has booted up before in gateway mode"		# Can be safely removed
+	else										# Can be safely removed
+		cp /etc/config/network.gt /etc/config/network				# Can be safely removed
+		sleep 1									# Can be safely removed
+		/etc/init.d/network restart						# Can be safely removed
+		sleep 2									# Can be safely removed
+		touch /etc/gateway-first-time-start-up-check-file			# Can be safely removed
+	fi										# Can be safely removed
+  echo "Not Gateway mode "								# Can be safely removed
+fi											# Can be safely removed
+	if [[ "$mode" = "Bridge" ]] ; then						# Can be safely removed
+		if [[ -f /etc/bridge-first-time-start-up-check-file ]] ; then		# Can be safely removed
+		echo "file exists, shield has booted up before in bridge mode"		# Can be safely removed
+	else										# Can be safely removed
+		cp /etc/config/network.br /etc/config/network				# Can be safely removed
+		sleep 1									# Can be safely removed
+		/etc/init.d/network restart						# Can be safely removed
+		sleep 2									# Can be safely removed
+		touch /etc/bridge-first-time-start-up-check-file			# Can be safely removed
+	fi										# Can be safely removed
+  echo "Not bridge mode "								# Can be safely removed
+
+fi											# Can be safely removed
 
 sleep 5
 ethtool -K eth0 gro off
@@ -33,9 +62,10 @@ sleep 1
 chown -R nobody:nogroup /tmp/*
 
 sleep 1
-sh /etc/itus/detect_mode.sh 	# Detects the shield mode
 
+sh /etc/itus/detect_mode.sh 	# Detects the shield mode
 sleep 1
+
 /etc/init.d/vnstat enable	# Vnstat Enable Autostart
 /etc/init.d/vnstat start	# Vnstat Start
 /etc/init.d/ipsec stop     	# strongSwan Stop
@@ -43,12 +73,13 @@ sleep 1
 sleep 2
 /etc/init.d/dnsmasq restart
 touch /var/run/ddns/lucihelper.err
+touch /tmp/rule_counter.log
 sh /etc/itus-setup.sh &>/dev/null
 
 sleep 30
 /etc/init.d/dropbear restart
 
-sleep 10
-/usr/sbin/ntpclient -s -p 123 -h 0.us.pool.ntp.org || /etc/init.d/ntpclient restart
+#sleep 10
+#/usr/sbin/ntpclient -s -p 123 -h 0.us.pool.ntp.org || /etc/init.d/ntpclient restart
 
 exit 0

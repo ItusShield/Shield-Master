@@ -12,7 +12,26 @@ You may obtain a copy of the License at
 
 Author: Marko Ratkaj <marko.ratkaj@sartura.hr>
 	Luka Perkov <luka.perkov@sartura.hr>
+--------------------------------------------------------------------------------
+Modified by Radrunnere42
+Date 25 Nov 2016
+Changes - Added two new tabs, Blocked filters and Web Filter count. The first now shows blocked domains making it
+          easier to see why web sites are not working. The second tab show the amount of ips that are in each selected
+					web filter. The logs tab now only shows queried domains.
+Files changed/added - /etc/itus/web-filter-counter.sh
+                      /tmp/web_filter_counter.log
+											/etc/itus/lists/log-gen.sh
 
+Files called - /etc/init.d/dnsmasq restart
+               /etc/itus/lists/log-gen.sh
+							 /tmp/dns.log
+							 /tmp/dns_stopped.log
+							 /tmp/web_filter_counter.log
+							 /etc/itus/lists/white.list
+							 /etc/itus/lists/black.list
+							 /etc/itus/web-filter-counter.sh
+					     /www/block/index.html
+--------------------------------------------------------------------------------
 ]]--
 
 local fs = require "nixio.fs"
@@ -20,28 +39,29 @@ local sys = require "luci.sys"
 require "ubus"
 
 m = Map("e2guardian", translate("Web Filter"), translate("Changes may take up to 60 seconds to take effect. Web access may be interrupted during this time."))
-m.on_after_commit = function() luci.sys.call("/etc/init.d/dnsmasq restart && sh /etc/itus/lists/log-gen.sh") end
+m.on_after_commit = function() luci.sys.call("/etc/init.d/dnsmasq restart ") end
 
 m.on_init = function()
-	luci.sys.call("sh /etc/itus/lists/log-gen.sh")
+	luci.sys.call("sh /etc/itus/lists/log-gen.sh ")
 end
 
 s = m:section(TypedSection, "e2guardian")
 s.anonymous = true
 s.addremove = false
 
-s:tab("tab_basic", translate("Basic Settings"))
-s:tab("tab_white", translate("White List"))
-s:tab("tab_black", translate("Black List"))
-s:tab("tab_logs", translate("Logs"))
-s:tab("tab_blocked_filters", translate("Blocked Filters"))
-s:tab("tab_block", translate("Block Page"))
+s:tab("tab_basic",		translate("Basic Settings"))
+s:tab("tab_white",		translate("White List"))
+s:tab("tab_black",		translate("Black List"))
+s:tab("tab_logs",			translate("Logs"))
+s:tab("tab_filters",	translate("Blocked Filters"))
+s:tab("tab_counter",	translate("Web Filter Count"))
+s:tab("tab_block",		translate("Block Page"))
 
 
 ----------------- Basic Settings Tab -----------------------
 
 
-local dummy1, ads, malicious, drugs, religion, gamble, porn, spyware, redirector, downloads, violence, tracker
+local dummy1, ads, malicious, drugs, religion, gambling, porn, spyware, redirector, downloads, violence, tracker
 
 dummy1 = s:taboption("tab_basic", DummyValue, "dummy1", translate("<b>Content filtering: </b>"))
 
@@ -53,7 +73,7 @@ malicious = s:taboption("tab_basic", Flag, "content_malicious", translate("Malic
 malicious.default=malicious.disabled
 malicious.rmempty = false
 
-drugs = s:taboption("tab_basic", Flag, "content_drugs", translate("Drugs"))
+drugs = s:taboption("tab_basic",  Flag, "content_drugs", translate("Drugs"))
 drugs.default=drugs.disabled
 drugs.rmempty = false
 
@@ -90,7 +110,6 @@ tracker.default=tracker.disabled
 tracker.rmempty = false
 
 
-
 --------------------- WhiteList Tab ------------------------
 
 	config_file0 = s:taboption("tab_white", TextValue, "text6", "")
@@ -117,7 +136,7 @@ tracker.rmempty = false
 		end
 	end
 
-	---------------------- Custom Blacklist Tab ------------------------
+---------------------- Custom Blacklist Tab ------------------------
 
 	config_file2 = s:taboption("tab_black", TextValue, "text7", "")
 	config_file2.wrap = "off"
@@ -142,69 +161,91 @@ tracker.rmempty = false
 		end
 	end
 
-	---------------------------- Logs Tab -----------------------------
+---------------------------- Logs Tab -----------------------------
 
-	e2guardian_logfile = s:taboption("tab_logs", TextValue, "lines", "")
-	e2guardian_logfile.wrap = "off"
-	e2guardian_logfile.rows = 25
-	e2guardian_logfile.rmempty = true
+e2guardian_logfile = s:taboption("tab_logs", TextValue, "lines", "")
+e2guardian_logfile.wrap = "off"
+e2guardian_logfile.rows = 25
+e2guardian_logfile.rmempty = true
 
-	function e2guardian_logfile.cfgvalue()
-		local uci = require "luci.model.uci".cursor_state()
-		file = "/tmp/dns.log"
-		if file then
-			return fs.readfile(file) or ""
-		else
-			return "Can't read log file"
-		end
+function e2guardian_logfile.cfgvalue()
+	local uci = require "luci.model.uci".cursor_state()
+	file = "/tmp/dns.log"
+	if file then
+		return fs.readfile(file) or ""
+	else
+		return "Can't read log file"
 	end
+end
 
-	function e2guardian_logfile.write()
-	end
+function e2guardian_logfile.write()
+end
 
-	---------------------------- Blocked Filters Tab -----------------------------
+---------------------------- filters Tab -----------------------------
 
-	e2guardian_blockedfile = s:taboption("tab_blocked_filters", TextValue, "lines", "")
-	e2guardian_blockedfile.wrap = "off"
-	e2guardian_blockedfile.rows = 25
-	e2guardian_blockedfile.rmempty = true
+filters_logfile = s:taboption("tab_filters", TextValue, "lines", "")
+filters_logfile.wrap = "off"
+filters_logfile.rows = 25
+filters_logfile.rmempty = true
 
-	function e2guardian_blockedfile.cfgvalue()
-		local uci = require "luci.model.uci".cursor_state()
+function filters_logfile.cfgvalue()
+	local uci = require "luci.model.uci".cursor_state()
 		file = "/tmp/dns_stopped.log"
-		if file then
-			return fs.readfile(file) or ""
-		else
-			return "Can't read log file"
-		end
+	if file then
+		return fs.readfile(file) or ""
+	else
+		return "Can't read log file"
 	end
+end
 
-	function e2guardian_blockedfile.write()
+function filters_logfile.write()
+end
+
+---------------------------- counter Tab -----------------------------
+
+counter_logfile = s:taboption("tab_counter", TextValue, "lines", "")
+counter_logfile.wrap = "off"
+counter_logfile.rows = 25
+counter_logfile.rmempty = true
+
+function counter_logfile.cfgvalue()
+	local uci = require "luci.model.uci".cursor_state()
+	sys.call("sh /etc/itus/web-filter-counter.sh &>/dev/null")
+
+	file = "/tmp/web_filter_counter.log"
+	if file then
+		return fs.readfile(file) or ""
+	else
+		return "Can't read log file"
 	end
+end
 
-	---------------------- Custom Block Page ------------------------
+function counter_logfile.write()
+end
 
-	config_file4 = s:taboption("tab_block", TextValue, "text9", "")
-	config_file4.wrap = "off"
-	config_file4.rows = 25
-	config_file4.rmempty = false
+---------------------- Custom Block Page ------------------------
+
+config_file4 = s:taboption("tab_block", TextValue, "text9", "")
+config_file4.wrap = "off"
+config_file4.rows = 25
+config_file4.rmempty = false
 
 	function config_file4.cfgvalue()
-			local uci = require "luci.model.uci".cursor_state()
-			file = "/www/block/index.html"
-			if file then
-					return fs.readfile(file) or ""
-			else
-					return ""
-			end
-	end
+		local uci = require "luci.model.uci".cursor_state()
+		file = "/www/block/index.html"
+		if file then
+		return fs.readfile(file) or ""
+		else
+		return ""
+		end
+end
 
 	function config_file4.write(self, section, value)
-			if value then
-					local uci = require "luci.model.uci".cursor_state()
-					file = "/www/block/index.html"
-					fs.writefile(file, value:gsub("\r\n", "\n"))
-			end
+		if value then
+		local uci = require "luci.model.uci".cursor_state()
+		file = "/www/block/index.html"
+		fs.writefile(file, value:gsub("\r\n", "\n"))
+		end
 	end
 
 return m
