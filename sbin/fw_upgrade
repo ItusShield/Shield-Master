@@ -609,7 +609,7 @@ do_dnsmasq_restart=1
 
 #	grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.do_date
 rm -f /.version
-grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#\s*$)" /sbin/fw_upgrade > /.version
+grep -oP "^\s*#\s*VER.*-\s*\K([0-9\.]+)(?=\s*#?\s*$)" /sbin/fw_upgrade > /.version
 
 # Shield Update Last Run: append current date
 #date >> /.do_date
